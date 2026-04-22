@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCF Canada · 备考资料库</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f3ee;
+    --ink: #1c1b18;
+    --ink-2: #6a6860;
+    --ink-3: #a8a69f;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.09);
+    --green: #1a7a5e;
+    --green-bg: #e4f2ec;
+    --amber: #b06000;
+    --amber-bg: #faeedd;
+    --purple: #4a3fb5;
+    --purple-bg: #eeeefe;
+    --coral: #b03520;
+    --coral-bg: #faece7;
+    --blue: #1a5fa8;
+    --blue-bg: #e6f1fb;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 16px 80px;
+  }
+
+  .page { max-width: 640px; margin: 0 auto; }
+
+  /* Header */
+  header { margin-bottom: 36px; }
+  .eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+    color: var(--ink-3); text-transform: uppercase; margin-bottom: 8px;
+  }
+  h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 32px; font-weight: 600;
+    letter-spacing: -0.5px; line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .tagline { font-size: 14px; color: var(--ink-2); line-height: 1.5; }
+
+  /* Stats bar */
+  .stats {
+    display: flex; gap: 20px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 32px;
+  }
+  .stat { display: flex; flex-direction: column; gap: 2px; }
+  .stat-n { font-size: 20px; font-weight: 600; letter-spacing: -0.5px; }
+  .stat-l { font-size: 11px; color: var(--ink-3); }
+
+  /* Section */
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-3);
+    margin-bottom: 10px; padding: 0 2px;
+  }
+
+  /* Cards */
+  .cards { display: flex; flex-direction: column; gap: 6px; }
+
+  a.card {
+    display: flex; align-items: center;
+    padding: 13px 16px; gap: 12px;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none; color: inherit;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  a.card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  }
+  a.card:active { transform: translateY(0); }
+
+  .card-icon {
+    width: 36px; height: 36px; flex-shrink: 0;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+
+  .card-body { flex: 1; min-width: 0; }
+  .card-title { font-size: 13px; font-weight: 500; line-height: 1.4; }
+  .card-desc { font-size: 12px; color: var(--ink-2); margin-top: 1px; line-height: 1.35; }
+
+  .card-arrow {
+    font-size: 14px; color: var(--ink-3);
+    flex-shrink: 0;
+  }
+
+  /* color variants */
+  .c-green  { background: var(--green-bg);  color: var(--green); }
+  .c-amber  { background: var(--amber-bg);  color: var(--amber); }
+  .c-purple { background: var(--purple-bg); color: var(--purple); }
+  .c-coral  { background: var(--coral-bg);  color: var(--coral); }
+  .c-blue   { background: var(--blue-bg);   color: var(--blue); }
+
+  /* Add new page hint */
+  .add-hint {
+    margin-top: 32px;
+    padding: 16px 18px;
+    background: transparent;
+    border: 1px dashed rgba(0,0,0,0.15);
+    border-radius: 10px;
+    font-size: 13px; color: var(--ink-2); line-height: 1.6;
+  }
+  .add-hint strong { color: var(--ink); font-weight: 600; }
+  .add-hint code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 11.5px; background: rgba(0,0,0,0.06);
+    padding: 1px 5px; border-radius: 4px;
+  }
+
+  footer {
+    margin-top: 48px; font-size: 11px;
+    color: var(--ink-3); text-align: center; line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="eyebrow">TCF Canada</div>
+    <h1>备考资料库</h1>
+    <p class="tagline">口语第二、三部分 · 话题练习 · 闪卡</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-n">13</span>
+      <span class="stat-l">个页面</span>
+    </div>
+    <div class="stat">
+      <span class="stat-n">5</span>
+      <span class="stat-l">个话题类别</span>
+    </div>
+    <div class="stat">
+      <span class="stat-n">Tâche 2</span>
+      <span class="stat-l">重点练习</span>
+    </div>
+  </div>
+
+  <!-- 综合工具 -->
+  <div class="section">
+    <div class="section-title">📋 综合工具</div>
+    <div class="cards">
+      <a class="card" href="tcf_tache2_checklist.html">
+        <div class="card-icon c-green">✅</div>
+        <div class="card-body">
+          <div class="card-title">Tâche 2 练习清单</div>
+          <div class="card-desc">44题按频率排序 · 勾选追踪进度</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+      <a class="card" href="tcf_april_topics.html">
+        <div class="card-icon c-green">📅</div>
+        <div class="card-body">
+          <div class="card-title">四月话题汇总</div>
+          <div class="card-desc">近期高频考题整理</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+      <a class="card" href="tcf_oral2_flashcards_v2_1.html">
+        <div class="card-icon c-green">🃏</div>
+        <div class="card-body">
+          <div class="card-title">口语闪卡 v2.1</div>
+          <div class="card-desc">Tâche 2 &amp; 3 快速复习</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+      <a class="card" href="tcf_practice_cards.html">
+        <div class="card-icon c-green">🎴</div>
+        <div class="card-body">
+          <div class="card-title">练习卡片</div>
+          <div class="card-desc">随机抽题模拟练习</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 工作与职业 -->
+  <div class="section">
+    <div class="section-title">💼 工作与职业</div>
+    <div class="cards">
+      <a class="card" href="succes_professionnel.html">
+        <div class="card-icon c-amber">🏆</div>
+        <div class="card-body">
+          <div class="card-title">职业成功</div>
+          <div class="card-desc">Succès professionnel</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+      <a class="card" href="teletravail.html">
+        <div class="card-icon c-amber">🏠</div>
+        <div class="card-body">
+          <div class="card-title">远程办公</div>
+          <div class="card-desc">Télétravail</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+      <a class="card" href="cours_interessants.html">
+        <div class="card-icon c-amber">📚</div>
+        <div class="card-body">
+          <div class="card-title">有趣的课程</div>
+          <div class="card-desc">Cours intéressants</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 生活与社会 -->
+  <div class="section">
+    <div class="section-title">🌿 生活与社会</div>
+    <div class="cards">
+      <a class="card" href="environnement_voiture.html">
+        <div class="card-icon c-green">🚗</div>
+        <div class="card-body">
+          <div class="card-title">环境与汽车</div>
+          <div class="card-desc">Environnement &amp; voiture</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+      <a class="card" href="gouvernement_environnement.html">
+        <div class="card-icon c-green">🏛️</div>
+        <div class="card-body">
+          <div class="card-title">政府与环境</div>
+          <div class="card-desc">Gouvernement &amp; environnement</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+      <a class="card" href="electronic_devices.html">
+        <div class="card-icon c-blue">📱</div>
+        <div class="card-body">
+          <div class="card-title">电子设备</div>
+          <div class="card-desc">Appareils électroniques</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 文化与个人 -->
+  <div class="section">
+    <div class="section-title">🌍 文化与个人</div>
+    <div class="cards">
+      <a class="card" href="apprendre_langue.html">
+        <div class="card-icon c-purple">🗣️</div>
+        <div class="card-body">
+          <div class="card-title">学习语言</div>
+          <div class="card-desc">Apprendre une langue</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+      <a class="card" href="culture_origine.html">
+        <div class="card-icon c-purple">🎭</div>
+        <div class="card-body">
+          <div class="card-title">原生文化</div>
+          <div class="card-desc">Culture d'origine</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+      <a class="card" href="voyager_seul.html">
+        <div class="card-icon c-coral">✈️</div>
+        <div class="card-body">
+          <div class="card-title">独自旅行</div>
+          <div class="card-desc">Voyager seul</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 如何添加新页面 -->
+  <div class="add-hint">
+    <strong>➕ 以后想加新页面？</strong><br>
+    只需两步：<br>
+    1. 把新的 <code>.html</code> 文件上传到 GitHub 仓库（Add file → Upload files）<br>
+    2. 在这个 <code>index.html</code> 里复制任意一个 <code>&lt;a class="card"&gt;</code> 块，修改 <strong>href</strong>（文件名）、标题、描述、图标即可。改完后上传替换 index.html。
+  </div>
+
+  <footer>
+    TCF Canada Oral Practice · 手机书签此页即可快速访问所有资料
+  </footer>
+
+</div>
+</body>
+</html>
