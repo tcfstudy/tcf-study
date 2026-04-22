@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>和家人旅游 / 移民的好处与坏处</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f6f3; padding: 2rem 1rem; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+  .deck-title { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; margin-top: 2rem; }
+  .card { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; }
+  .card-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; user-select: none; }
+  .card-header:hover { background: #fafaf8; }
+  .card-left { flex: 1; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 6px; margin-bottom: 6px; }
+  .b-purple { background: #ede9fe; color: #5b21b6; }
+  .b-blue   { background: #dbeafe; color: #1e40af; }
+  .b-teal   { background: #d1fae5; color: #065f46; }
+  .b-amber  { background: #fef3c7; color: #92400e; }
+  .b-coral  { background: #fee2e2; color: #991b1b; }
+  .prompt { font-size: 15px; font-weight: 500; color: #1a1a1a; line-height: 1.5; }
+  .hint { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .toggle-icon { font-size: 14px; color: #bbb; margin-top: 2px; flex-shrink: 0; transition: transform 0.2s; }
+  .toggle-icon.open { transform: rotate(90deg); }
+  .card-body { display: none; border-top: 1px solid #f0ede8; padding: 1rem 1.25rem 0.75rem; }
+  .card-body.open { display: block; }
+  .kw-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.9rem; }
+  .kw { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: #f3f2ef; color: #555; border: 1px solid #e8e6e1; font-family: monospace; }
+  .ans-toggle-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #aaa; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; user-select: none; transition: color 0.15s; }
+  .ans-toggle-btn:hover { color: #555; }
+  .ans-arrow { font-size: 11px; transition: transform 0.2s; display: inline-block; }
+  .ans-arrow.open { transform: rotate(90deg); }
+  .answer-section { display: none; border-top: 1px solid #f0ede8; margin-top: 0.75rem; padding-top: 0.75rem; }
+  .answer-section.open { display: block; }
+  .answer-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .answer-fr { font-size: 14px; font-style: italic; color: #444; line-height: 1.7; }
+  .answer-fr p { margin-bottom: 0.5rem; }
+  .answer-fr p:last-child { margin-bottom: 0; }
+  .answer-zh { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .answer-note { font-size: 12px; color: #b08d57; background: #fef9f0; border-left: 3px solid #f5c97a; border-radius: 0 5px 5px 0; padding: 6px 10px; margin-top: 8px; line-height: 1.5; }
+  .progress-wrap { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; }
+  .prog-bg { flex: 1; height: 6px; background: #f0ede8; border-radius: 3px; }
+  .prog-fill { height: 6px; border-radius: 3px; background: #7c3aed; transition: width 0.4s; }
+  .prog-text { font-size: 12px; color: #999; white-space: nowrap; }
+  .reset-btn { font-size: 12px; color: #7c3aed; cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .reset-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>和家人旅游 / 移民的好处与坏处</h1>
+  <p class="subtitle">看中文提示，组织法语句子，展开关键词后再查看参考答案</p>
+
+  <div class="progress-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <span class="prog-text" id="prog-text">已打开 0 张</span>
+    <button class="reset-btn" onclick="resetAll()">重置</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <div class="deck-title">第一篇 · 和家人旅游 / 移民的好处</div>
+
+  <!-- 观点 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">我认为，与家人一起移居有真正的优势，因为家庭是在异国他乡不可缺少的支撑。</div>
+        <div class="hint">提示：À mon avis，immigrer avec sa famille apporte de vrais avantages，la famille représente un soutien essentiel dans un nouveau pays</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">À mon avis</span>
+        <span class="kw">immigrer avec sa famille</span>
+        <span class="kw">apporte de vrais avantages</span>
+        <span class="kw">la famille représente un soutien essentiel</span>
+        <span class="kw">dans un nouveau pays</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>À mon avis, immigrer avec sa famille apporte de vrais avantages, car la famille représente un soutien essentiel dans un nouveau pays.</p></div>
+        <div class="answer-zh">我认为，与家人一起移居有真正的优势，因为家庭是在异国他乡不可缺少的支撑。</div>
+        <div class="answer-note">💡 représenter = 代表、构成（比 être 更正式）→ la famille représente un soutien = 家庭构成一种支持</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点1 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1</div>
+        <div class="prompt">首先，家人的陪伴有助于更好地应对适应过程中的压力。到达一个新国家时，人很容易感到孤独，尤其是在夜晚或重要时刻。</div>
+        <div class="hint">提示：D'abord，la présence de sa famille，mieux gérer le stress lié à l'adaptation，ressentir la solitude，surtout le soir ou pendant les moments importants</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">D'abord</span>
+        <span class="kw">la présence de sa famille</span>
+        <span class="kw">mieux gérer le stress lié à l'adaptation</span>
+        <span class="kw">ressentir la solitude</span>
+        <span class="kw">surtout le soir ou pendant les moments importants</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>D'abord, la présence de sa famille permet de mieux gérer le stress lié à l'adaptation. Quand on arrive dans un nouveau pays, on peut ressentir la solitude, surtout le soir ou pendant les moments importants.</p></div>
+        <div class="answer-zh">首先，家人的陪伴有助于更好地应对适应过程中的压力。到达一个新国家时，人很容易感到孤独，尤其是在夜晚或重要时刻。</div>
+        <div class="answer-note">💡 la présence de = ……的陪伴、……的存在（名词化，比 quand la famille est là 更简洁正式）｜gérer le stress = 应对压力（gérer 比 supporter 更积极主动）｜lié à = 与……相关的（过去分词形容词）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点2 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2</div>
+        <div class="prompt">其次，家庭也提供重要的经济支持。对于刚刚开始工作的年轻人来说，积蓄往往不足。独自旅行或出国可能是一笔不小的经济负担，而家庭的支持可以减轻压力，让这些计划更容易实现。</div>
+        <div class="hint">提示：Ensuite，soutien financier important，les jeunes qui commencent tout juste à travailler，des économies suffisantes，représenter une charge financière importante，réduire la pression économique，réaliser plus facilement ces projets</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Ensuite</span>
+        <span class="kw">un soutien financier important</span>
+        <span class="kw">commencer tout juste à travailler</span>
+        <span class="kw">des économies suffisantes</span>
+        <span class="kw">représenter une charge financière importante</span>
+        <span class="kw">réduire la pression économique</span>
+        <span class="kw">réaliser plus facilement ces projets</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Ensuite, la famille apporte aussi un soutien financier important. En particulier pour les jeunes qui commencent tout juste à travailler, il est souvent difficile d'avoir des économies suffisantes. Voyager seul ou partir à l'étranger peut représenter une charge financière importante. Dans ce contexte, le soutien de la famille permet de réduire la pression économique et de réaliser plus facilement ces projets.</p></div>
+        <div class="answer-zh">其次，家庭也提供重要的经济支持。对于刚刚开始工作的年轻人来说，往往很难有足够的积蓄。独自旅行或出国可能是一笔不小的经济负担。在这种情况下，家庭的支持可以减轻经济压力，让这些计划更容易实现。</div>
+        <div class="answer-note">💡 commencer tout juste à + 动词原形 = 刚刚开始做某事（tout juste 强调"才刚刚"）｜Dans ce contexte = 在这种情况下（比 donc 更书面的过渡语）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">比如，我的一些朋友和家人住在父母买的大房子里，不用付租金，可以把工资用在自己身上。多亏了这一点，他们过着相当舒适的生活。</div>
+        <div class="hint">提示：certains de mes amis et des membres de ma famille，une grande maison achetée par leurs parents，ils n'ont pas besoin de payer de loyer，Grâce à cela，une vie assez confortable</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">certains de mes amis et des membres de ma famille</span>
+        <span class="kw">une grande maison achetée par leurs parents</span>
+        <span class="kw">ils n'ont pas besoin de payer de loyer</span>
+        <span class="kw">utiliser leur salaire pour eux-mêmes</span>
+        <span class="kw">Grâce à cela</span>
+        <span class="kw">une vie assez confortable</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Par exemple, certains de mes amis et des membres de ma famille vivent dans une grande maison achetée par leurs parents. Ils n'ont pas besoin de payer de loyer, donc ils peuvent utiliser leur salaire pour eux-mêmes. Grâce à cela, ils ont une vie assez confortable.</p></div>
+        <div class="answer-zh">比如，我的一些朋友和家人住在父母买的大房子里。他们不用付租金，可以把工资用在自己身上。多亏了这一点，他们过着相当舒适的生活。</div>
+        <div class="answer-note">💡 assez = 相当、颇为（语气比 très 温和）→ une vie assez confortable = 相当舒适的生活｜Grâce à cela = 多亏了这一点（Grâce à 表正面原因，已在政府干预篇出现，串联记忆）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 小结 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-coral">小结</div>
+        <div class="prompt">换句话说，与家人一起移居可以共同承担困难、分享成功，这让整个经历少了孤立感，多了人情味。</div>
+        <div class="hint">提示：Autrement dit，immigrer avec sa famille permet de partager les difficultés et les réussites，ce qui rend l'expérience moins isolée et beaucoup plus humaine</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Autrement dit</span>
+        <span class="kw">partager les difficultés et les réussites</span>
+        <span class="kw">ce qui rend l'expérience</span>
+        <span class="kw">moins isolée et beaucoup plus humaine</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Autrement dit, immigrer avec sa famille permet de partager les difficultés et les réussites, ce qui rend l'expérience moins isolée et beaucoup plus humaine.</p></div>
+        <div class="answer-zh">换句话说，与家人一起移居可以共同承担困难、分享成功，这让整个经历少了孤立感，多了人情味。</div>
+        <div class="answer-note">💡 ce qui rend... = 这使得……（ce qui 引导非限制性关系从句，总结前文结果）｜Autrement dit = 换句话说（已在旅游坏处篇出现，串联记忆）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <div class="deck-title">第二篇 · 和家人旅游 / 移民的坏处</div>
+
+  <!-- 观点 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">我认为，与家人一起旅游或移居也有不便之处。</div>
+        <div class="hint">提示：À mon avis，voyager ou immigrer avec sa famille，a aussi des inconvénients</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">À mon avis</span>
+        <span class="kw">voyager ou immigrer avec sa famille</span>
+        <span class="kw">a aussi des inconvénients</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>À mon avis, voyager ou immigrer avec sa famille a aussi des inconvénients.</p></div>
+        <div class="answer-zh">我认为，与家人一起旅游或移居也有不便之处。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点1 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1</div>
+        <div class="prompt">首先，费用高得多。全家旅游或在国外定居，需要更大的住所、机票、孩子的学费和日常开销。</div>
+        <div class="hint">提示：D'abord，le coût est beaucoup plus élevé，Quand on voyage ou qu'on s'installe à l'étranger en famille，un logement plus grand / les billets d'avion / les frais de scolarité / les dépenses du quotidien</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">D'abord</span>
+        <span class="kw">le coût est beaucoup plus élevé</span>
+        <span class="kw">Quand on voyage ou qu'on s'installe</span>
+        <span class="kw">un logement plus grand</span>
+        <span class="kw">les billets d'avion</span>
+        <span class="kw">les frais de scolarité des enfants</span>
+        <span class="kw">les dépenses du quotidien</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>D'abord, le coût est beaucoup plus élevé. Quand on voyage ou qu'on s'installe à l'étranger en famille, il faut payer un logement plus grand, les billets d'avion, les frais de scolarité des enfants et les dépenses du quotidien.</p></div>
+        <div class="answer-zh">首先，费用高得多。全家旅游或在国外定居时，需要支付更大的住所、机票、孩子的学费和日常开销。</div>
+        <div class="answer-note">💡 Quand on voyage ou qu'on s'installe = 注意第二个从句用 qu'on 而非重复 quand on，这是法语中避免重复连词的规范写法｜les frais de scolarité = 学费（固定搭配）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例1：加拿大租金 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">比如在加拿大，租金和托育费非常贵，这可能造成很大的经济压力。</div>
+        <div class="hint">提示：au Canada，le loyer et les frais de garde coûtent très cher，ce qui peut créer beaucoup de stress financier</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">au Canada</span>
+        <span class="kw">le loyer et les frais de garde</span>
+        <span class="kw">coûtent très cher</span>
+        <span class="kw">ce qui peut créer beaucoup de stress financier</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Par exemple, au Canada, le loyer et les frais de garde coûtent très cher, ce qui peut créer beaucoup de stress financier.</p></div>
+        <div class="answer-zh">比如在加拿大，租金和托育费非常贵，这可能造成很大的经济压力。</div>
+        <div class="answer-note">💡 les frais de garde = 托育费、看护费（garde d'enfants = 儿童看护）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点2 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2</div>
+        <div class="prompt">其次，组织旅行或日常生活也更困难。一个人时可以迅速做决定，但有家人时，需要考虑每个人的口味和需求。</div>
+        <div class="hint">提示：Ensuite，plus difficile d'organiser，Quand on est seul on peut décider rapidement，Mais en famille，penser aux goûts et aux besoins de chacun</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Ensuite</span>
+        <span class="kw">plus difficile d'organiser le voyage</span>
+        <span class="kw">Quand on est seul, on peut décider rapidement</span>
+        <span class="kw">Mais en famille</span>
+        <span class="kw">penser aux goûts et aux besoins de chacun</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Ensuite, il est plus difficile d'organiser le voyage ou la vie quotidienne. Quand on est seul, on peut décider rapidement. Mais en famille, il faut penser aux goûts et aux besoins de chacun.</p></div>
+        <div class="answer-zh">其次，组织旅行或日常生活也更困难。一个人时可以迅速做决定，但有家人时，需要考虑每个人的口味和需求。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例2：意见不一 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">比如旅途中，有人想参观博物馆，有人想休息。最后，有时花在讨论上的时间比享受旅途还多。</div>
+        <div class="hint">提示：certains veulent visiter des musées / d'autres préfèrent se reposer，on passe parfois plus de temps à discuter qu'à profiter</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">certains veulent visiter des musées</span>
+        <span class="kw">d'autres préfèrent se reposer</span>
+        <span class="kw">Finalement</span>
+        <span class="kw">passer plus de temps à discuter qu'à profiter</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Par exemple, pendant un voyage, certains veulent visiter des musées, d'autres préfèrent se reposer. Finalement, on passe parfois plus de temps à discuter qu'à profiter.</p></div>
+        <div class="answer-zh">比如旅途中，有人想参观博物馆，有人想休息。最后，有时花在讨论上的时间比享受旅途还多。</div>
+        <div class="answer-note">💡 passer plus de temps à + 动词原形 qu'à + 动词原形 = 花在……上的时间比……还多（非常地道的比较句型，值得单独记下来）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 小结 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-coral">小结</div>
+        <div class="prompt">总之，与家人一起旅游或移居可以是一段美好的经历，但需要更多的金钱、耐心和组织能力。</div>
+        <div class="hint">提示：En conclusion，voyager ou immigrer en famille peut être une belle expérience，mais cela demande plus d'argent / de patience / d'organisation</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">En conclusion</span>
+        <span class="kw">peut être une belle expérience</span>
+        <span class="kw">mais cela demande</span>
+        <span class="kw">plus d'argent, de patience et d'organisation</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>En conclusion, voyager ou immigrer en famille peut être une belle expérience, mais cela demande plus d'argent, de patience et d'organisation.</p></div>
+        <div class="answer-zh">总之，与家人一起旅游或移居可以是一段美好的经历，但需要更多的金钱、耐心和组织能力。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let opened = new Set();
+  const total = document.querySelectorAll('.card').length;
+
+  function toggleKw(header) {
+    const body = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    icon.classList.toggle('open', !isOpen);
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(header);
+    if (!isOpen) {
+      opened.add(idx + '-kw');
+    } else {
+      opened.delete(idx + '-kw');
+      opened.delete(idx + '-ans');
+    }
+    updateProgress();
+  }
+
+  function toggleAns(event, btn) {
+    event.stopPropagation();
+    const ansSection = btn.nextElementSibling;
+    const arrow = btn.querySelector('.ans-arrow');
+    const isOpen = ansSection.classList.contains('open');
+    ansSection.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+    const card = btn.closest('.card');
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(card.querySelector('.card-header'));
+    if (!isOpen) opened.add(idx + '-ans'); else opened.delete(idx + '-ans');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const ansCount = Array.from(opened).filter(k => k.endsWith('-ans')).length;
+    const pct = Math.round(ansCount / total * 100);
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = '已打开 ' + ansCount + ' / ' + total + ' 张';
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.toggle-icon').forEach(i => i.classList.remove('open'));
+    document.querySelectorAll('.answer-section').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.ans-arrow').forEach(a => a.classList.remove('open'));
+    opened.clear();
+    updateProgress();
+  }
+</script>
+</body>
+</html>
