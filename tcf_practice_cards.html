@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCF 口语练习卡</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f6f3; padding: 2rem 1rem; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+  .deck-title { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; margin-top: 2rem; }
+  .card { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; }
+  .card-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; user-select: none; }
+  .card-header:hover { background: #fafaf8; }
+  .card-left { flex: 1; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 6px; margin-bottom: 6px; }
+  .b-purple { background: #ede9fe; color: #5b21b6; }
+  .b-blue { background: #dbeafe; color: #1e40af; }
+  .b-teal { background: #d1fae5; color: #065f46; }
+  .b-amber { background: #fef3c7; color: #92400e; }
+  .b-coral { background: #fee2e2; color: #991b1b; }
+  .prompt { font-size: 15px; font-weight: 500; color: #1a1a1a; line-height: 1.5; }
+  .hint { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .toggle-icon { font-size: 14px; color: #bbb; margin-top: 2px; flex-shrink: 0; transition: transform 0.2s; }
+  .toggle-icon.open { transform: rotate(90deg); }
+  .card-body { display: none; border-top: 1px solid #f0ede8; padding: 1rem 1.25rem; }
+  .card-body.open { display: block; }
+  .kw-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 1rem; }
+  .kw { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: #f3f2ef; color: #555; border: 1px solid #e8e6e1; font-family: monospace; }
+  .answer-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .answer-fr { font-size: 14px; font-style: italic; color: #444; line-height: 1.7; }
+  .answer-zh { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .progress-wrap { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; }
+  .prog-bg { flex: 1; height: 6px; background: #f0ede8; border-radius: 3px; }
+  .prog-fill { height: 6px; border-radius: 3px; background: #7c3aed; transition: width 0.4s; }
+  .prog-text { font-size: 12px; color: #999; white-space: nowrap; }
+  .reset-btn { font-size: 12px; color: #7c3aed; cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .reset-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>TCF 口语练习卡</h1>
+  <p class="subtitle">看中文提示，组织法语句子，再展开查看参考答案</p>
+
+  <div class="progress-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <span class="prog-text" id="prog-text">已打开 0 张</span>
+    <button class="reset-btn" onclick="resetAll()">重置</button>
+  </div>
+
+  <div class="deck-title">第一篇 · 屏幕与孩子</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggle(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">坦白说，就我个人而言，我不太支持孩子使用屏幕。</div>
+        <div class="hint">提示：用 Franchement 开头，表达个人立场</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Franchement</span>
+        <span class="kw">à titre personnel</span>
+        <span class="kw">favorable à</span>
+      </div>
+      <div class="answer-label">参考答案</div>
+      <div class="answer-fr">Franchement, à titre personnel, je ne suis pas très favorable aux écrans pour les enfants.</div>
+      <div class="answer-zh">坦白说，就我个人而言，我不太支持孩子使用屏幕。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggle(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点1</div>
+        <div class="prompt">问题在于过度使用。太多屏幕会对健康产生负面影响：缺乏运动、睡眠障碍、注意力难以集中。</div>
+        <div class="hint">提示：用 Le problème, c'est... 开头，列举三个健康问题</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Le problème, c'est</span>
+        <span class="kw">effets négatifs sur</span>
+        <span class="kw">manque d'exercice</span>
+        <span class="kw">troubles du sommeil</span>
+        <span class="kw">concentration</span>
+      </div>
+      <div class="answer-label">参考答案</div>
+      <div class="answer-fr">Le problème, c'est l'excès. Trop d'écrans peut avoir des effets négatifs sur la santé : manque d'exercice physique, troubles du sommeil, ou même difficultés de concentration à l'école.</div>
+      <div class="answer-zh">问题在于过度使用。太多屏幕可能对健康产生负面影响：缺乏运动、睡眠障碍，甚至在学校难以集中注意力。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggle(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">比如，我见过一些孩子花好几个小时打游戏，一让他们停就变得烦躁。可以清楚看出这不是均衡的使用方式。</div>
+        <div class="hint">提示：用 Par exemple, j'ai vu... 引出，用 On voit bien que... 总结</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">j'ai vu des enfants qui</span>
+        <span class="kw">passer des heures à</span>
+        <span class="kw">irritable</span>
+        <span class="kw">On voit bien que</span>
+        <span class="kw">usage équilibré</span>
+      </div>
+      <div class="answer-label">参考答案</div>
+      <div class="answer-fr">Par exemple, j'ai vu des enfants qui passent des heures à jouer à des jeux vidéo et qui deviennent irritables quand on leur demande d'arrêter. On voit bien que ce n'est pas un usage équilibré.</div>
+      <div class="answer-zh">比如，我见过一些孩子花好几个小时打游戏，一让他们停就变得烦躁。可以清楚地看出这不是均衡的使用方式。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggle(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点2</div>
+        <div class="prompt">此外，屏幕前花太多时间会限制与真实世界的接触。我在农村长大，常在户外玩。今天很多孩子把周末关在家里，而不是探索真实生活。</div>
+        <div class="hint">提示：用 De plus 过渡，穿插童年回忆，用 au lieu de 对比</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">De plus</span>
+        <span class="kw">limiter le contact avec</span>
+        <span class="kw">Dans mon enfance</span>
+        <span class="kw">j'ai grandi</span>
+        <span class="kw">au lieu de</span>
+        <span class="kw">curiosité</span>
+      </div>
+      <div class="answer-label">参考答案</div>
+      <div class="answer-fr">De plus, passer trop de temps devant les écrans limite le contact avec le monde réel. Dans mon enfance, j'ai grandi à la campagne — je passais du temps à jouer dehors avec mes cousins. Aujourd'hui, beaucoup d'enfants passent leur week-end enfermés chez eux, au lieu de découvrir la vie réelle. Cela peut réduire leur curiosité et leurs expériences sociales.</div>
+      <div class="answer-zh">此外，在屏幕前花太多时间会限制与真实世界的接触。我在农村长大，常在户外和表兄弟们玩。今天很多孩子把周末关在家里，而不是探索真实生活，这可能减少他们的好奇心和社交经验。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggle(this)">
+      <div class="card-left">
+        <div class="badge b-coral">论点3 + 小结</div>
+        <div class="prompt">最后，屏幕可能让孩子接触危险内容。没有父母监督会有负面影响。我希望孩子多花时间在真实世界，这至关重要。</div>
+        <div class="hint">提示：用 Enfin 引出，用 Honnêtement + 条件式收尾</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Enfin</span>
+        <span class="kw">exposer à des contenus dangereux</span>
+        <span class="kw">Sans surveillance</span>
+        <span class="kw">Honnêtement</span>
+        <span class="kw">je préférerais que</span>
+        <span class="kw">c'est essentiel</span>
+      </div>
+      <div class="answer-label">参考答案</div>
+      <div class="answer-fr">Enfin, les écrans peuvent exposer les enfants à des contenus dangereux. Sans surveillance des parents, ils peuvent être influencés négativement. Honnêtement, je préférerais qu'ils passent plus de temps dans le monde réel. Pour moi, c'est essentiel.</div>
+      <div class="answer-zh">最后，屏幕可能让孩子接触危险内容。没有父母监督，他们可能受到负面影响。说实话，我更希望他们多花时间在真实世界里。对我来说，这至关重要。</div>
+    </div>
+  </div>
+
+  <div class="deck-title">第二篇 · 独自移居的优势</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggle(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">独自移居有一定的优势。</div>
+        <div class="hint">提示：用动词原形做主语，certains 表示"若干"</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Immigrer seul</span>
+        <span class="kw">certains avantages</span>
+      </div>
+      <div class="answer-label">参考答案</div>
+      <div class="answer-fr">Immigrer seul a certains avantages.</div>
+      <div class="answer-zh">独自移居有一定的优势。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggle(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点1</div>
+        <div class="prompt">你完全自由地安排时间，想去哪就去哪，可以临时改变计划，不需要和别人商量，能更快适应新环境。</div>
+        <div class="hint">提示：être libre de + 名词，sans devoir + 动词原形</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">être libre de</span>
+        <span class="kw">emploi du temps</span>
+        <span class="kw">à la dernière minute</span>
+        <span class="kw">sans devoir se concerter</span>
+        <span class="kw">s'adapter plus rapidement</span>
+      </div>
+      <div class="answer-label">参考答案</div>
+      <div class="answer-fr">On est totalement libre de son emploi du temps. On peut visiter ce qu'on veut, changer de plan à la dernière minute, sans devoir se concerter avec quelqu'un d'autre. On peut s'adapter plus rapidement à un nouvel environnement, parce qu'on n'a pas la responsabilité d'autres personnes.</div>
+      <div class="answer-zh">你可以完全自由地安排自己的时间。想去哪就去哪，可以临时改变计划，不需要和别人商量。你能更快地适应新环境，因为你不需要对其他人负责。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggle(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点2</div>
+        <div class="prompt">独自身处异国，没有人可以依靠，你就学会了自己解决问题，走出舒适区，变得更独立、更灵活、更包容差异。</div>
+        <div class="hint">提示：se retrouver dans，sans personne sur qui compter，se débrouiller，pousser à</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">se retrouver dans</span>
+        <span class="kw">sans personne sur qui compter</span>
+        <span class="kw">se débrouiller</span>
+        <span class="kw">sortir de sa zone de confort</span>
+        <span class="kw">pousser à devenir</span>
+        <span class="kw">ouvert aux différences</span>
+      </div>
+      <div class="answer-label">参考答案</div>
+      <div class="answer-fr">Quand on se retrouve dans un pays étranger, sans personne sur qui compter, on apprend à se débrouiller. On doit sortir de sa zone de confort, s'adapter à une nouvelle culture, parfois même à une langue qu'on ne maîtrise pas totalement. Cela nous pousse à devenir plus autonomes, plus flexibles, et aussi plus ouverts aux différences.</div>
+      <div class="answer-zh">当你独自身处异国，没有任何人可以依靠，你就学会了自己解决问题。你必须走出舒适区，适应新文化，有时甚至是一门还没完全掌握的语言。这推动我们变得更独立、更灵活，也更包容差异。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggle(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">在国外，获取信息最快的方式是和当地人交流。我每次坐出租车都和司机聊，他们是信息宝库，会推荐游客不知道的地方。</div>
+        <div class="hint">提示：le moyen le plus rapide pour，une vraie mine d'informations，non seulement... mais aussi</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">le moyen le plus rapide pour</span>
+        <span class="kw">échanger avec les habitants</span>
+        <span class="kw">une vraie mine d'informations</span>
+        <span class="kw">non seulement... mais aussi</span>
+        <span class="kw">peu connus des touristes</span>
+      </div>
+      <div class="answer-label">参考答案</div>
+      <div class="answer-fr">À l'étranger, le moyen le plus rapide pour obtenir des informations, c'est souvent d'échanger avec les habitants. Chaque fois que je prends un taxi, je discute un peu avec le chauffeur — c'est une vraie mine d'informations ! Non seulement ils partagent des coutumes locales, mais ils recommandent aussi des endroits peu connus des touristes ou des restaurants vraiment typiques.</div>
+      <div class="answer-zh">在国外，获取信息最快的方式往往是和当地居民交流。每次坐出租车，我都会和司机聊几句——这真是一个信息宝库！他们不仅分享当地风俗，还会推荐游客不知道的地方或真正地道的餐厅。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggle(this)">
+      <div class="card-left">
+        <div class="badge b-coral">小结</div>
+        <div class="prompt">这些经历增强了我们的适应能力、好奇心和自信心。归根到底，它们促进了个人成长。</div>
+        <div class="hint">提示：renforcer，Finalement，favoriser，développement personnel</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">renforcer</span>
+        <span class="kw">capacité d'adaptation</span>
+        <span class="kw">confiance en nous</span>
+        <span class="kw">Finalement</span>
+        <span class="kw">favoriser</span>
+        <span class="kw">développement personnel</span>
+      </div>
+      <div class="answer-label">参考答案</div>
+      <div class="answer-fr">Ces expériences renforcent notre capacité d'adaptation, notre curiosité, et notre confiance en nous. Finalement, elles favorisent le développement personnel.</div>
+      <div class="answer-zh">这些经历增强了我们的适应能力、好奇心和自信心。归根到底，它们促进了个人成长。</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let opened = new Set();
+  const total = document.querySelectorAll('.card').length;
+
+  function toggle(header) {
+    const body = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    icon.classList.toggle('open', !isOpen);
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(header);
+    if (!isOpen) opened.add(idx); else opened.delete(idx);
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const pct = Math.round(opened.size / total * 100);
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = '已打开 ' + opened.size + ' / ' + total + ' 张';
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.toggle-icon').forEach(i => i.classList.remove('open'));
+    opened.clear();
+    updateProgress();
+  }
+</script>
+</body>
+</html>

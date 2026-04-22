@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCF Canada · Tâche 2 练习清单</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --surface2: #f0efe9;
+    --border: rgba(0,0,0,0.1);
+    --border-dash: rgba(0,0,0,0.12);
+    --text: #1a1a18;
+    --text-2: #6b6b65;
+    --text-3: #9e9d97;
+    --green: #1D9E75;
+    --green-bg: #E1F5EE;
+    --green-text: #085041;
+    --purple-bg: #EEEDFE;
+    --purple-text: #3C3489;
+    --amber-bg: #FAEEDA;
+    --amber-text: #633806;
+    --coral-bg: #FAECE7;
+    --coral-text: #712B13;
+    --blue-bg: #E6F1FB;
+    --blue-text: #0C447C;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: 'DM Sans', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 16px 64px;
+  }
+
+  .page { max-width: 680px; margin: 0 auto; }
+
+  header { margin-bottom: 28px; }
+  .title { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: var(--text-2); }
+
+  .progress-wrap { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 24px; }
+  .progress-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .progress-count { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
+  .progress-total { font-size: 13px; color: var(--text-3); }
+  .progress-bar { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.4s cubic-bezier(.4,0,.2,1); width: 0%; }
+
+  .phase { margin-bottom: 24px; }
+  .phase-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 0 2px; }
+  .phase-pill { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.02em; }
+  .phase-pct { font-size: 12px; color: var(--text-3); margin-left: auto; }
+
+  .group { margin-bottom: 4px; }
+  .dup-hint { font-size: 11px; color: var(--text-3); padding: 4px 2px 4px 36px; }
+
+  .card {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 11px 14px; border-radius: var(--radius);
+    cursor: pointer; user-select: none;
+    transition: opacity 0.2s, background 0.15s;
+    margin-bottom: 4px;
+  }
+  .card.primary { background: var(--surface); border: 0.5px solid var(--border); }
+  .card.primary:hover { background: #fafaf8; }
+  .card.dup { background: transparent; border: 0.5px dashed var(--border-dash); }
+  .card.dup:hover { background: rgba(0,0,0,0.02); }
+  .card.done { opacity: 0.32; }
+  .card.done .ctitle { text-decoration: line-through; }
+
+  .ccheck {
+    width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px;
+    border: 1.5px solid #c8c7c0; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .card.done .ccheck { background: var(--green); border-color: var(--green); }
+  .tick {
+    width: 9px; height: 5px;
+    border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translate(0.5px, -0.5px);
+    display: none;
+  }
+  .card.done .tick { display: block; }
+
+  .cbody { flex: 1; min-width: 0; }
+  .cid { font-size: 11px; font-weight: 600; color: var(--text-3); margin-bottom: 2px; letter-spacing: 0.04em; }
+  .ctitle { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.45; margin-bottom: 2px; }
+  .cmeta { font-size: 12px; color: var(--text-2); line-height: 1.4; }
+
+  .divider { height: 0.5px; background: var(--border); margin: 10px 0 8px; }
+
+  .reset-btn {
+    display: block; margin: 32px auto 0;
+    font-size: 12px; color: var(--text-3);
+    background: none; border: 0.5px solid var(--border);
+    border-radius: 6px; padding: 6px 16px; cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .reset-btn:hover { color: var(--text-2); border-color: rgba(0,0,0,0.2); }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="title">TCF Canada · Tâche 2</div>
+    <div class="subtitle">按频率排序 · 实线为代表题 · 虚线为同类重复题</div>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <span class="progress-count" id="pcount">0</span>
+      <span class="progress-total" id="ptotal">/ 44 已完成</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="pfill"></div></div>
+  </div>
+
+  <div id="phases"></div>
+
+  <button class="reset-btn" onclick="resetAll()">重置所有进度</button>
+</div>
+
+<script>
+const phases = [
+  {
+    label:"第一批 · 必练", pct:"地点/服务 · 原题32%",
+    pillBg:"#E1F5EE", pillColor:"#085041",
+    groups:[
+      { p:{id:"p1s4",code:"P1S4",title:"旅游局：主题公园（水族馆/动物园）",meta:"问开放时间、价格、餐厅等"}, d:[] },
+      { p:{id:"p2s3",code:"P2S3",title:"运动中心前台：选择运动项目",meta:"问项目种类、时间、费用、装备等"},
+        d:[
+          {id:"p6s1",code:"P6S1",title:"休闲中心：报名参加活动课程",meta:"问费用、时间、所需器材等"},
+          {id:"p9s4",code:"P9S4",title:"邻居在协会带运动课，想加入",meta:"问训练条件、项目、时间等"},
+          {id:"p9s3",code:"P9S3",title:"邻居在音乐学校教钢琴",meta:"问课程类型、价格、时间等"},
+          {id:"p8s2",code:"P8S2",title:"朋友参加了烹饪工作坊",meta:"问费用、时间、课程安排等"},
+        ]
+      },
+      { p:{id:"p2s4",code:"P2S4",title:"博物馆前台：带朋友参观",meta:"问开放时间、票价、导览等"}, d:[] },
+      { p:{id:"p4s4",code:"P4S4",title:"邻居游泳：询问泳池信息",meta:"问时间、价格、设施等"}, d:[] },
+      { p:{id:"p5s3",code:"P5S3",title:"旅行社：赢得旅游奖选目的地",meta:"问各城市天气、活动、预算等"},
+        d:[
+          {id:"p2s5",code:"P2S5",title:"同事推荐一座城市周末游",meta:"问住宿、餐厅、景点等"},
+          {id:"p4s5",code:"P4S5",title:"旅行社：乘飞机去加拿大",meta:"问登机、行李、机上服务等"},
+        ]
+      },
+      { p:{id:"p9s5",code:"P9S5",title:"旅游局：魁北克地区住宿咨询",meta:"问住宿类别、位置、价格等"}, d:[] },
+    ]
+  },
+  {
+    label:"第二批 · 高频", pct:"社交/邀请 · 原题23%",
+    pillBg:"#EEEDFE", pillColor:"#3C3489",
+    groups:[
+      { p:{id:"p1s1",code:"P1S1",title:"同事给你两张演出票",meta:"问日期、地点、演出类型等"},
+        d:[
+          {id:"p3s1",code:"P3S1",title:"为协会刊物写演出文章，询问朋友推荐",meta:"问演出费用、类型、地点等"},
+          {id:"p8s1",code:"P8S1",title:"朋友邀请去看演唱会",meta:"问音乐类型、地点、日期等"},
+          {id:"p3s5",code:"P3S5",title:"今晚想出去，和朋友讨论活动",meta:"问地点、交通、价格等"},
+          {id:"p4s3",code:"P4S3",title:"想去看电影，问朋友推荐",meta:"问类型、时长、演员、评价等"},
+          {id:"p7s4",code:"P7S4",title:"想开始追剧，朋友推荐",meta:"问类型、演员、流媒体平台等"},
+        ]
+      },
+      { p:{id:"p2s2",code:"P2S2",title:"朋友邀请参加庆典活动",meta:"问时间、礼物、着装等"},
+        d:[
+          {id:"p6s5",code:"P6S5",title:"朋友最近过了生日，你没去成",meta:"问活动流程、嘉宾、礼物、氛围等"},
+        ]
+      },
+      { p:{id:"p7s3",code:"P7S3",title:"朋友邀请：给其姐妹选生日礼物",meta:"问对方爱好、兴趣、性格等"}, d:[] },
+    ]
+  },
+  {
+    label:"第三批 · 常考", pct:"工作/职业 · 原题16%",
+    pillBg:"#FAEEDA", pillColor:"#633806",
+    groups:[
+      { p:{id:"p2s1",code:"P2S1",title:"刚入职，想了解公司",meta:"问结构、氛围、食堂等"},
+        d:[
+          {id:"p6s2",code:"P6S2",title:"新同事第一次见面，互相认识",meta:"问职位、家庭情况、爱好等"},
+          {id:"p5s2",code:"P5S2",title:"同事打算换部门",meta:"问动机、任务、时间、氛围等"},
+        ]
+      },
+      { p:{id:"p3s3",code:"P3S3",title:"语言学校比赛，向老师询问详情",meta:"问规则、奖品、参与方式等"}, d:[] },
+      { p:{id:"p3s4",code:"P3S4",title:"公司提供海外工作机会",meta:"问职位职责、薪资、福利等"},
+        d:[
+          {id:"p9s2",code:"P9S2",title:"朋友移居魁北克两年，问经验",meta:"问适应过程、困难、生活变化等"},
+        ]
+      },
+      { p:{id:"p5s4",code:"P5S4",title:"护送孩子上学的招聘岗位",meta:"问时间、学校位置、职责等"},
+        d:[
+          {id:"p8s4",code:"P8S4",title:"刚到埃德蒙顿，想给孩子报学校",meta:"问学校位置、师资、活动等"},
+        ]
+      },
+    ]
+  },
+  {
+    label:"第四批 · 常考", pct:"生活信息 · 原题14%",
+    pillBg:"#FAECE7", pillColor:"#712B13",
+    groups:[
+      { p:{id:"p1s3",code:"P1S3",title:"刚到魁北克，想预约医生",meta:"问地址、费用、专科等"}, d:[] },
+      { p:{id:"p3s2",code:"P3S2",title:"去蒙特利尔出差：问公共交通",meta:"问时间、价格、线路等"},
+        d:[
+          {id:"p8s5",code:"P8S5",title:"刚到某城市，问公共交通信息",meta:"问交通方式、价格、时间等"},
+        ]
+      },
+      { p:{id:"p4s1",code:"P4S1",title:"12月去加拿大朋友家做客",meta:"问气候、温度、衣物、活动等"},
+        d:[
+          {id:"p5s1",code:"P5S1",title:"朋友移居加拿大几个月，问生活",meta:"问住所、休闲、人际、工作等"},
+        ]
+      },
+      { p:{id:"p4s2",code:"P4S2",title:"同事提议合租，询问住房详情",meta:"问房间、规则、生活方式等"},
+        d:[
+          {id:"p9s1",code:"P9S1",title:"朋友出门，让你帮忙看公寓",meta:"问时间、要做什么、注意事项等"},
+        ]
+      },
+    ]
+  },
+  {
+    label:"第五批 · 补充", pct:"购买/租用及其他 · 原题11%",
+    pillBg:"#E6F1FB", pillColor:"#0C447C",
+    groups:[
+      { p:{id:"p1s2",code:"P1S2",title:"邻居出售家具（桌椅、电视、沙发）",meta:"问价格、状况、尺寸等"},
+        d:[
+          {id:"p6s4",code:"P6S4",title:"邻居搬家出售家具和家电",meta:"问物品、价格、状况等"},
+        ]
+      },
+      { p:{id:"p1s5",code:"P1S5",title:"汽车租赁公司：租车度假",meta:"问价格、条件、所需证件等"}, d:[] },
+      { p:{id:"p7s1",code:"P7S1",title:"久未联系的加拿大朋友，互问近况",meta:"问工作、亲近的人、爱好等"},
+        d:[
+          {id:"p6s3",code:"P6S3",title:"想结交新朋友，问邻居建议",meta:"问途径、活动、场所等"},
+          {id:"p7s5",code:"P7S5",title:"刚到加拿大，问同事如何认识新朋友",meta:"问活动、地点、出行等"},
+        ]
+      },
+      { p:{id:"p7s2",code:"P7S2",title:"朋友有包裹要寄，托你帮忙",meta:"问截止日期、包裹大小、所需时间等"}, d:[] },
+      { p:{id:"p8s3",code:"P8S3",title:"刚到多伦多，想订餐厅过生日",meta:"问菜系、价格、氛围等"}, d:[] },
+      { p:{id:"p5s5",code:"P5S5",title:"路上偶遇：法语电影节志愿者",meta:"问日期、节目、时间、票价等"}, d:[] },
+    ]
+  },
+];
+
+const KEY = 'tcf_tache2_v1';
+const TOTAL = 44;
+
+function getDone(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{ return []; } }
+function saveDone(d){ try{ localStorage.setItem(KEY, JSON.stringify(d)); }catch{} }
+
+function toggle(id){
+  let d = getDone();
+  d = d.includes(id) ? d.filter(x=>x!==id) : [...d, id];
+  saveDone(d);
+  render();
+}
+
+function resetAll(){
+  if(confirm('确定要重置所有进度吗？')) { saveDone([]); render(); }
+}
+
+function render(){
+  const done = getDone();
+  const n = done.length;
+  document.getElementById('pcount').textContent = n;
+  document.getElementById('ptotal').textContent = '/ '+TOTAL+' 已完成';
+  document.getElementById('pfill').style.width = Math.round(n/TOTAL*100)+'%';
+
+  const container = document.getElementById('phases');
+  container.innerHTML = '';
+
+  phases.forEach(phase => {
+    const wrap = document.createElement('div');
+    wrap.className = 'phase';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'phase-header';
+    hdr.innerHTML =
+      '<span class="phase-pill" style="background:'+phase.pillBg+';color:'+phase.pillColor+'">'+phase.label+'</span>'+
+      '<span class="phase-pct">'+phase.pct+'</span>';
+    wrap.appendChild(hdr);
+
+    phase.groups.forEach((group, gi) => {
+      if(gi > 0){
+        const div = document.createElement('div');
+        div.className = 'divider';
+        wrap.appendChild(div);
+      }
+
+      const g = document.createElement('div');
+      g.className = 'group';
+
+      const makeCard = (item, isDup) => {
+        const isDone = done.includes(item.id);
+        const card = document.createElement('div');
+        card.className = 'card '+(isDup?'dup':'primary')+(isDone?' done':'');
+        card.innerHTML =
+          '<div class="ccheck"><div class="tick"></div></div>'+
+          '<div class="cbody">'+
+            '<div class="cid">'+item.code+(isDup?' · 同类重复':'')+'</div>'+
+            '<div class="ctitle">'+item.title+'</div>'+
+            '<div class="cmeta">'+item.meta+'</div>'+
+          '</div>';
+        card.onclick = () => toggle(item.id);
+        return card;
+      };
+
+      g.appendChild(makeCard(group.p, false));
+
+      if(group.d.length > 0){
+        const hint = document.createElement('div');
+        hint.className = 'dup-hint';
+        hint.textContent = '↳ 同类重复题（练完代表题可跳过，或用来加练）';
+        g.appendChild(hint);
+        group.d.forEach(item => g.appendChild(makeCard(item, true)));
+      }
+
+      wrap.appendChild(g);
+    });
+
+    container.appendChild(wrap);
+  });
+}
+
+render();
+</script>
+</body>
+</html>

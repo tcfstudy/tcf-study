@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>远程上班的好处 / 坏处</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f6f3; padding: 2rem 1rem; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+  .deck-title { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; margin-top: 2rem; }
+  .card { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; }
+  .card-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; user-select: none; }
+  .card-header:hover { background: #fafaf8; }
+  .card-left { flex: 1; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 6px; margin-bottom: 6px; }
+  .b-purple { background: #ede9fe; color: #5b21b6; }
+  .b-blue   { background: #dbeafe; color: #1e40af; }
+  .b-teal   { background: #d1fae5; color: #065f46; }
+  .b-amber  { background: #fef3c7; color: #92400e; }
+  .b-coral  { background: #fee2e2; color: #991b1b; }
+  .prompt { font-size: 15px; font-weight: 500; color: #1a1a1a; line-height: 1.5; }
+  .hint { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .toggle-icon { font-size: 14px; color: #bbb; margin-top: 2px; flex-shrink: 0; transition: transform 0.2s; }
+  .toggle-icon.open { transform: rotate(90deg); }
+  .card-body { display: none; border-top: 1px solid #f0ede8; padding: 1rem 1.25rem 0.75rem; }
+  .card-body.open { display: block; }
+  .kw-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.9rem; }
+  .kw { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: #f3f2ef; color: #555; border: 1px solid #e8e6e1; font-family: monospace; }
+  .ans-toggle-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #aaa; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; user-select: none; transition: color 0.15s; }
+  .ans-toggle-btn:hover { color: #555; }
+  .ans-arrow { font-size: 11px; transition: transform 0.2s; display: inline-block; }
+  .ans-arrow.open { transform: rotate(90deg); }
+  .answer-section { display: none; border-top: 1px solid #f0ede8; margin-top: 0.75rem; padding-top: 0.75rem; }
+  .answer-section.open { display: block; }
+  .answer-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .answer-fr { font-size: 14px; font-style: italic; color: #444; line-height: 1.7; }
+  .answer-fr p { margin-bottom: 0.5rem; }
+  .answer-fr p:last-child { margin-bottom: 0; }
+  .answer-zh { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .answer-note { font-size: 12px; color: #b08d57; background: #fef9f0; border-left: 3px solid #f5c97a; border-radius: 0 5px 5px 0; padding: 6px 10px; margin-top: 8px; line-height: 1.5; }
+  .progress-wrap { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; }
+  .prog-bg { flex: 1; height: 6px; background: #f0ede8; border-radius: 3px; }
+  .prog-fill { height: 6px; border-radius: 3px; background: #7c3aed; transition: width 0.4s; }
+  .prog-text { font-size: 12px; color: #999; white-space: nowrap; }
+  .reset-btn { font-size: 12px; color: #7c3aed; cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .reset-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>远程上班的好处 / 坏处</h1>
+  <p class="subtitle">看中文提示，组织法语句子，展开关键词后再查看参考答案</p>
+
+  <div class="progress-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <span class="prog-text" id="prog-text">已打开 0 张</span>
+    <button class="reset-btn" onclick="resetAll()">重置</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <div class="deck-title">第一篇 · 远程上班的好处</div>
+
+  <!-- 观点 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">从企业角度来看，远程办公也有几个优势。</div>
+        <div class="hint">提示：Du côté des entreprises，le télétravail offre，plusieurs avantages</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Du côté des entreprises</span>
+        <span class="kw">le télétravail offre</span>
+        <span class="kw">plusieurs avantages</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Du côté des entreprises, le télétravail offre aussi plusieurs avantages.</p></div>
+        <div class="answer-zh">从企业角度来看，远程办公也有几个优势。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点1 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1</div>
+        <div class="prompt">疫情后，很多企业意识到远程工作可以和在办公室一样高效。数字工具让沟通、任务管理甚至开会都变得更方便了。</div>
+        <div class="hint">提示：Après la crise sanitaire，les entreprises ont compris que，travailler à distance pouvait être aussi efficace que，Les outils numériques ont rendu + 名词 + plus faciles</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Après la crise sanitaire</span>
+        <span class="kw">travailler à distance</span>
+        <span class="kw">aussi efficace que travailler au bureau</span>
+        <span class="kw">Les outils numériques ont rendu... plus faciles</span>
+        <span class="kw">la communication, la gestion des tâches, les réunions</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Après la crise sanitaire, beaucoup d'entreprises ont compris que travailler à distance pouvait être aussi efficace que travailler au bureau. Les outils numériques ont rendu la communication, la gestion des tâches et même les réunions plus faciles.</p></div>
+        <div class="answer-zh">疫情过后，很多企业意识到远程工作可以和在办公室一样高效。数字工具让沟通、任务管理甚至开会都变得更方便了。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点2 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2</div>
+        <div class="prompt">此外，远程办公能节省开支：更少的办公室、电费、食堂等服务。员工更满意，留存时间更长。也是在全球范围内招揽人才的好方式，不受距离限制。</div>
+        <div class="hint">提示：De plus，dépenser moins d'argent，列举 moins de + 三项，les employés sont plus contents / restent plus longtemps，trouver des talents partout dans le monde，sans être limité par la distance</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">De plus</span>
+        <span class="kw">dépenser moins d'argent</span>
+        <span class="kw">moins de bureaux / électricité / services</span>
+        <span class="kw">les employés restent plus longtemps</span>
+        <span class="kw">trouver des talents partout dans le monde</span>
+        <span class="kw">sans être limité par la distance</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>De plus, le télétravail permet de dépenser moins d'argent : moins de bureaux, moins d'électricité, moins de services comme la cantine. Les employés sont souvent plus contents, donc ils restent plus longtemps dans l'entreprise. Et c'est aussi un bon moyen de trouver des talents partout dans le monde, sans être limité par la distance.</p></div>
+        <div class="answer-zh">此外，远程办公能节省开支：更少的办公室、电费、食堂等服务。员工通常更满意，所以在公司留存时间更长。这也是在全球范围内招揽人才的好方式，不受距离限制。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <div class="deck-title">第二篇 · 远程上班的坏处</div>
+
+  <!-- 观点 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">远程办公对员工有很大影响。但这种影响可能是正面的，也可能是负面的，取决于个人情况和工作条件。</div>
+        <div class="hint">提示：Le télétravail a un impact important sur les employés，Mais cet impact peut être positif ou négatif，selon les personnes et les conditions</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Le télétravail a un impact important sur</span>
+        <span class="kw">positif ou négatif</span>
+        <span class="kw">selon les personnes et les conditions</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Le télétravail a un impact important sur les employés. Mais cet impact peut être positif ou négatif, selon les personnes et les conditions.</p></div>
+        <div class="answer-zh">远程办公对员工有很大影响。但这种影响可能是正面的，也可能是负面的，取决于个人情况和工作条件。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点1 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1</div>
+        <div class="prompt">有些人在家更专注高效，节省通勤时间，能更好地安排一天和平衡工作与生活。另一些人则相反，感到孤独、容易分心或难以保持动力。这一切取决于工作类型、家里的环境和自我组织能力。</div>
+        <div class="hint">提示：certaines personnes se sentent plus concentrées，perdre moins de temps dans les transports，D'autres au contraire，se laisser facilement distraire，Tout dépend de + 三个因素</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">certaines personnes se sentent plus concentrées</span>
+        <span class="kw">perdre moins de temps dans les transports</span>
+        <span class="kw">mieux équilibrer vie professionnelle et personnelle</span>
+        <span class="kw">D'autres, au contraire</span>
+        <span class="kw">se laisser facilement distraire</span>
+        <span class="kw">avoir du mal à rester motivées</span>
+        <span class="kw">Tout dépend du type de travail / de l'environnement / de la capacité à s'organiser</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Par exemple, certaines personnes se sentent plus concentrées et plus efficaces à la maison. Elles perdent moins de temps dans les transports, elles peuvent mieux organiser leur journée et mieux équilibrer leur vie professionnelle et personnelle. D'autres, au contraire, se sentent seules, se laissent facilement distraire ou ont du mal à rester motivées. Tout dépend du type de travail, de l'environnement à la maison, et de la capacité à bien s'organiser.</p></div>
+        <div class="answer-zh">比如，有些人在家感觉更专注、更高效。他们节省了通勤时间，能更好地安排一天，也能更好地平衡工作与个人生活。而另一些人则相反，感到孤独、容易分心，或难以保持动力。这一切取决于工作类型、家里的环境和自我组织能力。</div>
+        <div class="answer-note">🔗 可串题材：网络对生活工作的不利影响</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点2 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2</div>
+        <div class="prompt">有些职业仍然需要亲自完成，尤其是需要团队合作、集体创意或真实人际接触的工作，比如医疗、教育或商业。因此我认为，混合模式才是职场的未来：几天在家，几天在办公室。</div>
+        <div class="hint">提示：Certains métiers ont encore besoin d'être faits en personne，surtout quand il faut + 三种情况，comme dans la santé / l'éducation / le commerce，C'est pourquoi à mon avis，le modèle hybride est l'avenir</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Certains métiers ont encore besoin d'être faits en personne</span>
+        <span class="kw">travailler ensemble / être créatif en groupe / avoir un vrai contact humain</span>
+        <span class="kw">comme dans la santé, l'éducation ou le commerce</span>
+        <span class="kw">C'est pourquoi, à mon avis</span>
+        <span class="kw">le modèle hybride est l'avenir du monde professionnel</span>
+        <span class="kw">quelques jours à la maison, quelques jours au bureau</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Certains métiers ont encore besoin d'être faits en personne, surtout quand il faut travailler ensemble, être créatif en groupe, ou avoir un vrai contact humain, comme dans la santé, l'éducation ou le commerce. C'est pourquoi, à mon avis, le modèle hybride est l'avenir du monde professionnel : quelques jours à la maison, quelques jours au bureau.</p></div>
+        <div class="answer-zh">有些职业仍然需要亲自完成，尤其是需要团队合作、集体创意或真实人际接触的工作，比如医疗、教育或商业。因此，我认为混合模式才是职场的未来：几天在家，几天在办公室。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let opened = new Set();
+  const total = document.querySelectorAll('.card').length;
+
+  function toggleKw(header) {
+    const body = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    icon.classList.toggle('open', !isOpen);
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(header);
+    if (!isOpen) {
+      opened.add(idx + '-kw');
+    } else {
+      opened.delete(idx + '-kw');
+      opened.delete(idx + '-ans');
+    }
+    updateProgress();
+  }
+
+  function toggleAns(event, btn) {
+    event.stopPropagation();
+    const ansSection = btn.nextElementSibling;
+    const arrow = btn.querySelector('.ans-arrow');
+    const isOpen = ansSection.classList.contains('open');
+    ansSection.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+    const card = btn.closest('.card');
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(card.querySelector('.card-header'));
+    if (!isOpen) opened.add(idx + '-ans'); else opened.delete(idx + '-ans');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const ansCount = Array.from(opened).filter(k => k.endsWith('-ans')).length;
+    const pct = Math.round(ansCount / total * 100);
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = '已打开 ' + ansCount + ' / ' + total + ' 张';
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.toggle-icon').forEach(i => i.classList.remove('open'));
+    document.querySelectorAll('.answer-section').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.ans-arrow').forEach(a => a.classList.remove('open'));
+    opened.clear();
+    updateProgress();
+  }
+</script>
+</body>
+</html>

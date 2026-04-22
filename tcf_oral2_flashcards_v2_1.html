@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCF Canada 口语2 高频句练习</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f5f5f3; color: #1a1a1a;
+  min-height: 100vh; padding: 2rem 1rem;
+}
+h1 { font-size: 20px; font-weight: 500; text-align: center; margin-bottom: 0.4rem; }
+.subtitle { text-align: center; font-size: 13px; color: #888; margin-bottom: 0.6rem; }
+.freq-legend {
+  display: flex; gap: 12px; justify-content: center;
+  font-size: 11px; color: #aaa; margin-bottom: 1.75rem; flex-wrap: wrap;
+}
+.wrap { max-width: 680px; margin: 0 auto; }
+.controls { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.btn {
+  background: #fff; border: 1px solid #ddd; border-radius: 8px;
+  padding: 6px 14px; font-size: 13px; cursor: pointer; color: #1a1a1a;
+  transition: background 0.15s;
+}
+.btn:hover { background: #f0f0ee; }
+.btn.primary { border-color: #999; font-weight: 500; }
+.progress { font-size: 13px; color: #888; margin-left: auto; }
+.stats { display: flex; gap: 10px; margin-bottom: 1.25rem; }
+.stat {
+  background: #fff; border: 1px solid #e8e8e6;
+  border-radius: 8px; padding: 0.6rem 1rem; flex: 1; text-align: center;
+}
+.stat-num { font-size: 20px; font-weight: 500; }
+.stat-label { font-size: 11px; color: #aaa; margin-top: 2px; }
+.flashcard {
+  background: #fff; border: 1px solid #e8e8e6; border-radius: 14px;
+  padding: 2rem 1.75rem; min-height: 160px;
+  display: flex; flex-direction: column; justify-content: center;
+  cursor: pointer; margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.flashcard:hover { border-color: #bbb; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+.card-tag { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 0.04em; }
+.card-freq { font-size: 12px; }
+.card-zh { font-size: 19px; font-weight: 500; color: #1a1a1a; line-height: 1.5; }
+.card-fr {
+  font-size: 15px; color: #555; font-style: italic; line-height: 1.6;
+  margin-top: 1.1rem; padding-top: 1.1rem;
+  border-top: 1px solid #eee;
+  transition: opacity 0.2s;
+}
+.card-fr.hidden { opacity: 0; pointer-events: none; }
+.hint { font-size: 12px; color: #ccc; margin-top: 1.25rem; text-align: center; }
+.nav { display: flex; gap: 8px; margin-bottom: 1rem; }
+.kbd-hint { font-size: 11px; color: #ccc; text-align: center; margin-bottom: 1.25rem; }
+kbd { background: #f0f0ee; border: 1px solid #ddd; border-radius: 4px; padding: 1px 5px; font-size: 11px; }
+.index-bar { display: flex; flex-wrap: wrap; gap: 4px; }
+.idx-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  border: 1px solid #e8e8e6; background: transparent;
+  cursor: pointer; font-size: 11px; color: #bbb;
+  display: flex; align-items: center; justify-content: center;
+}
+.idx-btn:hover { background: #f5f5f3; }
+.idx-btn.seen { background: #f0f0ee; color: #888; }
+.idx-btn.current { border-color: #888; color: #1a1a1a; font-weight: 500; background: #fff; }
+@media (max-width: 480px) {
+  .card-zh { font-size: 16px; }
+  .card-fr { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>TCF Canada 口语2 高频句练习</h1>
+  <p class="subtitle">看中文 → 脑中翻译 → 点击显示答案</p>
+  <p class="subtitle">按跨题型频率从高到低排列 · 同频率内保持原素材类别顺序</p>
+  <div class="freq-legend">
+    <span>⭐⭐⭐⭐⭐ 全场景通用</span>
+    <span>⭐⭐⭐⭐ 高频</span>
+    <span>⭐⭐⭐ 中高频</span>
+    <span>⭐⭐ 中频</span>
+    <span>⭐ 场景专属</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="statSeen">0</div><div class="stat-label">已练习</div></div>
+    <div class="stat"><div class="stat-num" id="statTotal">0</div><div class="stat-label">总句数</div></div>
+    <div class="stat"><div class="stat-num" id="statPct">0%</div><div class="stat-label">完成率</div></div>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="shuffleBtn">🔀 随机</button>
+    <button class="btn" id="resetBtn">↺ 重置</button>
+    <span class="progress" id="progressText">1 / 0</span>
+  </div>
+
+  <div class="flashcard" id="card" onclick="toggleAnswer()">
+    <div class="card-top">
+      <div class="card-tag" id="cardTag"></div>
+      <div class="card-freq" id="cardFreq"></div>
+    </div>
+    <div class="card-zh" id="cardZh"></div>
+    <div class="card-fr hidden" id="cardFr"></div>
+    <div class="hint" id="hint">点击显示法文答案</div>
+  </div>
+
+  <div class="nav">
+    <button class="btn" onclick="prevCard()">← 上一句</button>
+    <button class="btn primary" onclick="toggleAnswer()">显示 / 隐藏</button>
+    <button class="btn" onclick="nextCard()">下一句 →</button>
+  </div>
+  <div class="kbd-hint"><kbd>←</kbd> 上一句 &nbsp; <kbd>→</kbd> 下一句 &nbsp; <kbd>空格</kbd> 显示答案</div>
+  <div class="index-bar" id="indexBar"></div>
+</div>
+
+<script>
+const ALL = [
+  {zh:"具体是几点开始？",fr:"À quelle heure est-ce que ça commence exactement ?",tag:"时间",freq:5},
+  {zh:"一般几点结束？",fr:"Ça se termine à quelle heure en général ?",tag:"时间",freq:5},
+  {zh:"一共持续多长时间？",fr:"Combien de temps ça dure en tout ?",tag:"时间",freq:5},
+  {zh:"您能告诉我大概的收费情况吗？",fr:"Pourriez-vous me donner une idée des tarifs ?",tag:"价格",freq:5},
+  {zh:"价格里包含所有费用，还是有额外收费？",fr:"Est-ce que tout est inclus dans le prix ou il y a des frais supplémentaires ?",tag:"价格",freq:5},
+  {zh:"具体在哪里进行？",fr:"Où est-ce que ça se passe exactement ?",tag:"地点",freq:5},
+  {zh:"公共交通方便吗？",fr:"C'est bien desservi par les transports en commun ?",tag:"地点",freq:5},
+  {zh:"怎么报名——网上、电话还是现场？",fr:"Comment se passe l'inscription — en ligne, par téléphone ou sur place ?",tag:"报名",freq:5},
+  {zh:"参加有什么特别要求吗？",fr:"Y a-t-il des conditions particulières pour participer ?",tag:"报名",freq:5},
+  {zh:"开始之前有什么重要的事情需要了解吗？",fr:"Y a-t-il des choses importantes à savoir avant de commencer ?",tag:"建议",freq:5},
+  {zh:"如果要给初学者推荐一个选择，您会推荐哪个？",fr:"Si vous deviez recommander une option pour quelqu'un qui débute, ce serait laquelle ?",tag:"建议",freq:5},
+  {zh:"多久一次——每周一次还是更频繁？",fr:"À quelle fréquence est-ce que ça a lieu — une fois par semaine ou plus ?",tag:"时间",freq:4},
+  {zh:"假期期间还继续吗，还是会暂停？",fr:"Est-ce que ça continue pendant les vacances ou il y a une pause ?",tag:"时间",freq:4},
+  {zh:"是一次性付款，还是有订阅方式？",fr:"Est-ce qu'on paie en une seule fois ou il y a un abonnement ?",tag:"价格",freq:4},
+  {zh:"学生或家庭有优惠吗？",fr:"Et est-ce qu'il y a des réductions pour les étudiants ou les familles ?",tag:"价格",freq:4},
+  {zh:"如果我需要取消，可以退款吗？",fr:"Que se passe-t-il si je dois annuler — est-ce qu'on peut être remboursé ?",tag:"价格",freq:4},
+  {zh:"离市中心远吗？大概要多久到？",fr:"C'est loin du centre-ville ? Combien de temps il faut pour y aller ?",tag:"地点",freq:4},
+  {zh:"报名需要提供什么特别文件吗？",fr:"Faut-il fournir des documents particuliers pour s'inscrire ?",tag:"报名",freq:4},
+  {zh:"需要提前很久报名，还是随时都可以？",fr:"Est-ce qu'il faut s'inscrire longtemps à l'avance ou on peut venir spontanément ?",tag:"报名",freq:4},
+  {zh:"您最喜欢这里面的哪一点？",fr:"Qu'est-ce que vous appréciez le plus dans tout ça ?",tag:"建议",freq:4},
+  {zh:"您觉得这适合从没尝试过的人吗？",fr:"Et vous pensez que c'est adapté à quelqu'un qui n'a jamais essayé ?",tag:"建议",freq:4},
+  {zh:"你们具体提供哪些类型的活动或课程？",fr:"Quels types d'activités ou de cours proposez-vous exactement ?",tag:"课程",freq:4},
+  {zh:"那在这些里面，您会推荐初学者参加哪个？",fr:"Et parmi tout ça, qu'est-ce que vous recommanderiez pour quelqu'un qui débute ?",tag:"课程",freq:4},
+  {zh:"课程里具体做什么？",fr:"Qu'est-ce qu'on fait exactement pendant les séances ?",tag:"课程",freq:4},
+  {zh:"对所有人开放，还是需要一定基础？",fr:"Est-ce que c'est ouvert à tout le monde ou il faut un niveau minimum pour participer ?",tag:"课程",freq:4},
+  {zh:"报名前可以先试听一次吗？",fr:"Est-il possible d'assister à une séance d'essai avant de s'inscrire ?",tag:"课程",freq:4},
+  {zh:"试听是免费的吗？",fr:"Et la séance d'essai est gratuite ?",tag:"课程",freq:4},
+  {zh:"日常具体是怎么运作的？",fr:"Comment ça fonctionne exactement au quotidien ?",tag:"职场",freq:4},
+  {zh:"你们具体提供哪些服务？",fr:"Quels types de services proposez-vous exactement ?",tag:"服务",freq:4},
+  {zh:"工作日、周末都有，还是只有其中一个？",fr:"Est-ce que c'est disponible en semaine, le week-end, ou les deux ?",tag:"时间",freq:3},
+  {zh:"周六和周日的时间一样吗？",fr:"Et le samedi et le dimanche, les horaires sont les mêmes ?",tag:"时间",freq:3},
+  {zh:"预订时需要先付定金吗？",fr:"Faut-il verser un acompte au moment de la réservation ?",tag:"价格",freq:3},
+  {zh:"那可以改到其他日期吗？",fr:"Et est-ce qu'il est possible de reporter à une autre date ?",tag:"价格",freq:3},
+  {zh:"停车免费，还是需要额外付费？",fr:"Est-ce que le parking est gratuit ou faut-il payer un supplément ?",tag:"地点",freq:3},
+  {zh:"如果不完全符合条件，有例外的可能吗？",fr:"Et si on ne remplit pas toutes les conditions, il y a des exceptions possibles ?",tag:"报名",freq:3},
+  {zh:"在您看来，和其他选择相比最大的优势是什么？",fr:"À votre avis, quel est le plus grand avantage par rapport aux autres options ?",tag:"建议",freq:3},
+  {zh:"您觉得这真的值这个价吗？",fr:"Est-ce que vous avez l'impression que ça vaut vraiment le prix ?",tag:"建议",freq:3},
+  {zh:"如果只给我一个建议，您会说什么？",fr:"Si vous deviez me donner un seul conseil pour bien s'installer ici, ce serait lequel ?",tag:"建议",freq:3},
+  {zh:"如果需要取消一次课，可以改期吗？",fr:"J'aimerais savoir ce qu'il se passe si je dois annuler une séance — est-ce possible de la reporter ?",tag:"课程",freq:3},
+  {zh:"每组一般有多少人参加？",fr:"Combien de personnes participent par groupe en général ?",tag:"课程",freq:3},
+  {zh:"第一次来的人容易融入吗？",fr:"Et est-ce que c'est facile de s'intégrer quand on arrive pour la première fois ?",tag:"课程",freq:3},
+  {zh:"您会推荐什么目的地或地区？",fr:"Quelles sont les destinations ou les régions que vous recommanderiez pour ce type de voyage ?",tag:"旅游",freq:3},
+  {zh:"行程是怎么安排的——有固定计划还是自由行？",fr:"Comment est organisé le séjour — il y a un programme fixe ou c'est libre ?",tag:"旅游",freq:3},
+  {zh:"旅行一般持续多长时间？",fr:"Combien de temps dure le séjour en général ?",tag:"旅游",freq:3},
+  {zh:"您推荐至少几天才能好好体验？",fr:"Et vous recommanderiez combien de jours minimum pour vraiment en profiter ?",tag:"旅游",freq:3},
+  {zh:"当地有哪些活动可以参加？",fr:"Quelles sont les activités proposées sur place ?",tag:"旅游",freq:3},
+  {zh:"那您觉得哪个绝对不能错过？",fr:"Et qu'est-ce que vous conseilleriez absolument de ne pas manquer ?",tag:"旅游",freq:3},
+  {zh:"什么时候去最合适？",fr:"Quelle est la meilleure période pour faire ce type de voyage ?",tag:"旅游",freq:3},
+  {zh:"旺季的话需要提前很久预订吗？",fr:"Est-ce qu'il faut réserver longtemps à l'avance surtout en haute saison ?",tag:"旅游",freq:3},
+  {zh:"具体的开放时间是什么？",fr:"Quels sont les horaires d'ouverture exactement ?",tag:"旅游",freq:3},
+  {zh:"门票多少钱——儿童或家庭有优惠吗？",fr:"Quel est le tarif d'entrée — et est-ce qu'il y a des réductions pour les enfants ou les familles ?",tag:"旅游",freq:3},
+  {zh:"逛完整个地方大概需要多长时间？",fr:"Combien de temps faut-il prévoir pour faire le tour complet ?",tag:"旅游",freq:3},
+  {zh:"可以在那里吃午饭，还是需要自带食物？",fr:"Est-il possible de déjeuner sur place ou il faut prévoir de quoi manger ?",tag:"旅游",freq:3},
+  {zh:"那价格是偏贵还是合理？",fr:"Et c'est plutôt cher ou c'est raisonnable ?",tag:"旅游",freq:3},
+  {zh:"需要提前买票，还是可以现场购买？",fr:"Faut-il réserver les billets à l'avance ou on peut acheter sur place ?",tag:"旅游",freq:3},
+  {zh:"住所具体在哪里——离市中心近吗？",fr:"Où est-ce que le logement se situe exactement — c'est proche du centre-ville ?",tag:"住房",freq:3},
+  {zh:"那从那里坐公共交通方便吗？",fr:"Et les transports en commun, c'est facilement accessible depuis là ?",tag:"住房",freq:3},
+  {zh:"每月租金是多少？",fr:"Quel est le loyer mensuel exactement ?",tag:"住房",freq:3},
+  {zh:"那物业费包含在这个价格里，还是需要另付？",fr:"Et les charges sont incluses dans ce prix ou c'est en supplément ?",tag:"住房",freq:3},
+  {zh:"签合同时需要付押金吗？",fr:"Est-ce qu'il faut verser une caution au moment de la signature ?",tag:"住房",freq:3},
+  {zh:"住所什么时候可以入住？",fr:"À partir de quand est-ce que le logement est disponible ?",tag:"住房",freq:3},
+  {zh:"申请需要提供哪些文件？",fr:"Quels documents faut-il fournir pour faire la demande ?",tag:"住房",freq:3},
+  {zh:"那在我的情况下，您推荐哪种服务？",fr:"Et dans mon cas, quel service vous recommanderiez ?",tag:"服务",freq:3},
+  {zh:"你们多久能来处理？",fr:"Dans combien de temps est-ce que vous pouvez intervenir ?",tag:"服务",freq:3},
+  {zh:"处理这类请求一般需要多长时间？",fr:"Combien de temps ça prend en général pour traiter ce type de demande ?",tag:"服务",freq:3},
+  {zh:"需要提前预约，还是可以直接来？",fr:"Est-ce qu'il faut prendre rendez-vous à l'avance ou on peut venir directement ?",tag:"服务",freq:3},
+  {zh:"你们的营业时间是什么——周末也开吗？",fr:"Quels sont vos horaires d'ouverture — vous êtes disponibles le week-end aussi ?",tag:"服务",freq:3},
+  {zh:"这类服务的收费是多少？",fr:"Quel est le tarif pour ce type de service ?",tag:"服务",freq:3},
+  {zh:"具体怎么操作——有哪些步骤？",fr:"Comment ça se passe exactement — quelles sont les étapes ?",tag:"服务",freq:3},
+  {zh:"出问题的话，我具体应该联系谁？",fr:"En cas de problème, qui est-ce que je dois contacter exactement ?",tag:"服务",freq:3},
+  {zh:"您具体出售哪些类型的产品？",fr:"Quels types de produits est-ce que vous proposez exactement ?",tag:"购物",freq:3},
+  {zh:"产品状态好吗——已经用了很久了吗？",fr:"Est-ce que les produits sont en bon état — ils ont déjà été utilisés longtemps ?",tag:"购物",freq:3},
+  {zh:"那有什么特别需要说明的瑕疵吗？",fr:"Et est-ce qu'il y a des défauts particuliers à signaler ?",tag:"购物",freq:3},
+  {zh:"这类产品的价格是多少？",fr:"Quel est le prix pour ce type de produit ?",tag:"购物",freq:3},
+  {zh:"日常和谁一起工作——小团队还是很多人？",fr:"Avec qui est-ce qu'on travaille au quotidien — une petite équipe ou beaucoup de monde ?",tag:"职场",freq:3},
+  {zh:"那一开始容易找到自己的位置吗？",fr:"Et c'est facile de s'y retrouver au début ?",tag:"职场",freq:3},
+  {zh:"同事之间怎么沟通——邮件、消息还是开会？",fr:"Comment vous communiquez entre collègues — par email, par messagerie ou en réunion ?",tag:"职场",freq:3},
+  {zh:"你现在怎么样——工作、生活总体如何？",fr:"Comment ça se passe pour toi en ce moment — au travail, dans ta vie en général ?",tag:"社交",freq:3},
+  {zh:"你现在空闲时间都做什么？",fr:"Qu'est-ce que tu fais pendant ton temps libre maintenant ?",tag:"社交",freq:3},
+  {zh:"那你做这个有多久了？",fr:"Et ça fait longtemps que tu fais ça ?",tag:"社交",freq:3},
+  {zh:"总共有多少人参加？",fr:"Combien de personnes seront présentes en tout ?",tag:"社交",freq:3},
+  {zh:"需要带什么吗——食物或饮料？",fr:"Est-ce qu'il faut apporter quelque chose — à manger, à boire ?",tag:"社交",freq:3},
+  {zh:"你想象的氛围是什么样的——比较随意还是正式一些？",fr:"Comment tu imagines l'ambiance — plutôt décontractée ou plus habillée ?",tag:"社交",freq:3},
+  {zh:"有特别的着装要求，还是普通穿着就可以？",fr:"Est-ce qu'il y a un dress code particulier ou on peut venir habillé normalement ?",tag:"社交",freq:3},
+  {zh:"需要提前预订车位，还是随时都有？",fr:"Et il faut réserver une place à l'avance ou c'est libre ?",tag:"地点",freq:2},
+  {zh:"一共有几个房间？",fr:"Combien de pièces est-ce qu'il y a exactement ?",tag:"住房",freq:2},
+  {zh:"那卧室是大的还是比较小？",fr:"Et les chambres, elles sont grandes ou plutôt petites ?",tag:"住房",freq:2},
+  {zh:"住所设施齐全吗——厨房、浴室这些？",fr:"Est-ce que le logement est bien équipé — cuisine, salle de bain, etc. ?",tag:"住房",freq:2},
+  {zh:"住所采光好吗？",fr:"Est-ce que le logement est bien lumineux ?",tag:"住房",freq:2},
+  {zh:"附近有商店、学校或公园吗？",fr:"Y a-t-il des commerces, des écoles ou des parcs à proximité ?",tag:"住房",freq:2},
+  {zh:"这个街区总体怎么样——安静还是比较热闹？",fr:"Comment est le quartier en général — c'est calme ou plutôt animé ?",tag:"住房",freq:2},
+  {zh:"那晚上也很安静，没有什么噪音吗？",fr:"Et la nuit aussi c'est calme, pas de bruit particulier ?",tag:"住房",freq:2},
+  {zh:"那相当于几个月的租金？",fr:"Et ça représente combien de mois de loyer ?",tag:"住房",freq:2},
+  {zh:"合同最短期限是多久？",fr:"Quelle est la durée minimale du contrat ?",tag:"住房",freq:2},
+  {zh:"那如果我需要在合同结束前离开，怎么处理？",fr:"Et si je dois partir avant la fin du contrat, comment ça se passe ?",tag:"住房",freq:2},
+  {zh:"街区里有方便就诊的医生或诊所吗？",fr:"Est-ce qu'il y a des médecins ou des cliniques facilement accessibles dans le quartier ?",tag:"住房",freq:2},
+  {zh:"那找一个家庭医生容易吗，还是要等很长时间？",fr:"Et pour avoir un médecin de famille, c'est facile ou il faut attendre longtemps ?",tag:"住房",freq:2},
+  {zh:"你特别推荐街区里的哪些地方？",fr:"Y a-t-il des endroits que tu recommanderais particulièrement dans le quartier ?",tag:"住房",freq:2},
+  {zh:"有什么重要的事情需要了解，才能更好地融入这里？",fr:"Y a-t-il des choses importantes à savoir pour bien s'intégrer ici ?",tag:"住房",freq:2},
+  {zh:"参与者通常是什么背景——年轻人、家庭还是退休人士？",fr:"Quel est le profil des participants — plutôt des jeunes, des familles ou des retraités ?",tag:"课程",freq:2},
+  {zh:"需要提前订座，还是自由入座？",fr:"Est-ce qu'il faut réserver ses places à l'avance ou c'est placement libre ?",tag:"课程",freq:2},
+  {zh:"还有位置吗？",fr:"Il reste encore des places disponibles ?",tag:"课程",freq:2},
+  {zh:"这些活动适合初学者，还是需要有一定经验？",fr:"Est-ce que les activités sont adaptées aux débutants ou il faut déjà avoir de l'expérience ?",tag:"旅游",freq:2},
+  {zh:"器材租借包含在费用里，还是需要另付？",fr:"Est-ce que la location du matériel est incluse dans le tarif ou c'est en supplément ?",tag:"旅游",freq:2},
+  {zh:"住宿包含在套餐里，还是需要单独预订？",fr:"Est-ce que le logement est inclus dans le forfait ou il faut le réserver séparément ?",tag:"旅游",freq:2},
+  {zh:"对第一次去的人，您推荐哪个选择？",fr:"Et quelle option vous recommanderiez pour une première fois ?",tag:"旅游",freq:2},
+  {zh:"那在这种情况下，可以在当地租车吗？",fr:"Et dans ce cas, est-ce qu'il est possible de louer une voiture sur place ?",tag:"旅游",freq:2},
+  {zh:"接受哪些付款方式——银行卡、现金还是转账？",fr:"Quels sont les modes de paiement acceptés — carte bancaire, espèces ou virement ?",tag:"服务",freq:2},
+  {zh:"这类情况合同里有保障吗？",fr:"Est-ce que ce type de situation est bien couvert par le contrat ?",tag:"服务",freq:2},
+  {zh:"那维修费用是全额报销，还是只报销一部分？",fr:"Et les frais de réparation sont pris en charge à 100% ou seulement en partie ?",tag:"服务",freq:2},
+  {zh:"保险包含在租赁费用里吗？",fr:"Est-ce que l'assurance est incluse dans le tarif de location ?",tag:"服务",freq:2},
+  {zh:"归还怎么操作——需要还到同一个地方吗？",fr:"Comment se passe la restitution — il faut le ramener au même endroit ?",tag:"服务",freq:2},
+  {zh:"目前有哪些型号可选？",fr:"Quels modèles sont disponibles en ce moment ?",tag:"服务",freq:2},
+  {zh:"那现在库存里有什么？",fr:"Et en ce moment, qu'est-ce que vous avez en stock ?",tag:"购物",freq:2},
+  {zh:"有哪些尺寸或规格可选？",fr:"Quelles tailles ou quels formats sont disponibles ?",tag:"购物",freq:2},
+  {zh:"如果我买几个，价格可以商量吗？",fr:"Et est-ce que c'est négociable si j'en prends plusieurs ?",tag:"购物",freq:2},
+  {zh:"您接受哪些付款方式——现金、转账还是其他？",fr:"Quels modes de paiement vous acceptez — espèces, virement ou autre ?",tag:"购物",freq:2},
+  {zh:"您送货上门，还是需要自己来取？",fr:"Est-ce que vous livrez à domicile ou il faut venir chercher les produits sur place ?",tag:"购物",freq:2},
+  {zh:"那送货免费，还是有额外费用？",fr:"Et la livraison est gratuite ou il y a des frais supplémentaires ?",tag:"购物",freq:2},
+  {zh:"我什么时候能收到订单？",fr:"Dans combien de temps est-ce que je peux recevoir ma commande ?",tag:"购物",freq:2},
+  {zh:"如果产品不合适，可以退货吗？",fr:"Est-ce que c'est possible de retourner un produit s'il ne convient pas ?",tag:"购物",freq:2},
+  {zh:"那需要在多长时间内退货？",fr:"Et dans quel délai il faut le faire ?",tag:"购物",freq:2},
+  {zh:"需要什么设备才能正常工作？",fr:"De quel matériel est-ce qu'on a besoin pour travailler correctement ?",tag:"职场",freq:2},
+  {zh:"那这些都是公司提供的吗？",fr:"Et c'est l'entreprise qui fournit tout ça ?",tag:"职场",freq:2},
+  {zh:"你最喜欢这种工作方式的哪一点？",fr:"Qu'est-ce que tu apprécies le plus dans ce mode de travail ?",tag:"职场",freq:2},
+  {zh:"有没有一开始没想到的不便之处？",fr:"Est-ce qu'il y a des inconvénients que tu n'avais pas anticipés au début ?",tag:"职场",freq:2},
+  {zh:"那你是怎么适应的？",fr:"Et comment tu as fait pour t'adapter ?",tag:"职场",freq:2},
+  {zh:"那你觉得这样效率更高吗？",fr:"Et tu trouves que c'est plus productif comme ça ?",tag:"职场",freq:2},
+  {zh:"这个职位的主要职责是什么？",fr:"Quelles seraient mes missions principales dans ce poste ?",tag:"海外工作",freq:2},
+  {zh:"那在这些里面，日常工作的重点是什么？",fr:"Et parmi tout ça, quelle serait la priorité au quotidien ?",tag:"海外工作",freq:2},
+  {zh:"我会和谁一起工作——本地团队还是国际团队？",fr:"Avec qui est-ce que je travaillerais — une équipe locale ou internationale ?",tag:"海外工作",freq:2},
+  {zh:"日常工作用什么语言进行？",fr:"Dans quelle langue est-ce que le travail se ferait au quotidien ?",tag:"海外工作",freq:2},
+  {zh:"您能告诉我这个职位的薪资大概是多少吗？",fr:"Pourriez-vous me donner une idée du salaire proposé pour ce poste ?",tag:"海外工作",freq:2},
+  {zh:"那有额外福利吗——住房、交通、保险？",fr:"Et est-ce qu'il y a des avantages supplémentaires — logement, transport, assurance ?",tag:"海外工作",freq:2},
+  {zh:"自从我们上次见面，你的生活有什么变化？",fr:"Qu'est-ce qui a changé dans ta vie depuis la dernière fois qu'on s'est vus ?",tag:"社交",freq:2},
+  {zh:"你接下来几个月有什么计划吗？",fr:"Est-ce que tu as des projets pour les prochains mois ?",tag:"社交",freq:2},
+  {zh:"在那边有没有什么你很想念的东西？",fr:"Est-ce qu'il y a des choses de chez nous qui te manquent là-bas ?",tag:"社交",freq:2},
+  {zh:"你会怎么描述她的个性——比较安静还是比较活跃？",fr:"Comment tu décrirais sa personnalité — elle est plutôt calme ou plutôt dynamique ?",tag:"社交",freq:2},
+  {zh:"她喜欢什么活动或爱好？",fr:"Qu'est-ce qu'elle aime comme activités ou comme loisirs ?",tag:"社交",freq:2},
+  {zh:"那她现在主要对什么感兴趣？",fr:"Et en ce moment, elle s'intéresse plutôt à quoi ?",tag:"社交",freq:2},
+  {zh:"她有特别的风格吗——比较经典、现代还是有个性？",fr:"Est-ce qu'elle a un style particulier — plutôt classique, moderne, original ?",tag:"社交",freq:2},
+  {zh:"你觉得这类礼物多少预算合适？",fr:"Tu penses qu'un budget de combien serait raisonnable pour ce type de cadeau ?",tag:"社交",freq:2},
+  {zh:"我可以带人来，还是只限受邀者？",fr:"Est-ce que je peux venir accompagné(e) ou c'est sur invitation uniquement ?",tag:"社交",freq:2},
+  {zh:"聚会有特别的主题吗？",fr:"Est-ce qu'il y a un thème particulier pour la fête ?",tag:"社交",freq:2},
+  {zh:"晚上会有游戏或活动安排吗？",fr:"Est-ce qu'il y aura des jeux ou des activités prévus pendant la soirée ?",tag:"社交",freq:2},
+  {zh:"那家电是新的吗？",fr:"Et les appareils électroménagers sont récents ?",tag:"住房",freq:1},
+  {zh:"邻居们总体怎么样——相处融洽吗？",fr:"Comment sont les voisins en général — c'est plutôt convivial ?",tag:"住房",freq:1},
+  {zh:"楼里有门卫或管理员吗？",fr:"Y a-t-il un gardien ou un concierge dans l'immeuble ?",tag:"住房",freq:1},
+  {zh:"在这座城市找工作容易吗？",fr:"Est-ce que c'est facile de trouver du travail dans cette ville ?",tag:"住房",freq:1},
+  {zh:"等待维修期间，你们提供代步车吗？",fr:"Est-ce que vous proposez un véhicule de remplacement en attendant la réparation ?",tag:"服务",freq:1},
+  {zh:"有最低购买金额吗，还是可以只买一件？",fr:"Y a-t-il un montant minimum d'achat ou on peut prendre juste un article ?",tag:"购物",freq:1},
+  {zh:"产品具体来自哪里——是本地的吗？",fr:"D'où viennent les produits exactement — c'est local ?",tag:"购物",freq:1},
+  {zh:"那有官方有机认证吗？",fr:"Et ils sont certifiés biologiques officiellement ?",tag:"购物",freq:1},
+  {zh:"骑车上班需要多长时间？",fr:"Combien de temps ça te prend pour aller au travail à vélo ?",tag:"职场",freq:1},
+  {zh:"在城市里骑车安全吗——有自行车道吗？",fr:"Est-ce que c'est sûr de se déplacer à vélo en ville — il y a des pistes cyclables ?",tag:"职场",freq:1},
+  {zh:"下雨或天气很冷的时候你怎么办？",fr:"Comment tu fais quand il pleut ou quand il fait très froid ?",tag:"职场",freq:1},
+  {zh:"上班的地方有安全的停车处吗？",fr:"Est-ce qu'il y a un endroit sécurisé pour garer le vélo au travail ?",tag:"职场",freq:1},
+  {zh:"总体来说，你现在出行花的钱比以前少了吗？",fr:"Au final, tu dépenses moins d'argent qu'avant pour tes déplacements ?",tag:"职场",freq:1},
+  {zh:"公司对远程办公有特别规定吗？",fr:"Est-ce que l'entreprise impose des règles particulières pour le télétravail ?",tag:"职场",freq:1},
+  {zh:"公司会帮助在当地找住所吗？",fr:"Est-ce que l'entreprise aide à trouver un logement sur place ?",tag:"海外工作",freq:1},
+  {zh:"搬家费用由公司承担吗？",fr:"Est-ce que les frais de déménagement sont pris en charge par l'entreprise ?",tag:"海外工作",freq:1},
+  {zh:"这次海外任务持续多长时间？",fr:"Combien de temps durerait cette mission à l'étranger ?",tag:"海外工作",freq:1},
+  {zh:"那如果有需要可以提前回来吗？",fr:"Et est-ce qu'il y a une possibilité de rentrer plus tôt si nécessaire ?",tag:"海外工作",freq:1},
+  {zh:"这个职位从什么时候开始？",fr:"À partir de quand est-ce que le poste serait disponible ?",tag:"海外工作",freq:1},
+  {zh:"出发前会有培训吗？",fr:"Est-ce qu'il y aurait une formation avant de partir ?",tag:"海外工作",freq:1},
+  {zh:"我将驻扎的城市怎么样——容易适应吗？",fr:"Comment est la ville où je serais basé(e) — c'est facile de s'y adapter ?",tag:"海外工作",freq:1},
+  {zh:"如果我有家人，他们可以跟我一起去吗？",fr:"Et si j'ai de la famille, est-ce qu'elle peut m'accompagner ?",tag:"海外工作",freq:1},
+  {zh:"我回来之后现在的职位还会保留吗？",fr:"Est-ce que mon poste actuel sera toujours disponible à mon retour ?",tag:"海外工作",freq:1},
+];
+
+const freqStars = f => ['','⭐','⭐⭐','⭐⭐⭐','⭐⭐⭐⭐','⭐⭐⭐⭐⭐'][f] || '';
+
+let cards = [...ALL];
+let current = 0;
+let seen = new Set();
+let revealed = false;
+
+function render() {
+  const c = cards[current];
+  document.getElementById('cardTag').textContent = c.tag;
+  document.getElementById('cardFreq').textContent = freqStars(c.freq);
+  document.getElementById('cardZh').textContent = c.zh;
+  const frEl = document.getElementById('cardFr');
+  frEl.textContent = c.fr;
+  frEl.classList.add('hidden');
+  document.getElementById('hint').style.display = 'block';
+  revealed = false;
+  document.getElementById('progressText').textContent = (current+1) + ' / ' + cards.length;
+  seen.add(current);
+  updateIndex();
+  updateStats();
+}
+
+function toggleAnswer() {
+  const frEl = document.getElementById('cardFr');
+  const hint = document.getElementById('hint');
+  if (!revealed) {
+    frEl.classList.remove('hidden');
+    hint.style.display = 'none';
+    revealed = true;
+  } else {
+    frEl.classList.add('hidden');
+    hint.style.display = 'block';
+    revealed = false;
+  }
+}
+
+function nextCard() { if (current < cards.length-1) { current++; render(); } }
+function prevCard() { if (current > 0) { current--; render(); } }
+
+function updateStats() {
+  document.getElementById('statSeen').textContent = seen.size;
+  document.getElementById('statTotal').textContent = cards.length;
+  document.getElementById('statPct').textContent = Math.round(seen.size/cards.length*100)+'%';
+}
+
+function buildIndex() {
+  const bar = document.getElementById('indexBar');
+  bar.innerHTML = '';
+  cards.forEach((_,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'idx-btn'+(i===current?' current':'')+(seen.has(i)?' seen':'');
+    btn.textContent = i+1;
+    btn.onclick = () => { current=i; render(); };
+    bar.appendChild(btn);
+  });
+}
+
+function updateIndex() {
+  document.querySelectorAll('.idx-btn').forEach((btn,i) => {
+    btn.className = 'idx-btn'+(i===current?' current':'')+(seen.has(i)?' seen':'');
+  });
+}
+
+document.getElementById('shuffleBtn').addEventListener('click', () => {
+  cards = [...ALL].sort(()=>Math.random()-0.5);
+  current=0; seen=new Set(); revealed=false;
+  render(); buildIndex();
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  cards=[...ALL]; current=0; seen=new Set(); revealed=false;
+  render(); buildIndex();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight') nextCard();
+  if (e.key==='ArrowLeft') prevCard();
+  if (e.key===' ') { e.preventDefault(); toggleAnswer(); }
+});
+
+render();
+buildIndex();
+updateStats();
+</script>
+</body>
+</html>

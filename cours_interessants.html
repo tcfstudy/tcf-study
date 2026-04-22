@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>如何让课堂更有趣</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f6f3; padding: 2rem 1rem; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+  .deck-title { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; margin-top: 2rem; }
+  .card { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; }
+  .card-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; user-select: none; }
+  .card-header:hover { background: #fafaf8; }
+  .card-left { flex: 1; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 6px; margin-bottom: 6px; }
+  .b-purple { background: #ede9fe; color: #5b21b6; }
+  .b-blue   { background: #dbeafe; color: #1e40af; }
+  .b-teal   { background: #d1fae5; color: #065f46; }
+  .b-amber  { background: #fef3c7; color: #92400e; }
+  .b-coral  { background: #fee2e2; color: #991b1b; }
+  .prompt { font-size: 15px; font-weight: 500; color: #1a1a1a; line-height: 1.5; }
+  .hint { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .toggle-icon { font-size: 14px; color: #bbb; margin-top: 2px; flex-shrink: 0; transition: transform 0.2s; }
+  .toggle-icon.open { transform: rotate(90deg); }
+  .card-body { display: none; border-top: 1px solid #f0ede8; padding: 1rem 1.25rem 0.75rem; }
+  .card-body.open { display: block; }
+  .kw-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.9rem; }
+  .kw { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: #f3f2ef; color: #555; border: 1px solid #e8e6e1; font-family: monospace; }
+  .ans-toggle-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #aaa; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; user-select: none; transition: color 0.15s; }
+  .ans-toggle-btn:hover { color: #555; }
+  .ans-arrow { font-size: 11px; transition: transform 0.2s; display: inline-block; }
+  .ans-arrow.open { transform: rotate(90deg); }
+  .answer-section { display: none; border-top: 1px solid #f0ede8; margin-top: 0.75rem; padding-top: 0.75rem; }
+  .answer-section.open { display: block; }
+  .answer-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .answer-fr { font-size: 14px; font-style: italic; color: #444; line-height: 1.7; }
+  .answer-fr p { margin-bottom: 0.5rem; }
+  .answer-fr p:last-child { margin-bottom: 0; }
+  .answer-zh { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .answer-note { font-size: 12px; color: #b08d57; background: #fef9f0; border-left: 3px solid #f5c97a; border-radius: 0 5px 5px 0; padding: 6px 10px; margin-top: 8px; line-height: 1.5; }
+  .progress-wrap { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; }
+  .prog-bg { flex: 1; height: 6px; background: #f0ede8; border-radius: 3px; }
+  .prog-fill { height: 6px; border-radius: 3px; background: #7c3aed; transition: width 0.4s; }
+  .prog-text { font-size: 12px; color: #999; white-space: nowrap; }
+  .reset-btn { font-size: 12px; color: #7c3aed; cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .reset-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>如何让课堂更有趣</h1>
+  <p class="subtitle">看中文提示，组织法语句子，展开关键词后再查看参考答案</p>
+
+  <div class="progress-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <span class="prog-text" id="prog-text">已打开 0 张</span>
+    <button class="reset-btn" onclick="resetAll()">重置</button>
+  </div>
+
+  <div class="deck-title">Comment rendre les cours plus intéressants pour les élèves ?</div>
+
+  <!-- 观点 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">我认为，要让课堂更有趣，学校应该采用不同的方法：更多数字工具、课外活动，以及认可学生努力的方式。</div>
+        <div class="hint">提示：À mon avis，l'école devrait utiliser des méthodes différentes，列举三项：plus d'outils numériques / des activités en dehors de la classe / des façons de valoriser les efforts des élèves</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">À mon avis</span>
+        <span class="kw">rendre les cours plus intéressants</span>
+        <span class="kw">l'école devrait utiliser des méthodes différentes</span>
+        <span class="kw">plus d'outils numériques</span>
+        <span class="kw">des activités en dehors de la classe</span>
+        <span class="kw">valoriser les efforts des élèves</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>À mon avis, pour rendre les cours plus intéressants, l'école devrait utiliser des méthodes différentes : plus d'outils numériques, des activités en dehors de la classe, et des façons de valoriser les efforts des élèves.</p></div>
+        <div class="answer-zh">我认为，要让课堂更有趣，学校应该采用不同的方法：更多数字工具、课外活动，以及认可学生努力的方式。</div>
+        <div class="answer-note">💡 valoriser = 认可、体现价值（比 récompenser 更广义，包含精神上的肯定）｜devrait = 应该（条件式，表建议）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点1 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1 · 数字工具</div>
+        <div class="prompt">首先，使用数字工具能让课堂更生动、更互动。比如，平板、视频或教育类App能帮助学生更好地理解复杂的内容，也能让他们独立学习。我自己注意到，一些学生在看动画时比在课本上读定义更能理解科学概念。</div>
+        <div class="hint">提示：Tout d'abord，utiliser des outils numériques，rendre les cours plus vivants et plus interactifs，tablettes / vidéos / applications éducatives，J'ai moi-même remarqué que，comprendre mieux... quand ils voient une animation plutôt que quand ils lisent</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Tout d'abord</span>
+        <span class="kw">rendre les cours plus vivants et plus interactifs</span>
+        <span class="kw">des tablettes, des vidéos, des applications éducatives</span>
+        <span class="kw">mieux comprendre des choses compliquées</span>
+        <span class="kw">travailler seuls</span>
+        <span class="kw">J'ai moi-même remarqué que</span>
+        <span class="kw">une animation plutôt que lire une définition</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Tout d'abord, utiliser des outils numériques peut rendre les cours plus vivants et plus interactifs. Par exemple, utiliser des tablettes, des vidéos ou des applications éducatives aide les élèves à mieux comprendre des choses compliquées et à travailler seuls. J'ai moi-même remarqué que certains élèves comprennent mieux un concept scientifique quand ils voient une animation, plutôt que quand ils lisent simplement une définition dans un manuel.</p></div>
+        <div class="answer-zh">首先，使用数字工具能让课堂更生动、更互动。比如，平板、视频或教育类App能帮助学生更好地理解复杂的内容，也能让他们独立学习。我自己注意到，一些学生看动画时比在课本上读定义更能理解科学概念。</div>
+        <div class="answer-note">💡 J'ai moi-même remarqué que = 我自己注意到（moi-même 强调亲身经历，增加说服力）｜plutôt que quand = 而不是当……（对比两种情况）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例1：屏幕使用的平衡 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">延伸</div>
+        <div class="prompt">然而，学校也要教学生均衡使用屏幕：过多屏幕会损害注意力和健康。所以目标不应该是"更多屏幕"，而是"更好地使用屏幕"。</div>
+        <div class="hint">提示：Cependant，il est important que l'école apprenne aux élèves à utiliser les écrans de façon équilibrée，trop d'écrans peut nuire à，l'objectif ne doit pas être "plus d'écrans" mais "mieux utiliser les écrans"</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Cependant</span>
+        <span class="kw">utiliser les écrans de façon équilibrée</span>
+        <span class="kw">trop d'écrans peut nuire à la concentration et à la santé</span>
+        <span class="kw">l'objectif ne doit pas être "plus d'écrans"</span>
+        <span class="kw">mais "mieux utiliser les écrans"</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Cependant, il est important que l'école apprenne aux élèves à utiliser les écrans de façon équilibrée : trop d'écrans peut nuire à la concentration et à la santé. C'est pourquoi l'objectif ne doit pas être "plus d'écrans", mais "mieux utiliser les écrans".</p></div>
+        <div class="answer-zh">然而，学校也要教学生均衡使用屏幕：过多屏幕会损害注意力和健康。因此目标不应该是"更多屏幕"，而是"更好地使用屏幕"。</div>
+        <div class="answer-note">💡 nuire à = 损害、有害于（nuire à la santé = 有损健康，常用动词）｜il est important que + 虚拟式 → apprenne（apprendre 的虚拟式）
+🔗 可串题材：电子设备的优劣（直接套用已学内容）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点2 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2 · 实地体验</div>
+        <div class="prompt">其次，学校应该提供更多基于真实体验的活动，比如参观动物园、博物馆或农场。这种学习方式让学生亲眼看到事物，而不是读抽象的描述。</div>
+        <div class="hint">提示：Ensuite，l'école devrait proposer plus d'activités basées sur l'expérience réelle，des visites au zoo / aux musées / à des fermes，voir les choses en vrai，au lieu de lire des descriptions abstraites</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Ensuite</span>
+        <span class="kw">plus d'activités basées sur l'expérience réelle</span>
+        <span class="kw">des visites au zoo, aux musées, à des fermes</span>
+        <span class="kw">voir les choses en vrai</span>
+        <span class="kw">au lieu de lire des descriptions abstraites</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Ensuite, l'école devrait proposer plus d'activités basées sur l'expérience réelle, par exemple des visites au zoo, aux musées ou à des fermes. Ce type d'apprentissage permet aux élèves de voir les choses en vrai, au lieu de lire des descriptions abstraites.</p></div>
+        <div class="answer-zh">其次，学校应该提供更多基于真实体验的活动，比如参观动物园、博物馆或农场。这种学习方式让学生亲眼看到事物，而不是读抽象的描述。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例2：动物园 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">比如，参观动物园能让关于动物的课变得具体得多：孩子们真实地看到动物的多样性、行为和生活环境。这种方式激发学生的好奇心，帮助他们更好地记住所学的知识。</div>
+        <div class="hint">提示：Une visite au zoo，rendre une leçon sur les animaux bien plus concrète，la diversité des animaux / leurs comportements / leur environnement，encourager la curiosité naturelle，mieux retenir ce qu'ils ont appris</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Une visite au zoo</span>
+        <span class="kw">rendre une leçon bien plus concrète</span>
+        <span class="kw">la diversité des animaux</span>
+        <span class="kw">leurs comportements et leur environnement</span>
+        <span class="kw">encourager la curiosité naturelle des élèves</span>
+        <span class="kw">mieux retenir ce qu'ils ont appris</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Une visite au zoo, par exemple, peut rendre une leçon sur les animaux bien plus concrète : les enfants voient vraiment la diversité des animaux, leurs comportements et leur environnement. Cette méthode encourage la curiosité naturelle des élèves et les aide à mieux retenir ce qu'ils ont appris.</p></div>
+        <div class="answer-zh">比如，参观动物园能让关于动物的课变得具体得多：孩子们真实地看到动物的多样性、行为和生活环境。这种方式激发学生的自然好奇心，帮助他们更好地记住所学的知识。</div>
+        <div class="answer-note">🔗 可串题材：该不该有动物园（直接套用这段举例）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点3 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 3 · 奖励机制</div>
+        <div class="prompt">最后，学校也可以建立奖励机制来鼓励学生的努力。不一定是金钱，而是认可进步，比如证书、加分或特别职责。研究表明，哪怕是小小的奖励也能让学生更投入、更自信。</div>
+        <div class="hint">提示：Enfin，mettre en place des récompenses，Il ne s'agit pas forcément de donner de l'argent，mais plutôt de reconnaître les progrès，des diplômes / points bonus / responsabilités spéciales，Les études montrent que，s'impliquer plus / avoir plus confiance en eux</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Enfin</span>
+        <span class="kw">mettre en place des récompenses</span>
+        <span class="kw">Il ne s'agit pas forcément de donner de l'argent</span>
+        <span class="kw">mais plutôt de reconnaître les progrès</span>
+        <span class="kw">des diplômes, des points bonus, des responsabilités spéciales</span>
+        <span class="kw">Les études montrent que</span>
+        <span class="kw">s'impliquer plus / avoir plus confiance en eux</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Enfin, l'école pourrait aussi mettre en place des récompenses pour encourager les efforts des élèves. Il ne s'agit pas forcément de donner de l'argent, mais plutôt de reconnaître les progrès, par exemple avec des diplômes, des points bonus ou des responsabilités spéciales. Les études montrent que même une petite récompense peut aider les élèves à s'impliquer plus et à avoir plus confiance en eux.</p></div>
+        <div class="answer-zh">最后，学校也可以建立奖励机制来鼓励学生的努力。不一定是给钱，而是认可进步，比如证书、加分或特别职责。研究表明，哪怕是小小的奖励也能让学生更投入、更自信。</div>
+        <div class="answer-note">💡 Il ne s'agit pas de... mais plutôt de... = 不是……而是……（il s'agir de = 涉及、关乎，这里用否定转折，非常地道）｜s'impliquer = 投入、参与（比 participer 更强调主动性）
+🔗 可串题材：如何激励孩子 &amp; 金钱在教育中的作用</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let opened = new Set();
+  const total = document.querySelectorAll('.card').length;
+
+  function toggleKw(header) {
+    const body = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    icon.classList.toggle('open', !isOpen);
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(header);
+    if (!isOpen) {
+      opened.add(idx + '-kw');
+    } else {
+      opened.delete(idx + '-kw');
+      opened.delete(idx + '-ans');
+    }
+    updateProgress();
+  }
+
+  function toggleAns(event, btn) {
+    event.stopPropagation();
+    const ansSection = btn.nextElementSibling;
+    const arrow = btn.querySelector('.ans-arrow');
+    const isOpen = ansSection.classList.contains('open');
+    ansSection.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+    const card = btn.closest('.card');
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(card.querySelector('.card-header'));
+    if (!isOpen) opened.add(idx + '-ans'); else opened.delete(idx + '-ans');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const ansCount = Array.from(opened).filter(k => k.endsWith('-ans')).length;
+    const pct = Math.round(ansCount / total * 100);
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = '已打开 ' + ansCount + ' / ' + total + ' 张';
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.toggle-icon').forEach(i => i.classList.remove('open'));
+    document.querySelectorAll('.answer-section').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.ans-arrow').forEach(a => a.classList.remove('open'));
+    opened.clear();
+    updateProgress();
+  }
+</script>
+</body>
+</html>

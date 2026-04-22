@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电子设备的好处 / 坏处</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f6f3; padding: 2rem 1rem; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+  .deck-title { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; margin-top: 2rem; }
+  .card { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; }
+  .card-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; user-select: none; }
+  .card-header:hover { background: #fafaf8; }
+  .card-left { flex: 1; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 6px; margin-bottom: 6px; }
+  .b-purple { background: #ede9fe; color: #5b21b6; }
+  .b-blue   { background: #dbeafe; color: #1e40af; }
+  .b-teal   { background: #d1fae5; color: #065f46; }
+  .b-amber  { background: #fef3c7; color: #92400e; }
+  .b-coral  { background: #fee2e2; color: #991b1b; }
+  .prompt { font-size: 15px; font-weight: 500; color: #1a1a1a; line-height: 1.5; }
+  .hint { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .toggle-icon { font-size: 14px; color: #bbb; margin-top: 2px; flex-shrink: 0; transition: transform 0.2s; }
+  .toggle-icon.open { transform: rotate(90deg); }
+
+  .card-body { display: none; border-top: 1px solid #f0ede8; padding: 1rem 1.25rem 0.75rem; }
+  .card-body.open { display: block; }
+
+  .kw-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.9rem; }
+  .kw { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: #f3f2ef; color: #555; border: 1px solid #e8e6e1; font-family: monospace; }
+
+  .ans-toggle-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; color: #aaa; background: none; border: none;
+    cursor: pointer; font-family: inherit; padding: 0;
+    user-select: none; transition: color 0.15s;
+  }
+  .ans-toggle-btn:hover { color: #555; }
+  .ans-arrow { font-size: 11px; transition: transform 0.2s; display: inline-block; }
+  .ans-arrow.open { transform: rotate(90deg); }
+
+  .answer-section { display: none; border-top: 1px solid #f0ede8; margin-top: 0.75rem; padding-top: 0.75rem; }
+  .answer-section.open { display: block; }
+  .answer-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .answer-fr { font-size: 14px; font-style: italic; color: #444; line-height: 1.7; }
+  .answer-fr p { margin-bottom: 0.5rem; }
+  .answer-fr p:last-child { margin-bottom: 0; }
+  .answer-zh { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .answer-note { font-size: 12px; color: #b08d57; background: #fef9f0; border-left: 3px solid #f5c97a; border-radius: 0 5px 5px 0; padding: 6px 10px; margin-top: 8px; line-height: 1.5; }
+
+  .progress-wrap { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; }
+  .prog-bg { flex: 1; height: 6px; background: #f0ede8; border-radius: 3px; }
+  .prog-fill { height: 6px; border-radius: 3px; background: #7c3aed; transition: width 0.4s; }
+  .prog-text { font-size: 12px; color: #999; white-space: nowrap; }
+  .reset-btn { font-size: 12px; color: #7c3aed; cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .reset-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>电子设备的好处 / 坏处</h1>
+  <p class="subtitle">看中文提示，组织法语句子，展开关键词后再查看参考答案</p>
+
+  <div class="progress-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <span class="prog-text" id="prog-text">已打开 0 张</span>
+    <button class="reset-btn" onclick="resetAll()">重置</button>
+  </div>
+
+  <div class="deck-title">第一篇 · 电子设备的好处</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">我认为，电子设备有很多优点，尤其是让学习更快速、更高效。</div>
+        <div class="hint">提示：用 À mon avis 开头，提到 rapidement 和 de manière plus efficace</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">À mon avis</span>
+        <span class="kw">présenter de nombreux avantages</span>
+        <span class="kw">de manière plus efficace</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>À mon avis, les appareils électroniques présentent de nombreux avantages, surtout pour apprendre plus rapidement et de manière plus efficace.</p></div>
+        <div class="answer-zh">我认为，电子设备有很多优点，尤其是让学习更快速、更高效。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1</div>
+        <div class="prompt">首先，电子设备提供对海量信息的即时获取。只需一部手机就能随时随地看课程、读文章。</div>
+        <div class="hint">提示：用 Tout d'abord 开头，用 il suffit de + 名词 + pour，结尾加 n'importe où</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Tout d'abord</span>
+        <span class="kw">offrir un accès immédiat à</span>
+        <span class="kw">il suffit de + 名词 + pour</span>
+        <span class="kw">à tout moment</span>
+        <span class="kw">n'importe où</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Tout d'abord, ils offrent un accès immédiat à une quantité énorme d'informations. Aujourd'hui, il suffit d'un téléphone pour regarder des cours en ligne, lire des articles ou suivre des formations, à tout moment et n'importe où.</p></div>
+        <div class="answer-zh">首先，电子设备提供对海量信息的即时获取。只需一部手机就能随时随地看课程、读文章。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">比如我学法语时，不只是读课本——早上和巴黎人练口音，晚上和摩纳哥女士练对话。当语言变得生动，它就变得难忘。</div>
+        <div class="hint">提示：用 ne faire que 引出，未完成过去时描述习惯，Résultat : 做总结</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">ne faire que + 动词原形</span>
+        <span class="kw">je discutais / je parlais（未完成过去时）</span>
+        <span class="kw">améliorer mon accent</span>
+        <span class="kw">Résultat :</span>
+        <span class="kw">une langue devient vivante</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr">
+          <p>Par exemple, quand j'apprenais le français, je ne faisais pas que lire des manuels. Le matin, je discutais avec un Parisien très charmant sur une application pour améliorer mon accent, et le soir, je parlais avec une jeune femme très élégante de Monaco pour pratiquer la conversation.</p>
+          <p>Résultat : Quand une langue devient vivante, elle devient mémorable.</p>
+        </div>
+        <div class="answer-zh">比如我学法语时，不只是读课本——早上和一个迷人的巴黎人练口音，晚上和来自摩纳哥的优雅女士练对话。当一门语言变得生动，它就变得难忘。</div>
+        <div class="answer-note">⏱ 时态提示：全用未完成过去时（apprenais / discutais / parlais），描述那段时间反复进行的习惯，而非某一次事件。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2</div>
+        <div class="prompt">其次，电子设备让学习更互动、更有趣，不用局限于课本，还能做练习、听播客、看视频。</div>
+        <div class="hint">提示：用 Ensuite 过渡，用 sans se limiter à 表示不局限于</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Ensuite</span>
+        <span class="kw">rendre l'apprentissage plus interactif</span>
+        <span class="kw">sans se limiter à un manuel</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Ensuite, les appareils électroniques rendent l'apprentissage plus interactif et plus motivant. On peut faire des exercices, écouter des podcasts ou regarder des vidéos, sans se limiter à un manuel.</p></div>
+        <div class="answer-zh">其次，电子设备让学习更互动、更有趣。不用局限于课本，还能做练习、听播客、看视频。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">比如有些教育App太吸引人了，父母根本不用守在旁边，孩子自己就专心了。平板几乎成了一个免费但聪明的保姆。</div>
+        <div class="hint">提示：用 tellement... que... 表结果，rester derrière quelqu'un，se concentrer tout seul，baby-sitter 比喻收尾</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">tellement + 形容词 + que</span>
+        <span class="kw">rester derrière quelqu'un</span>
+        <span class="kw">se concentrer tout seul</span>
+        <span class="kw">une baby-sitter gratuite mais intelligente</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr">
+          <p>Par exemple, chez les enfants, certaines applications éducatives sont tellement attractives que les parents n'ont même plus besoin de rester derrière eux. L'enfant ouvre son iPad, lance une application éducative et se concentre tout seul.</p>
+          <p>On peut dire que la tablette devient presque une baby-sitter gratuite, mais une baby-sitter intelligente.</p>
+        </div>
+        <div class="answer-zh">比如有些教育App太吸引人了，父母根本不用守在旁边，孩子自己就专心了。可以说平板几乎成了一个免费的保姆——但是一个聪明的保姆。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="deck-title">第二篇 · 电子设备的坏处</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">坦白说，就我个人而言，我不太支持孩子使用屏幕。</div>
+        <div class="hint">提示：用 Franchement 开头，à titre personnel 表个人立场，favorable à 表态度</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Franchement</span>
+        <span class="kw">à titre personnel</span>
+        <span class="kw">ne pas être favorable à</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Franchement, à titre personnel, je ne suis pas très favorable aux écrans pour les enfants.</p></div>
+        <div class="answer-zh">坦白说，就我个人而言，我不太支持孩子使用屏幕。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1</div>
+        <div class="prompt">问题在于过度使用。太多屏幕会对健康产生负面影响：缺乏运动、睡眠障碍、注意力难以集中。</div>
+        <div class="hint">提示：用 Le problème, c'est l'excès 开头，列举三个健康问题</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Le problème, c'est l'excès</span>
+        <span class="kw">effets négatifs sur la santé</span>
+        <span class="kw">manque d'exercice physique</span>
+        <span class="kw">troubles du sommeil</span>
+        <span class="kw">difficultés de concentration</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Le problème, c'est l'excès. Trop d'écrans peut avoir des effets négatifs sur la santé : manque d'exercice physique, troubles du sommeil, ou même difficultés de concentration à l'école.</p></div>
+        <div class="answer-zh">问题在于过度使用。太多屏幕可能对健康产生负面影响：缺乏运动、睡眠障碍，甚至在学校难以集中注意力。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">比如，我见过一些孩子花好几个小时打游戏，一让他们停就变得烦躁。可以清楚看出这不是均衡的使用方式。</div>
+        <div class="hint">提示：用 Par exemple, j'ai vu... 引出，用 On voit bien que... 总结</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">j'ai vu des enfants qui</span>
+        <span class="kw">passer des heures à</span>
+        <span class="kw">irritable</span>
+        <span class="kw">On voit bien que</span>
+        <span class="kw">usage équilibré</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Par exemple, j'ai vu des enfants qui passent des heures à jouer à des jeux vidéo et qui deviennent irritables quand on leur demande d'arrêter. On voit bien que ce n'est pas un usage équilibré.</p></div>
+        <div class="answer-zh">比如，我见过一些孩子花好几个小时打游戏，一让他们停就变得烦躁。可以清楚地看出这不是均衡的使用方式。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2</div>
+        <div class="prompt">此外，屏幕前花太多时间会限制与真实世界的接触。我在农村长大，常在户外和表兄弟们玩，在河里钓鱼。今天很多孩子把周末关在家里，而不是探索真实生活。</div>
+        <div class="hint">提示：用 De plus 过渡，穿插童年回忆（j'ai grandi à la campagne，pêcher dans la rivière），用 au lieu de 形成对比</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">De plus</span>
+        <span class="kw">limiter le contact avec le monde réel</span>
+        <span class="kw">j'ai grandi à la campagne</span>
+        <span class="kw">pêcher dans la rivière</span>
+        <span class="kw">au lieu de</span>
+        <span class="kw">réduire leur curiosité</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr">
+          <p>De plus, passer trop de temps devant les écrans limite le contact avec le monde réel. Dans mon enfance, j'ai grandi à la campagne, je me souviens que je passais du temps à jouer dehors avec mes cousins, à pêcher dans la rivière ou à explorer la nature.</p>
+          <p>Aujourd'hui, beaucoup d'enfants passent leur week-end enfermés chez eux, connectés à une tablette ou un téléphone, au lieu de découvrir la vie réelle. Cela peut réduire leur curiosité et leurs expériences sociales.</p>
+        </div>
+        <div class="answer-zh">此外，在屏幕前花太多时间会限制与真实世界的接触。我在农村长大，记得常和表兄弟们在外面玩，在河里钓鱼或探索大自然。今天很多孩子把周末关在家里，而不是探索真实生活，这可能减少他们的好奇心和社交经验。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 3</div>
+        <div class="prompt">最后，屏幕可能让孩子接触危险内容。网上不只有教育信息，还有暴力图像和假新闻，没有父母监督会受负面影响。</div>
+        <div class="hint">提示：用 Enfin 引出，用 On ne trouve pas seulement... mais aussi... 列举，被动语态 être influencé 收尾</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Enfin</span>
+        <span class="kw">exposer les enfants à des contenus dangereux</span>
+        <span class="kw">On ne trouve pas seulement... mais aussi...</span>
+        <span class="kw">Sans surveillance des parents</span>
+        <span class="kw">être influencé négativement</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Enfin, il faut aussi rappeler que les écrans peuvent exposer les enfants à des contenus dangereux ou inadaptés. Sur Internet, on ne trouve pas seulement des informations éducatives, mais aussi des images violentes ou des fake news. Sans surveillance des parents, les enfants peuvent être influencés négativement.</p></div>
+        <div class="answer-zh">最后，还需提醒的是，屏幕可能让孩子接触危险或不适宜的内容。网上不只有教育信息，还有暴力图像和假新闻。没有父母的监督，孩子可能受到负面影响。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-coral">小结</div>
+        <div class="prompt">说实话，如果有一天我有孩子，我不希望他们太早开始。我更希望他们多花时间在真实世界，这至关重要。</div>
+        <div class="hint">提示：Honnêtement 开头，虚拟条件句 si + 现在时 + 条件式，用 que ce soit par... ou... 列举，c'est essentiel 收尾</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Honnêtement</span>
+        <span class="kw">si un jour j'ai des enfants</span>
+        <span class="kw">je préférerais que + 虚拟式</span>
+        <span class="kw">que ce soit par... ou...</span>
+        <span class="kw">c'est essentiel</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Honnêtement, si un jour j'ai des enfants, je n'aimerais pas qu'ils commencent trop tôt. Je préférerais qu'ils passent plus de temps dans le monde réel : que ce soit par des activités en plein air, ou même simplement en lisant à la maison. Pour moi, c'est essentiel d'avoir une vraie connexion avec la vie réelle et pas seulement avec un écran.</p></div>
+        <div class="answer-zh">说实话，如果有一天我有了孩子，我不希望他们太早开始。我更希望他们多花时间在真实世界里：不管是户外活动，还是简单地在家读书。对我来说，与真实生活保持真正的联系，而不只是与屏幕，是非常重要的。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let opened = new Set();
+  const total = document.querySelectorAll('.card').length;
+
+  function toggleKw(header) {
+    const body = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    icon.classList.toggle('open', !isOpen);
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(header);
+    if (!isOpen) {
+      opened.add(idx + '-kw');
+    } else {
+      opened.delete(idx + '-kw');
+      opened.delete(idx + '-ans');
+    }
+    updateProgress();
+  }
+
+  function toggleAns(event, btn) {
+    event.stopPropagation();
+    const ansSection = btn.nextElementSibling;
+    const arrow = btn.querySelector('.ans-arrow');
+    const isOpen = ansSection.classList.contains('open');
+    ansSection.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+    const card = btn.closest('.card');
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(card.querySelector('.card-header'));
+    if (!isOpen) opened.add(idx + '-ans'); else opened.delete(idx + '-ans');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const ansCount = Array.from(opened).filter(k => k.endsWith('-ans')).length;
+    const pct = Math.round(ansCount / total * 100);
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = '已打开 ' + ansCount + ' / ' + total + ' 张';
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.toggle-icon').forEach(i => i.classList.remove('open'));
+    document.querySelectorAll('.answer-section').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.ans-arrow').forEach(a => a.classList.remove('open'));
+    opened.clear();
+    updateProgress();
+  }
+</script>
+</body>
+</html>

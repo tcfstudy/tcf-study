@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>年轻人学外语更容易吗</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f6f3; padding: 2rem 1rem; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+  .deck-title { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; margin-top: 2rem; }
+  .card { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; }
+  .card-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; user-select: none; }
+  .card-header:hover { background: #fafaf8; }
+  .card-left { flex: 1; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 6px; margin-bottom: 6px; }
+  .b-purple { background: #ede9fe; color: #5b21b6; }
+  .b-blue   { background: #dbeafe; color: #1e40af; }
+  .b-teal   { background: #d1fae5; color: #065f46; }
+  .b-amber  { background: #fef3c7; color: #92400e; }
+  .b-coral  { background: #fee2e2; color: #991b1b; }
+  .prompt { font-size: 15px; font-weight: 500; color: #1a1a1a; line-height: 1.5; }
+  .hint { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .toggle-icon { font-size: 14px; color: #bbb; margin-top: 2px; flex-shrink: 0; transition: transform 0.2s; }
+  .toggle-icon.open { transform: rotate(90deg); }
+  .card-body { display: none; border-top: 1px solid #f0ede8; padding: 1rem 1.25rem 0.75rem; }
+  .card-body.open { display: block; }
+  .kw-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.9rem; }
+  .kw { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: #f3f2ef; color: #555; border: 1px solid #e8e6e1; font-family: monospace; }
+  .ans-toggle-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #aaa; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; user-select: none; transition: color 0.15s; }
+  .ans-toggle-btn:hover { color: #555; }
+  .ans-arrow { font-size: 11px; transition: transform 0.2s; display: inline-block; }
+  .ans-arrow.open { transform: rotate(90deg); }
+  .answer-section { display: none; border-top: 1px solid #f0ede8; margin-top: 0.75rem; padding-top: 0.75rem; }
+  .answer-section.open { display: block; }
+  .answer-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .answer-fr { font-size: 14px; font-style: italic; color: #444; line-height: 1.7; }
+  .answer-fr p { margin-bottom: 0.5rem; }
+  .answer-fr p:last-child { margin-bottom: 0; }
+  .answer-zh { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .answer-note { font-size: 12px; color: #b08d57; background: #fef9f0; border-left: 3px solid #f5c97a; border-radius: 0 5px 5px 0; padding: 6px 10px; margin-top: 8px; line-height: 1.5; }
+  .progress-wrap { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; }
+  .prog-bg { flex: 1; height: 6px; background: #f0ede8; border-radius: 3px; }
+  .prog-fill { height: 6px; border-radius: 3px; background: #7c3aed; transition: width 0.4s; }
+  .prog-text { font-size: 12px; color: #999; white-space: nowrap; }
+  .reset-btn { font-size: 12px; color: #7c3aed; cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .reset-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>年轻人学外语更容易吗</h1>
+  <p class="subtitle">看中文提示，组织法语句子，展开关键词后再查看参考答案</p>
+
+  <div class="progress-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <span class="prog-text" id="prog-text">已打开 0 张</span>
+    <button class="reset-btn" onclick="resetAll()">重置</button>
+  </div>
+
+  <div class="deck-title">Pensez-vous que les jeunes apprennent les langues étrangères plus facilement ?</div>
+
+  <!-- 观点 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">我认为，年轻人学外语通常更容易，但这取决于几个因素。</div>
+        <div class="hint">提示：À mon avis，les jeunes peuvent apprendre une langue étrangère plus facilement，mais cela dépend de plusieurs facteurs</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">À mon avis</span>
+        <span class="kw">apprendre une langue étrangère plus facilement</span>
+        <span class="kw">mais cela dépend de plusieurs facteurs</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>À mon avis, les jeunes peuvent apprendre une langue étrangère plus facilement, mais cela dépend de plusieurs facteurs.</p></div>
+        <div class="answer-zh">我认为，年轻人学外语通常更容易，但这取决于几个因素。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点1 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1</div>
+        <div class="prompt">首先，年轻人总体上学习起来更轻松。他们的记忆更灵活，也更敢开口说话，即使说错也不怕。这种自然的方式帮助很大，因为学语言主要靠尝试、重复和与他人交流。</div>
+        <div class="hint">提示：D'abord，il faut reconnaître que，leur mémoire est plus flexible，oser parler même avec des fautes，une langue s'apprend surtout en essayant / en répétant / en parlant avec les autres</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">D'abord, il faut reconnaître que</span>
+        <span class="kw">plus de facilité pour apprendre</span>
+        <span class="kw">la mémoire est plus flexible</span>
+        <span class="kw">oser parler même avec des fautes</span>
+        <span class="kw">une langue s'apprend surtout en essayant</span>
+        <span class="kw">en répétant et en parlant avec les autres</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>D'abord, il faut reconnaître que les jeunes ont généralement plus de facilité pour apprendre. Leur mémoire est plus flexible et ils osent plus parler, même avec des fautes. Cette façon naturelle de faire les aide beaucoup, car une langue s'apprend surtout en essayant, en répétant et en parlant avec les autres.</p></div>
+        <div class="answer-zh">首先，必须承认年轻人总体上学习起来更轻松。他们的记忆更灵活，也更敢开口说话，即使犯错也不怕。这种自然的方式帮助很大，因为学语言主要靠尝试、重复和与他人交流。</div>
+        <div class="answer-note">💡 oser + 动词原形 = 敢于……（oser parler = 敢开口）｜une langue s'apprend = 语言是被学会的（反身动词表被动，比 on apprend une langue 更地道）｜en + 动名词三连：en essayant, en répétant, en parlant（已在职业成功篇出现，串联记忆）
+🔗 可串题材：年轻人是否更容易适应海外生活 &amp; 什么时候可以换工作</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点2 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2</div>
+        <div class="prompt">其次，在这个联系越来越紧密的世界里，旅行、文化交流和社交媒体无处不在，年轻人经常接触其他语言——比如通过音乐、电影、游戏或TikTok。这种自然的沉浸让学习不那么理论化，变得更自然。</div>
+        <div class="hint">提示：Ensuite，dans un monde de plus en plus connecté，les voyages / échanges culturels / réseaux sociaux，à travers la musique / les films / les jeux vidéo / TikTok，Cette immersion naturelle rend l'apprentissage moins théorique et beaucoup plus naturel</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Ensuite</span>
+        <span class="kw">dans un monde de plus en plus connecté</span>
+        <span class="kw">les échanges culturels et les réseaux sociaux</span>
+        <span class="kw">en contact avec d'autres langues</span>
+        <span class="kw">à travers la musique, les films, les jeux vidéo</span>
+        <span class="kw">Cette immersion naturelle</span>
+        <span class="kw">moins théorique et beaucoup plus naturel</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Ensuite, dans un monde de plus en plus connecté où les voyages, les échanges culturels et les réseaux sociaux sont très présents, les jeunes sont souvent en contact avec d'autres langues — par exemple à travers la musique, les films, les jeux vidéo ou TikTok. Cette immersion naturelle rend l'apprentissage moins théorique et beaucoup plus naturel.</p></div>
+        <div class="answer-zh">其次，在这个联系越来越紧密的世界里，旅行、文化交流和社交媒体无处不在，年轻人经常接触其他语言——比如通过音乐、电影、游戏或TikTok。这种自然的沉浸让学习不那么理论化，变得更自然。</div>
+        <div class="answer-note">💡 dans un monde de plus en plus connecté où... = 在一个越来越……的世界里（关系从句修饰 monde，口语中很地道的开场方式）｜immersion = 沉浸（语言学习中的核心概念）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例：Friends -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">一个好例子是，很多年轻人通过《老友记》学英语。他们不是枯燥地背单词，而是通过看剧集、听真实对话、重复日常表达、适应自然发音来学习。这种方式更生动、更有动力，因为人们把语言和乐趣、情感与文化联系在一起。</div>
+        <div class="hint">提示：Un bon exemple c'est que，apprendre l'anglais grâce à la série Friends，Au lieu d'étudier des listes de vocabulaire，en regardant les épisodes / en écoutant les vrais dialogues / en répétant les expressions / en s'habituant à la prononciation，associer la langue au plaisir, à l'émotion et à la culture</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Un bon exemple, c'est que</span>
+        <span class="kw">apprendre l'anglais grâce à la série Friends</span>
+        <span class="kw">Au lieu d'étudier des listes de vocabulaire</span>
+        <span class="kw">en regardant les épisodes</span>
+        <span class="kw">en écoutant les vrais dialogues</span>
+        <span class="kw">en répétant les expressions du quotidien</span>
+        <span class="kw">en s'habituant à la prononciation naturelle</span>
+        <span class="kw">associer la langue au plaisir, à l'émotion et à la culture</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr">
+          <p>Un bon exemple, c'est que beaucoup de jeunes apprennent l'anglais grâce à la série Friends. Au lieu d'étudier des listes de vocabulaire de façon théorique et parfois ennuyeuse, ils apprennent en regardant les épisodes, en écoutant les vrais dialogues, en répétant les expressions du quotidien et en s'habituant à la prononciation naturelle.</p>
+          <p>Ce type d'apprentissage est beaucoup plus vivant et motivant, parce qu'on associe la langue au plaisir, à l'émotion et à la culture.</p>
+        </div>
+        <div class="answer-zh">一个好例子是，很多年轻人通过《老友记》学英语。他们不是枯燥地背单词表，而是通过看剧集、听真实对话、重复日常表达、适应自然发音来学习。这种学习方式更生动、更有动力，因为人们把语言和乐趣、情感与文化联系在一起。</div>
+        <div class="answer-note">💡 en + 动名词四连：en regardant / en écoutant / en répétant / en s'habituant（和前两篇的三连呼应，越来越长，层层递进）｜associer A à B = 把A与B联系起来（associer la langue au plaisir = 把语言和乐趣联系起来）｜Au lieu de + 动词原形 = 而不是……（已在旅游篇出现，串联记忆）</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let opened = new Set();
+  const total = document.querySelectorAll('.card').length;
+
+  function toggleKw(header) {
+    const body = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    icon.classList.toggle('open', !isOpen);
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(header);
+    if (!isOpen) {
+      opened.add(idx + '-kw');
+    } else {
+      opened.delete(idx + '-kw');
+      opened.delete(idx + '-ans');
+    }
+    updateProgress();
+  }
+
+  function toggleAns(event, btn) {
+    event.stopPropagation();
+    const ansSection = btn.nextElementSibling;
+    const arrow = btn.querySelector('.ans-arrow');
+    const isOpen = ansSection.classList.contains('open');
+    ansSection.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+    const card = btn.closest('.card');
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(card.querySelector('.card-header'));
+    if (!isOpen) opened.add(idx + '-ans'); else opened.delete(idx + '-ans');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const ansCount = Array.from(opened).filter(k => k.endsWith('-ans')).length;
+    const pct = Math.round(ansCount / total * 100);
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = '已打开 ' + ansCount + ' / ' + total + ' 张';
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.toggle-icon').forEach(i => i.classList.remove('open'));
+    document.querySelectorAll('.answer-section').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.ans-arrow').forEach(a => a.classList.remove('open'));
+    opened.clear();
+    updateProgress();
+  }
+</script>
+</body>
+</html>

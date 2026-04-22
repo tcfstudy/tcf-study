@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>职业成功的因素</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f6f3; padding: 2rem 1rem; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+  .deck-title { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; margin-top: 2rem; }
+  .card { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; }
+  .card-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; user-select: none; }
+  .card-header:hover { background: #fafaf8; }
+  .card-left { flex: 1; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 6px; margin-bottom: 6px; }
+  .b-purple { background: #ede9fe; color: #5b21b6; }
+  .b-blue   { background: #dbeafe; color: #1e40af; }
+  .b-teal   { background: #d1fae5; color: #065f46; }
+  .b-amber  { background: #fef3c7; color: #92400e; }
+  .b-coral  { background: #fee2e2; color: #991b1b; }
+  .prompt { font-size: 15px; font-weight: 500; color: #1a1a1a; line-height: 1.5; }
+  .hint { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .toggle-icon { font-size: 14px; color: #bbb; margin-top: 2px; flex-shrink: 0; transition: transform 0.2s; }
+  .toggle-icon.open { transform: rotate(90deg); }
+  .card-body { display: none; border-top: 1px solid #f0ede8; padding: 1rem 1.25rem 0.75rem; }
+  .card-body.open { display: block; }
+  .kw-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.9rem; }
+  .kw { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: #f3f2ef; color: #555; border: 1px solid #e8e6e1; font-family: monospace; }
+  .ans-toggle-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #aaa; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; user-select: none; transition: color 0.15s; }
+  .ans-toggle-btn:hover { color: #555; }
+  .ans-arrow { font-size: 11px; transition: transform 0.2s; display: inline-block; }
+  .ans-arrow.open { transform: rotate(90deg); }
+  .answer-section { display: none; border-top: 1px solid #f0ede8; margin-top: 0.75rem; padding-top: 0.75rem; }
+  .answer-section.open { display: block; }
+  .answer-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .answer-fr { font-size: 14px; font-style: italic; color: #444; line-height: 1.7; }
+  .answer-fr p { margin-bottom: 0.5rem; }
+  .answer-fr p:last-child { margin-bottom: 0; }
+  .answer-zh { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .answer-note { font-size: 12px; color: #b08d57; background: #fef9f0; border-left: 3px solid #f5c97a; border-radius: 0 5px 5px 0; padding: 6px 10px; margin-top: 8px; line-height: 1.5; }
+  .progress-wrap { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; }
+  .prog-bg { flex: 1; height: 6px; background: #f0ede8; border-radius: 3px; }
+  .prog-fill { height: 6px; border-radius: 3px; background: #7c3aed; transition: width 0.4s; }
+  .prog-text { font-size: 12px; color: #999; white-space: nowrap; }
+  .reset-btn { font-size: 12px; color: #7c3aed; cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .reset-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>职业成功的因素</h1>
+  <p class="subtitle">看中文提示，组织法语句子，展开关键词后再查看参考答案</p>
+
+  <div class="progress-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <span class="prog-text" id="prog-text">已打开 0 张</span>
+    <button class="reset-btn" onclick="resetAll()">重置</button>
+  </div>
+
+  <div class="deck-title">Pensez-vous que faire l'expérience de la vie à l'étranger garantit le succès dans sa carrière ?</div>
+
+  <!-- 观点 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">职业成功取决于很多因素。</div>
+        <div class="hint">提示：Le succès professionnel，dépendre de，de nombreux facteurs</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Le succès professionnel</span>
+        <span class="kw">dépendre de</span>
+        <span class="kw">de nombreux facteurs</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Le succès professionnel dépend de nombreux facteurs.</p></div>
+        <div class="answer-zh">职业成功取决于很多因素。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点1：学历 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1 · 学历</div>
+        <div class="prompt">首先，学历仍然很重要，尤其是在职业初期。医学、法律、工程等领域必须经过长期学习。好的学历能帮助找到工作，也证明了你的认真和努力。</div>
+        <div class="hint">提示：D'abord，reconnaître que les diplômes jouent un rôle important，surtout au début d'une carrière，列举 médecine / loi / ingénierie，montre qu'on est sérieux</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">D'abord</span>
+        <span class="kw">les diplômes jouent un rôle important</span>
+        <span class="kw">surtout au début d'une carrière</span>
+        <span class="kw">il est impossible de travailler sans</span>
+        <span class="kw">montre qu'on est sérieux</span>
+        <span class="kw">travailler dur</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>D'abord, il faut reconnaître que les diplômes jouent encore un rôle important, surtout au début d'une carrière. Dans des domaines comme la médecine, la loi ou l'ingénierie, il est impossible de travailler sans faire de longues études. Un bon diplôme peut aider à trouver un travail, et montre qu'on est sérieux et qu'on peut travailler dur.</p></div>
+        <div class="answer-zh">首先，必须承认学历仍然很重要，尤其是在职业初期。在医学、法律或工程等领域，不经过长期学习是不可能工作的。一个好的学历能帮助找到工作，也证明了你的认真和努力。</div>
+        <div class="answer-note">🔗 可串题材：学历对工作的影响 — Selon vous, est-il nécessaire de suivre de longues études pour réussir dans la vie ?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例1：学历的局限 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">然而，学历并不总能保证日后的成功。越来越多的人没有高学历也能成功。比如我在社交媒体上看到一个女生，没有学历却获得了超过百万粉丝，创立了自己的公司。创意、勇气和适应能力有时和学历同样重要。</div>
+        <div class="hint">提示：Cependant，ne garantissent pas toujours le succès，On voit de plus en plus de gens，j'ai vu une jeune femme sur les réseaux sociaux，la créativité / le courage / la capacité à s'adapter</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Cependant</span>
+        <span class="kw">ne garantissent pas toujours le succès</span>
+        <span class="kw">On voit de plus en plus de gens qui réussissent sans</span>
+        <span class="kw">j'ai vu une jeune femme sur les réseaux sociaux</span>
+        <span class="kw">plus d'un million d'abonnés</span>
+        <span class="kw">créé sa propre entreprise</span>
+        <span class="kw">la créativité, le courage, la capacité à s'adapter</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Cependant, même si les diplômes aident à trouver un emploi, ils ne garantissent pas toujours le succès plus tard. On voit de plus en plus de gens qui réussissent bien sans avoir fait de grandes études. Par exemple, j'ai vu une jeune femme sur les réseaux sociaux : sans diplôme, elle a eu plus d'un million d'abonnés et a créé sa propre entreprise. On voit donc que la créativité, le courage et la capacité à s'adapter peuvent être aussi importants que les diplômes.</p></div>
+        <div class="answer-zh">然而，即使学历能帮助找到工作，它也不总能保证日后的成功。越来越多的人没有高学历也能成功。比如我在社交媒体上看到一个女生：没有学历，却获得了超过百万粉丝，还创立了自己的公司。可见创意、勇气和适应能力有时和学历同样重要。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点2：热情 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2 · 热情</div>
+        <div class="prompt">热爱自己的工作真的能帮助进步。有热情的人更有创意、更有精力，也更善于解决问题，也愿意花时间提升自己。</div>
+        <div class="hint">提示：Aimer son travail，aider à progresser，être passionné，plus créatif / plus d'énergie / gérer mieux les problèmes，se former / pratiquer / apprendre</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Aimer son travail</span>
+        <span class="kw">aider à progresser</span>
+        <span class="kw">être passionné</span>
+        <span class="kw">plus créatif, plus d'énergie</span>
+        <span class="kw">gérer mieux les problèmes</span>
+        <span class="kw">prêts à passer du temps pour s'améliorer</span>
+        <span class="kw">en se formant, en pratiquant, en apprenant</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Aimer son travail peut vraiment aider à progresser. Quand on est passionné, on est plus créatif, on a plus d'énergie et on gère mieux les problèmes. Les gens qui aiment ce qu'ils font sont aussi prêts à passer du temps pour s'améliorer : en se formant, en pratiquant, en apprenant.</p></div>
+        <div class="answer-zh">热爱自己的工作真的能帮助进步。有热情时，人会更有创意、更有精力，也更善于解决问题。热爱工作的人也愿意花时间提升自己：通过学习、练习、钻研。</div>
+        <div class="answer-note">💡 en + 动名词（gérondif）= 通过……的方式，三个并列非常地道：en se formant, en pratiquant, en apprenant</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例2：热情的局限 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">人们常说成为真正的高手需要一万小时的练习，是热情让人坚持下去。但也要现实：有些喜欢的职业薪水不高，比如很多艺术家难以靠工作为生。就算喜欢，不好的工作环境也可能让人失去全部动力。</div>
+        <div class="hint">提示：dix mille heures de pratique，la passion qui permet de tenir，Mais il faut être réaliste，certains métiers ne paient pas bien，un mauvais environnement，faire perdre toute motivation</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">dix mille heures de pratique</span>
+        <span class="kw">la passion qui permet de tenir aussi longtemps</span>
+        <span class="kw">Mais il faut aussi être réaliste</span>
+        <span class="kw">certains métiers ne paient pas bien</span>
+        <span class="kw">avoir du mal à vivre de leur travail</span>
+        <span class="kw">un mauvais environnement</span>
+        <span class="kw">faire perdre toute motivation</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>On dit souvent qu'il faut dix mille heures de pratique pour devenir vraiment bon dans quelque chose, et c'est la passion qui permet de tenir aussi longtemps. Mais il faut aussi être réaliste : certains métiers qu'on aime ne paient pas bien. Beaucoup d'artistes, par exemple, ont du mal à vivre de leur travail. Et même quand on aime ce qu'on fait, un mauvais environnement — des collègues difficiles ou trop de pression — peut faire perdre toute motivation.</p></div>
+        <div class="answer-zh">人们常说，要真正擅长某件事需要一万小时的练习，而正是热情让人坚持那么久。但也要现实：有些喜欢的职业薪水并不高。很多艺术家难以靠工作为生。就算热爱所做的事，糟糕的工作环境——难相处的同事或过大的压力——也可能让人失去所有动力。</div>
+        <div class="answer-note">🔗 可串题材：喜欢的工作是否更容易成功</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点3：工作的个人收益 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 3 · 个人收益</div>
+        <div class="prompt">最后，工作也给个人生活带来很多正面的东西：给生活带来结构感，让我们认识人、学到新东西、变得更独立，也让我们感到自己对社会有用。</div>
+        <div class="hint">提示：Enfin，le travail apporte des choses positives，donner une structure à notre journée，rencontrer des gens，devenir plus indépendant，se sentir utiles dans la société</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Enfin</span>
+        <span class="kw">le travail apporte des choses positives</span>
+        <span class="kw">donner une structure à notre journée</span>
+        <span class="kw">rencontrer des gens</span>
+        <span class="kw">devenir plus indépendant</span>
+        <span class="kw">se sentir utiles dans la société</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Enfin, il est important de dire que le travail apporte aussi beaucoup de choses positives dans la vie personnelle. Le travail donne une structure à notre journée, nous permet de rencontrer des gens, d'apprendre des choses nouvelles, et de devenir plus indépendant. Il nous aide aussi à nous sentir utiles dans la société.</p></div>
+        <div class="answer-zh">最后，值得一提的是，工作也给个人生活带来很多正面的东西。工作给我们的一天带来结构感，让我们认识人、学到新东西、变得更独立。它也帮助我们感到自己对社会有用。</div>
+        <div class="answer-note">🔗 可串题材：工作的好处</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例3：成就感 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">而且，当完成一项困难的任务或取得进步时，我们会为自己感到骄傲——这种感觉和赚到的钱一样重要。</div>
+        <div class="hint">提示：En plus，finir une tâche difficile，faire des progrès，être fier de soi，ce sentiment est aussi important que l'argent qu'on gagne</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">En plus</span>
+        <span class="kw">finir une tâche difficile</span>
+        <span class="kw">faire des progrès</span>
+        <span class="kw">être fier de soi</span>
+        <span class="kw">ce sentiment est aussi important que l'argent qu'on gagne</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>En plus, quand on finit une tâche difficile ou qu'on fait des progrès, on est fier de soi — et ce sentiment est aussi important que l'argent qu'on gagne.</p></div>
+        <div class="answer-zh">而且，当完成一项困难的任务或取得进步时，我们会为自己感到骄傲——这种感觉和赚到的钱一样重要。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let opened = new Set();
+  const total = document.querySelectorAll('.card').length;
+
+  function toggleKw(header) {
+    const body = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    icon.classList.toggle('open', !isOpen);
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(header);
+    if (!isOpen) {
+      opened.add(idx + '-kw');
+    } else {
+      opened.delete(idx + '-kw');
+      opened.delete(idx + '-ans');
+    }
+    updateProgress();
+  }
+
+  function toggleAns(event, btn) {
+    event.stopPropagation();
+    const ansSection = btn.nextElementSibling;
+    const arrow = btn.querySelector('.ans-arrow');
+    const isOpen = ansSection.classList.contains('open');
+    ansSection.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+    const card = btn.closest('.card');
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(card.querySelector('.card-header'));
+    if (!isOpen) opened.add(idx + '-ans'); else opened.delete(idx + '-ans');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const ansCount = Array.from(opened).filter(k => k.endsWith('-ans')).length;
+    const pct = Math.round(ansCount / total * 100);
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = '已打开 ' + ansCount + ' / ' + total + ' 张';
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.toggle-icon').forEach(i => i.classList.remove('open'));
+    document.querySelectorAll('.answer-section').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.ans-arrow').forEach(a => a.classList.remove('open'));
+    opened.clear();
+    updateProgress();
+  }
+</script>
+</body>
+</html>

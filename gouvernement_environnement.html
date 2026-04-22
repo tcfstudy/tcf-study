@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>通过政府干预保护环境</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f6f3; padding: 2rem 1rem; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+  .deck-title { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; margin-top: 2rem; }
+  .card { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; }
+  .card-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; user-select: none; }
+  .card-header:hover { background: #fafaf8; }
+  .card-left { flex: 1; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 6px; margin-bottom: 6px; }
+  .b-purple { background: #ede9fe; color: #5b21b6; }
+  .b-blue   { background: #dbeafe; color: #1e40af; }
+  .b-teal   { background: #d1fae5; color: #065f46; }
+  .b-amber  { background: #fef3c7; color: #92400e; }
+  .b-coral  { background: #fee2e2; color: #991b1b; }
+  .prompt { font-size: 15px; font-weight: 500; color: #1a1a1a; line-height: 1.5; }
+  .hint { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .toggle-icon { font-size: 14px; color: #bbb; margin-top: 2px; flex-shrink: 0; transition: transform 0.2s; }
+  .toggle-icon.open { transform: rotate(90deg); }
+  .card-body { display: none; border-top: 1px solid #f0ede8; padding: 1rem 1.25rem 0.75rem; }
+  .card-body.open { display: block; }
+  .kw-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.9rem; }
+  .kw { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: #f3f2ef; color: #555; border: 1px solid #e8e6e1; font-family: monospace; }
+  .ans-toggle-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #aaa; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; user-select: none; transition: color 0.15s; }
+  .ans-toggle-btn:hover { color: #555; }
+  .ans-arrow { font-size: 11px; transition: transform 0.2s; display: inline-block; }
+  .ans-arrow.open { transform: rotate(90deg); }
+  .answer-section { display: none; border-top: 1px solid #f0ede8; margin-top: 0.75rem; padding-top: 0.75rem; }
+  .answer-section.open { display: block; }
+  .answer-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .answer-fr { font-size: 14px; font-style: italic; color: #444; line-height: 1.7; }
+  .answer-fr p { margin-bottom: 0.5rem; }
+  .answer-fr p:last-child { margin-bottom: 0; }
+  .answer-zh { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .answer-note { font-size: 12px; color: #b08d57; background: #fef9f0; border-left: 3px solid #f5c97a; border-radius: 0 5px 5px 0; padding: 6px 10px; margin-top: 8px; line-height: 1.5; }
+  .progress-wrap { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; }
+  .prog-bg { flex: 1; height: 6px; background: #f0ede8; border-radius: 3px; }
+  .prog-fill { height: 6px; border-radius: 3px; background: #7c3aed; transition: width 0.4s; }
+  .prog-text { font-size: 12px; color: #999; white-space: nowrap; }
+  .reset-btn { font-size: 12px; color: #7c3aed; cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .reset-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>通过政府干预保护环境</h1>
+  <p class="subtitle">看中文提示，组织法语句子，展开关键词后再查看参考答案</p>
+
+  <div class="progress-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <span class="prog-text" id="prog-text">已打开 0 张</span>
+    <button class="reset-btn" onclick="resetAll()">重置</button>
+  </div>
+
+  <div class="deck-title">Pensez-vous que les gouvernements devraient intervenir pour protéger l'environnement ?</div>
+
+  <!-- 观点 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">我认为，政府应该逐步限制乘飞机出行，尤其是短途航班。如今飞机产生大量CO₂，减少航班是保护环境的好方式。</div>
+        <div class="hint">提示：À mon avis，les autorités devraient limiter peu à peu，surtout pour les trajets courts，les avions produisent une grande partie du CO₂，réduire les vols c'est un bon moyen de protéger l'environnement</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">À mon avis</span>
+        <span class="kw">les autorités devraient limiter peu à peu</span>
+        <span class="kw">les voyages en avion</span>
+        <span class="kw">surtout pour les trajets courts</span>
+        <span class="kw">produire une grande partie du CO₂</span>
+        <span class="kw">réduire les vols</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>À mon avis, les autorités devraient limiter peu à peu les voyages en avion, surtout pour les trajets courts. Aujourd'hui, les avions produisent une grande partie du CO₂, donc réduire les vols, c'est un bon moyen de protéger l'environnement.</p></div>
+        <div class="answer-zh">我认为，政府应该逐步限制乘飞机出行，尤其是短途航班。如今飞机产生大量CO₂，因此减少航班是保护环境的好方式。</div>
+        <div class="answer-note">💡 devraient = 应该（条件式，表示建议或义务，比 doivent 更委婉）｜peu à peu = 逐步、慢慢地（副词短语）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点1 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1</div>
+        <div class="prompt">首先，对于很多国内航线，已经有火车等替代方案。比如在法国或加拿大，两三个小时的路程乘火车比飞机对环境友好得多。而且火车能避免安检、等候和机场的压力，所以这不仅对地球好，也更舒适。</div>
+        <div class="hint">提示：D'abord，pour beaucoup de trajets intérieurs，il existe déjà des alternatives comme le train，certains trajets sont bien meilleurs pour l'environnement en train qu'en avion，éviter les contrôles / l'attente / le stress，ce n'est pas seulement... c'est aussi...</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">D'abord</span>
+        <span class="kw">pour beaucoup de trajets intérieurs</span>
+        <span class="kw">il existe déjà des alternatives comme le train</span>
+        <span class="kw">bien meilleurs pour l'environnement en train qu'en avion</span>
+        <span class="kw">éviter les contrôles, l'attente, le stress</span>
+        <span class="kw">ce n'est pas seulement... c'est aussi plus confortable</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>D'abord, pour beaucoup de trajets intérieurs, il existe déjà des alternatives comme le train. Par exemple, en France ou au Canada, certains trajets de deux ou trois heures sont bien meilleurs pour l'environnement en train qu'en avion. En plus, le train permet d'éviter les contrôles, l'attente et le stress des aéroports, donc ce n'est pas seulement une bonne chose pour la planète, c'est aussi plus confortable.</p></div>
+        <div class="answer-zh">首先，对于很多国内路程，已经有火车等替代方案。比如在法国或加拿大，两三个小时的路程乘火车比飞机对环境友好得多。而且火车能避免安检、等候和机场的压力，所以这不仅对地球好，也更舒适。</div>
+        <div class="answer-note">💡 bien meilleurs = 好得多（bien 加强比较级，相当于 beaucoup + 比较级）｜il existe = 存在（比 il y a 更书面正式）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点2 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2</div>
+        <div class="prompt">其次，限制航班促使人们和企业改变习惯。比如，一些人现在用线上会议代替坐飞机出差一天。借助数字技术，我们可以维持职业联系，甚至围绕共同兴趣交朋友，而不需要亲自出行。</div>
+        <div class="hint">提示：Ensuite，limiter les vols pousse les gens à changer leurs habitudes，organiser des réunions en ligne au lieu de prendre l'avion，Grâce au numérique，garder des contacts professionnels / se faire des amis autour d'intérêts communs，sans avoir besoin de se déplacer</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Ensuite</span>
+        <span class="kw">limiter les vols pousse les gens à changer leurs habitudes</span>
+        <span class="kw">des réunions en ligne au lieu de prendre l'avion</span>
+        <span class="kw">Grâce au numérique</span>
+        <span class="kw">garder des contacts professionnels</span>
+        <span class="kw">se faire des amis autour d'intérêts communs</span>
+        <span class="kw">sans avoir besoin de se déplacer</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Ensuite, limiter les vols pousse les gens et les entreprises à changer leurs habitudes. Par exemple, certaines personnes organisent maintenant des réunions en ligne au lieu de prendre l'avion pour une journée. Grâce au numérique, on peut garder des contacts professionnels ou même se faire des amis autour d'intérêts communs, sans avoir besoin de se déplacer.</p></div>
+        <div class="answer-zh">其次，限制航班促使人们和企业改变习惯。比如，一些人现在组织线上会议，而不是为了一天的出差坐飞机。借助数字技术，我们可以维持职业联系，甚至围绕共同兴趣交朋友，而不需要亲自出行。</div>
+        <div class="answer-note">💡 pousser quelqu'un à + 动词原形 = 促使某人做某事（已在旅游材料出现，串联记忆）｜Grâce à = 多亏了、借助（表正面原因，对比 à cause de 表负面原因）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 小结：本国政府的行动 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-coral">小结</div>
+        <div class="prompt">至于我的国家，我觉得行动还远远不够，尽管能看到一些进步：更多公共交通、部分城市禁止高污染车辆的区域，以及向民众宣传污染问题的活动。</div>
+        <div class="hint">提示：Pour ce qui est de mon pays，les actions ne sont pas encore assez importantes，même si on voit quelques progrès，列举三项进步：plus de transports publics / zones où les voitures polluantes sont interdites / campagnes pour informer</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Pour ce qui est de mon pays</span>
+        <span class="kw">les actions ne sont pas encore assez importantes</span>
+        <span class="kw">même si on voit quelques progrès</span>
+        <span class="kw">plus de transports publics</span>
+        <span class="kw">des zones où les voitures polluantes sont interdites</span>
+        <span class="kw">des campagnes pour informer les gens sur la pollution</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Pour ce qui est de mon pays, je trouve que les actions ne sont pas encore assez importantes, même si on voit quelques progrès : plus de transports publics, des zones où les voitures polluantes sont interdites dans certaines villes, et des campagnes pour informer les gens sur la pollution.</p></div>
+        <div class="answer-zh">至于我的国家，我觉得行动还远远不够，尽管能看到一些进步：更多公共交通、部分城市禁止高污染车辆的区域，以及向民众宣传污染问题的活动。</div>
+        <div class="answer-note">💡 Pour ce qui est de = 至于……、关于……（口语中转换话题的地道表达）｜même si = 尽管（让步从句，后接直陈式，区别于 bien que + 虚拟式）</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let opened = new Set();
+  const total = document.querySelectorAll('.card').length;
+
+  function toggleKw(header) {
+    const body = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    icon.classList.toggle('open', !isOpen);
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(header);
+    if (!isOpen) {
+      opened.add(idx + '-kw');
+    } else {
+      opened.delete(idx + '-kw');
+      opened.delete(idx + '-ans');
+    }
+    updateProgress();
+  }
+
+  function toggleAns(event, btn) {
+    event.stopPropagation();
+    const ansSection = btn.nextElementSibling;
+    const arrow = btn.querySelector('.ans-arrow');
+    const isOpen = ansSection.classList.contains('open');
+    ansSection.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+    const card = btn.closest('.card');
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(card.querySelector('.card-header'));
+    if (!isOpen) opened.add(idx + '-ans'); else opened.delete(idx + '-ans');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const ansCount = Array.from(opened).filter(k => k.endsWith('-ans')).length;
+    const pct = Math.round(ansCount / total * 100);
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = '已打开 ' + ansCount + ' / ' + total + ' 张';
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.toggle-icon').forEach(i => i.classList.remove('open'));
+    document.querySelectorAll('.answer-section').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.ans-arrow').forEach(a => a.classList.remove('open'));
+    opened.clear();
+    updateProgress();
+  }
+</script>
+</body>
+</html>

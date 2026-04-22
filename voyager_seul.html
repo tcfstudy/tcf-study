@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一个人旅游的好处 / 坏处</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f6f3; padding: 2rem 1rem; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+  .deck-title { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; margin-top: 2rem; }
+  .card { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; }
+  .card-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; user-select: none; }
+  .card-header:hover { background: #fafaf8; }
+  .card-left { flex: 1; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 6px; margin-bottom: 6px; }
+  .b-purple { background: #ede9fe; color: #5b21b6; }
+  .b-blue   { background: #dbeafe; color: #1e40af; }
+  .b-teal   { background: #d1fae5; color: #065f46; }
+  .b-amber  { background: #fef3c7; color: #92400e; }
+  .b-coral  { background: #fee2e2; color: #991b1b; }
+  .prompt { font-size: 15px; font-weight: 500; color: #1a1a1a; line-height: 1.5; }
+  .hint { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .toggle-icon { font-size: 14px; color: #bbb; margin-top: 2px; flex-shrink: 0; transition: transform 0.2s; }
+  .toggle-icon.open { transform: rotate(90deg); }
+
+  .card-body { display: none; border-top: 1px solid #f0ede8; padding: 1rem 1.25rem 0.75rem; }
+  .card-body.open { display: block; }
+
+  .kw-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.9rem; }
+  .kw { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: #f3f2ef; color: #555; border: 1px solid #e8e6e1; font-family: monospace; }
+
+  .ans-toggle-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; color: #aaa; background: none; border: none;
+    cursor: pointer; font-family: inherit; padding: 0;
+    user-select: none; transition: color 0.15s;
+  }
+  .ans-toggle-btn:hover { color: #555; }
+  .ans-arrow { font-size: 11px; transition: transform 0.2s; display: inline-block; }
+  .ans-arrow.open { transform: rotate(90deg); }
+
+  .answer-section { display: none; border-top: 1px solid #f0ede8; margin-top: 0.75rem; padding-top: 0.75rem; }
+  .answer-section.open { display: block; }
+  .answer-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .answer-fr { font-size: 14px; font-style: italic; color: #444; line-height: 1.7; }
+  .answer-fr p { margin-bottom: 0.5rem; }
+  .answer-fr p:last-child { margin-bottom: 0; }
+  .answer-zh { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .answer-note { font-size: 12px; color: #b08d57; background: #fef9f0; border-left: 3px solid #f5c97a; border-radius: 0 5px 5px 0; padding: 6px 10px; margin-top: 8px; line-height: 1.5; }
+
+  .progress-wrap { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; }
+  .prog-bg { flex: 1; height: 6px; background: #f0ede8; border-radius: 3px; }
+  .prog-fill { height: 6px; border-radius: 3px; background: #7c3aed; transition: width 0.4s; }
+  .prog-text { font-size: 12px; color: #999; white-space: nowrap; }
+  .reset-btn { font-size: 12px; color: #7c3aed; cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .reset-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>一个人旅游的好处 / 坏处</h1>
+  <p class="subtitle">看中文提示，组织法语句子，展开关键词后再查看参考答案</p>
+
+  <div class="progress-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <span class="prog-text" id="prog-text">已打开 0 张</span>
+    <button class="reset-btn" onclick="resetAll()">重置</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <div class="deck-title">第一篇 · 一个人旅游的好处</div>
+
+  <!-- 观点 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">独自移居有一定的优势。</div>
+        <div class="hint">提示：用动词原形做主语，certains 表示"若干"</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Immigrer seul</span>
+        <span class="kw">certains avantages</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Immigrer seul a certains avantages.</p></div>
+        <div class="answer-zh">独自移居有一定的优势。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点1 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1</div>
+        <div class="prompt">你完全自由地安排时间，想去哪就去哪，可以临时改变计划，不需要和别人商量，能更快适应新环境。</div>
+        <div class="hint">提示：être libre de son emploi du temps，changer de plan à la dernière minute，sans devoir se concerter，s'adapter plus rapidement</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">être libre de son emploi du temps</span>
+        <span class="kw">changer de plan à la dernière minute</span>
+        <span class="kw">sans devoir se concerter</span>
+        <span class="kw">s'adapter plus rapidement</span>
+        <span class="kw">la responsabilité d'autres personnes</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>On est totalement libre de son emploi du temps. On peut visiter ce qu'on veut, changer de plan à la dernière minute, sans devoir se concerter avec quelqu'un d'autre. On peut s'adapter plus rapidement à un nouvel environnement, parce qu'on n'a pas la responsabilité d'autres personnes.</p></div>
+        <div class="answer-zh">你可以完全自由地安排自己的时间。想去哪就去哪，可以临时改变计划，不需要和别人商量。你能更快地适应新环境，因为你不需要对其他人负责。</div>
+        <div class="answer-note">💡 emploi du temps = 时间安排、日程表（固定搭配，不能拆开说）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点2 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2</div>
+        <div class="prompt">独自身处异国，没有人可以依靠，你就学会了自己解决问题，走出舒适区，变得更独立、更灵活、更包容差异。</div>
+        <div class="hint">提示：se retrouver dans un pays étranger，sans personne sur qui compter，se débrouiller，pousser à devenir，ouvert aux différences</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">se retrouver dans un pays étranger</span>
+        <span class="kw">sans personne sur qui compter</span>
+        <span class="kw">se débrouiller</span>
+        <span class="kw">sortir de sa zone de confort</span>
+        <span class="kw">pousser à devenir</span>
+        <span class="kw">ouvert aux différences</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Quand on se retrouve dans un pays étranger, sans personne sur qui compter, on apprend à se débrouiller. On doit sortir de sa zone de confort, s'adapter à une nouvelle culture, parfois même à une langue qu'on ne maîtrise pas totalement. Cela nous pousse à devenir plus autonomes, plus flexibles, et aussi plus ouverts aux différences.</p></div>
+        <div class="answer-zh">当你独自身处异国，没有任何人可以依靠，你就学会了自己解决问题。你必须走出舒适区，适应新文化，有时甚至是一门还没完全掌握的语言。这推动我们变得更独立、更灵活，也更包容差异。</div>
+        <div class="answer-note">💡 se débrouiller = 自己想办法、应付过去｜pousser quelqu'un à + 动词原形 = 推动某人做某事｜ouvert aux différences = 对差异持开放态度
+🔗 可串题材：出国生活的困难 &amp; 年轻时去国外生活是否是个好主意 &amp; 旅游改变性格</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">在国外，获取信息最快的方式是和当地人交流。我每次坐出租车都和司机聊，他们是信息宝库，会推荐游客不知道的地方或地道的餐厅。</div>
+        <div class="hint">提示：le moyen le plus rapide pour，Chaque fois que je prends un taxi，une vraie mine d'informations，non seulement... mais... aussi...</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">le moyen le plus rapide pour</span>
+        <span class="kw">échanger avec les habitants</span>
+        <span class="kw">une vraie mine d'informations</span>
+        <span class="kw">non seulement... mais... aussi...</span>
+        <span class="kw">peu connus des touristes</span>
+        <span class="kw">des restaurants vraiment typiques</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Par exemple, à l'étranger, le moyen le plus rapide pour obtenir des informations, c'est souvent d'échanger avec les habitants. Chaque fois que je prends un taxi, je discute un peu avec le chauffeur — c'est une vraie mine d'informations ! Non seulement ils partagent des coutumes locales, mais ils recommandent aussi des endroits peu connus des touristes ou des restaurants vraiment typiques.</p></div>
+        <div class="answer-zh">在国外，获取信息最快的方式往往是和当地居民交流。每次坐出租车，我都会和司机聊几句——这真是一个信息宝库！他们不仅分享当地风俗，还会推荐游客不知道的地方或真正地道的餐厅。</div>
+        <div class="answer-note">💡 une vraie mine d'informations = 真正的信息宝库（mine = 矿，比喻资源丰富，口语生动）｜non seulement… mais… aussi… = 不仅……而且……</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 小结 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-coral">小结</div>
+        <div class="prompt">这些经历增强了我们的适应能力、好奇心和自信心。归根到底，它们促进了个人成长。</div>
+        <div class="hint">提示：Ces expériences renforcent，capacité d'adaptation，confiance en nous，Finalement，favoriser le développement personnel</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Ces expériences renforcent</span>
+        <span class="kw">capacité d'adaptation</span>
+        <span class="kw">curiosité</span>
+        <span class="kw">confiance en nous</span>
+        <span class="kw">Finalement</span>
+        <span class="kw">favoriser le développement personnel</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Ces expériences renforcent notre capacité d'adaptation, notre curiosité, et notre confiance en nous. Finalement, elles favorisent le développement personnel.</p></div>
+        <div class="answer-zh">这些经历增强了我们的适应能力、好奇心和自信心。归根到底，它们促进了个人成长。</div>
+        <div class="answer-note">💡 capacité d'adaptation = 适应能力（固定搭配）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <div class="deck-title">第二篇 · 一个人旅游的坏处</div>
+
+  <!-- 观点 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">独自旅行并不总是个好主意，尽管看起来很有吸引力。</div>
+        <div class="hint">提示：Voyager seul n'est pas toujours une bonne idée，même si 转折，paraître + 形容词 表示"看起来"</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Voyager seul</span>
+        <span class="kw">pas toujours une bonne idée</span>
+        <span class="kw">même si</span>
+        <span class="kw">paraître + 形容词</span>
+        <span class="kw">attirant</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Voyager seul n'est pas toujours une bonne idée, même si cela paraît très attirant.</p></div>
+        <div class="answer-zh">独自旅行并不总是个好主意，尽管这看起来非常有吸引力。</div>
+        <div class="answer-note">💡 paraître + 形容词 = 看起来……（比 sembler 更常用于外表印象）→ cela paraît attirant = 这看起来很吸引人</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点1 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1</div>
+        <div class="prompt">首先，独自旅行在心理层面可能很艰难。身边没有朋友或家人，容易感到孤独，尤其是在夜晚或重要时刻。</div>
+        <div class="hint">提示：D'abord，sur le plan psychologique，Sans amis ni famille autour de soi，ressentir la solitude，surtout le soir ou pendant les moments importants</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">D'abord</span>
+        <span class="kw">sur le plan psychologique</span>
+        <span class="kw">Sans amis ni famille autour de soi</span>
+        <span class="kw">ressentir la solitude</span>
+        <span class="kw">surtout le soir</span>
+        <span class="kw">pendant les moments importants</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>D'abord, voyager seul peut être difficile sur le plan psychologique. Sans amis ni famille autour de soi, on peut ressentir la solitude, surtout le soir ou pendant les moments importants.</p></div>
+        <div class="answer-zh">首先，独自旅行在心理层面可能很艰难。身边没有朋友或家人，容易感到孤独，尤其是在夜晚或重要时刻。</div>
+        <div class="answer-note">💡 sur le plan + 名词 = 在……层面（可替换：sur le plan financier / pratique / émotionnel）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点2 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2</div>
+        <div class="prompt">其次，遇到问题时——比如火车晚点、行李丢失或语言障碍——没有即时的支持，这会增加压力。</div>
+        <div class="hint">提示：Ensuite，lorsqu'on rencontre un problème，用破折号列举三个问题，il n'y a pas de soutien immédiat，ce qui augmente le stress</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Ensuite</span>
+        <span class="kw">lorsqu'on rencontre un problème</span>
+        <span class="kw">un retard de train</span>
+        <span class="kw">une perte de bagage</span>
+        <span class="kw">une difficulté linguistique</span>
+        <span class="kw">pas de soutien immédiat</span>
+        <span class="kw">ce qui augmente le stress</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Ensuite, lorsqu'on rencontre un problème – par exemple un retard de train, une perte de bagage ou une difficulté linguistique – il n'y a pas de soutien immédiat, ce qui augmente le stress.</p></div>
+        <div class="answer-zh">其次，当遇到问题时——比如火车晚点、行李丢失或语言障碍——没有即时的支持，这会增加压力。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">比如，我有个朋友独自去意大利。起初一切顺利，他非常开心。但有一天手机被偷了，没有地图也没有人帮助，差点迷路，真的慌了。如果当时有朋友在，本来会更简单。</div>
+        <div class="hint">提示：j'ai un ami qui est parti seul，复合过去时讲事件，未完成时描述状态，最后用虚拟条件句（si + 愈过去时，条件式过去时）收尾</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">j'ai un ami qui est parti seul</span>
+        <span class="kw">son téléphone a été volé</span>
+        <span class="kw">il a failli se perdre（差点迷路）</span>
+        <span class="kw">il a vraiment paniqué</span>
+        <span class="kw">S'il avait été avec un ami（虚拟条件句）</span>
+        <span class="kw">ça aurait été plus simple</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr">
+          <p>Par exemple, j'ai un ami qui est parti seul en Italie. Au début, tout allait bien, il était très content. Mais un jour, son téléphone a été volé. À ce moment-là, il n'avait plus de Google Maps ni personne pour l'aider. Il ne connaissait pas bien la ville et il a failli se perdre. Comme il était seul, il a vraiment paniqué.</p>
+          <p>S'il avait été avec un ami, ça aurait été beaucoup plus simple et moins stressant.</p>
+        </div>
+        <div class="answer-zh">比如，我有个朋友独自去了意大利。起初一切顺利，他非常开心。但有一天，他的手机被偷了。那时他既没有导航也没有人帮忙，对城市又不熟悉，差点迷路，真的慌了神。如果当时有朋友在，本来会简单得多，压力也会小很多。</div>
+        <div class="answer-note">⏱ 时态提示：复合过去时讲具体事件（est parti / a été volé / a failli / a paniqué）｜未完成时描述当时的状态（allait bien / était content / ne connaissait pas）｜S'il avait été… ça aurait été… = 与过去事实相反的虚拟假设（si + 愈过去时，主句 + 条件式过去时），TCF 高分句型</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 小结 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-coral">小结</div>
+        <div class="prompt">换句话说，独自旅行看似给了自由，但现实中，当没有人分担困难时，可能会造成很大的心理压力。</div>
+        <div class="hint">提示：Autrement dit，semble donner de la liberté，mais en réalité，pression émotionnelle，lorsqu'il n'y a personne pour partager les difficultés</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Autrement dit</span>
+        <span class="kw">semble donner de la liberté</span>
+        <span class="kw">mais en réalité</span>
+        <span class="kw">pression émotionnelle</span>
+        <span class="kw">lorsqu'il n'y a personne pour partager les difficultés</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Autrement dit, voyager seul semble donner de la liberté, mais en réalité, cela peut créer beaucoup de pression émotionnelle lorsqu'il n'y a personne pour partager les difficultés.</p></div>
+        <div class="answer-zh">换句话说，独自旅行看似给了自由，但现实中，当没有人分担困难时，可能会造成很大的心理压力。</div>
+        <div class="answer-note">🔗 可串题材：出国对职业成功 — Pensez-vous que faire l'expérience de la vie à l'étranger garantit le succès dans sa carrière ?</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let opened = new Set();
+  const total = document.querySelectorAll('.card').length;
+
+  function toggleKw(header) {
+    const body = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    icon.classList.toggle('open', !isOpen);
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(header);
+    if (!isOpen) {
+      opened.add(idx + '-kw');
+    } else {
+      opened.delete(idx + '-kw');
+      opened.delete(idx + '-ans');
+    }
+    updateProgress();
+  }
+
+  function toggleAns(event, btn) {
+    event.stopPropagation();
+    const ansSection = btn.nextElementSibling;
+    const arrow = btn.querySelector('.ans-arrow');
+    const isOpen = ansSection.classList.contains('open');
+    ansSection.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+    const card = btn.closest('.card');
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(card.querySelector('.card-header'));
+    if (!isOpen) opened.add(idx + '-ans'); else opened.delete(idx + '-ans');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const ansCount = Array.from(opened).filter(k => k.endsWith('-ans')).length;
+    const pct = Math.round(ansCount / total * 100);
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = '已打开 ' + ansCount + ' / ' + total + ' 张';
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.toggle-icon').forEach(i => i.classList.remove('open'));
+    document.querySelectorAll('.answer-section').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.ans-arrow').forEach(a => a.classList.remove('open'));
+    opened.clear();
+    updateProgress();
+  }
+</script>
+</body>
+</html>

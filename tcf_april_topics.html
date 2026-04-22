@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCF Canada 4月题目 — 观点对照表</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.08);
+    --border-strong: rgba(0,0,0,0.15);
+    --text-primary: #1a1a18;
+    --text-secondary: #6b6b65;
+    --text-tertiary: #9e9e97;
+
+    --green-bg: #e8f5e3; --green-text: #2d6a1f;
+    --blue-bg: #e3eeff; --blue-text: #1a4fa0;
+    --amber-bg: #fef3dc; --amber-text: #7a4a08;
+    --red-bg: #fde8e8; --red-text: #992020;
+    --purple-bg: #eeecff; --purple-text: #4a3db0;
+    --gray-bg: #efefeb; --gray-text: #555550;
+
+    --section-green: #1a6b2a;
+    --section-blue: #1a3fa0;
+    --section-amber: #7a4a08;
+    --section-social: #6b2d6b;
+    --section-culture: #1a5f6b;
+    --section-red: #992020;
+  }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .page-header {
+    max-width: 960px;
+    margin: 0 auto 2rem;
+  }
+
+  .page-header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+
+  .page-header p {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 12px 0 0;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .legend span { display: flex; align-items: center; gap: 5px; }
+
+  .filter-bar {
+    max-width: 960px;
+    margin: 0 auto 1.2rem;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all .15s;
+  }
+
+  .filter-btn:hover { background: var(--gray-bg); }
+  .filter-btn.active {
+    background: var(--text-primary);
+    color: #fff;
+    border-color: var(--text-primary);
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .section-block {
+    margin-bottom: 1.8rem;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 0.5px solid var(--border);
+    overflow: hidden;
+  }
+
+  .section-header {
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-header .count {
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 11px;
+    opacity: 0.75;
+  }
+
+  .sh-migration { background: var(--section-green); }
+  .sh-tech      { background: var(--section-blue); }
+  .sh-work      { background: var(--section-amber); }
+  .sh-health    { background: #2d6b4a; }
+  .sh-social    { background: var(--section-social); }
+  .sh-culture   { background: var(--section-culture); }
+  .sh-new       { background: var(--section-red); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-align: left;
+    border-bottom: 0.5px solid var(--border);
+    background: #fafaf8;
+    letter-spacing: 0.3px;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 0.5px solid var(--border);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafaf8; }
+
+  .col-num  { width: 52px; }
+  .col-q    { width: 28%; }
+  .col-src  { width: 30%; }
+  .col-note { }
+
+  .num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin: 1px 2px 1px 0;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .t-green  { background: var(--green-bg);  color: var(--green-text); }
+  .t-blue   { background: var(--blue-bg);   color: var(--blue-text); }
+  .t-amber  { background: var(--amber-bg);  color: var(--amber-text); }
+  .t-red    { background: var(--red-bg);    color: var(--red-text); }
+  .t-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .t-gray   { background: var(--gray-bg);   color: var(--gray-text); }
+
+  .note { font-size: 12px; color: var(--text-secondary); }
+
+  .status-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-right: 5px;
+    flex-shrink: 0;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }
+  .dot-ready  { background: #3a9e50; }
+  .dot-adapt  { background: #d48c10; }
+  .dot-new    { background: #cc3333; }
+  .dot-dup    { background: #b0b0a8; }
+
+  tr.dup-row td {
+    opacity: 0.42;
+  }
+
+  .dup-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 8px;
+    background: var(--gray-bg);
+    color: var(--gray-text);
+    margin-right: 5px;
+    font-weight: 500;
+  }
+
+  tr.hidden { display: none; }
+
+  .stats-bar {
+    max-width: 960px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-card .val {
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .stat-card .lbl {
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>TCF Canada · 2026年4月口语题 — 观点对照表</h1>
+  <p>按观点使用频率排序 · 去重后共 42 道有效题目</p>
+  <div class="legend">
+    <span><span class="status-dot dot-ready"></span>直接用</span>
+    <span><span class="status-dot dot-adapt"></span>稍作调整</span>
+    <span><span class="status-dot dot-new"></span>需要新备</span>
+    <span><span class="status-dot dot-dup"></span>已去重（灰显）</span>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-card"><span class="val">50</span><span class="lbl">原题总数</span></div>
+  <div class="stat-card"><span class="val">8</span><span class="lbl">去重题目</span></div>
+  <div class="stat-card"><span class="val">4</span><span class="lbl">需要新备</span></div>
+  <div class="stat-card"><span class="val">6</span><span class="lbl">核心观点主题</span></div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filter('all',this)">全部</button>
+  <button class="filter-btn" onclick="filter('ready',this)">直接用 ●</button>
+  <button class="filter-btn" onclick="filter('adapt',this)">稍作调整 ●</button>
+  <button class="filter-btn" onclick="filter('new',this)">需要新备 ●</button>
+  <button class="filter-btn" onclick="filter('dup',this)">已去重</button>
+</div>
+
+<div class="container" id="container">
+
+  <!-- MIGRATION -->
+  <div class="section-block" data-section="migration">
+    <div class="section-header sh-migration">🌍 移民 · 异乡生活 <span class="count">— 观点被用到 12 次</span></div>
+    <table>
+      <thead><tr>
+        <th class="col-num">#</th>
+        <th class="col-q">题目</th>
+        <th class="col-src">对应观点</th>
+        <th class="col-note">备注 / 调整方向</th>
+      </tr></thead>
+      <tbody>
+        <tr data-status="ready">
+          <td><span class="num">P1·3</span><br><span class="status-dot dot-ready"></span></td>
+          <td>国外生活的利弊</td>
+          <td><span class="tag t-green">移民好处</span><span class="tag t-green">移民坏处</span></td>
+          <td class="note">拼接两个观点，加一句过渡即可</td>
+        </tr>
+        <tr data-status="dup" class="dup-row">
+          <td><span class="num">P6·5</span><br><span class="status-dot dot-dup"></span></td>
+          <td><span class="dup-badge">去重 ≈ P1·3</span>异国生活总是有优势？</td>
+          <td><span class="tag t-gray">≈ P1·3</span></td>
+          <td class="note">练P1·3即可</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P3·5</span><br><span class="status-dot dot-ready"></span></td>
+          <td>移居国外是否要保持母国联系？</td>
+          <td><span class="tag t-green">在国外忘记传统</span></td>
+          <td class="note">直接用，核心论点完全匹配</td>
+        </tr>
+        <tr data-status="dup" class="dup-row">
+          <td><span class="num">P10·1</span><br><span class="status-dot dot-dup"></span></td>
+          <td><span class="dup-badge">去重 ≈ P3·5</span>移居国外=改变文化认同？</td>
+          <td><span class="tag t-gray">≈ P3·5</span></td>
+          <td class="note">练P3·5即可</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P5·5</span><br><span class="status-dot dot-ready"></span></td>
+          <td>移居魁北克前要考虑什么？</td>
+          <td><span class="tag t-green">移民好坏</span><span class="tag t-green">在国外忘记传统</span></td>
+          <td class="note">三点：语言、经济基础、文化适应，全部有对应观点</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P8·4</span><br><span class="status-dot dot-ready"></span></td>
+          <td>掌握当地语言是否足够融入？</td>
+          <td><span class="tag t-green">在国外忘记传统</span></td>
+          <td class="note">语言是关键但不够，还需文化理解和人际关系</td>
+        </tr>
+        <tr data-status="dup" class="dup-row">
+          <td><span class="num">P9·5</span><br><span class="status-dot dot-dup"></span></td>
+          <td><span class="dup-badge">去重 ≈ P8·4</span>必须掌握所在国语言吗？</td>
+          <td><span class="tag t-gray">≈ P8·4</span></td>
+          <td class="note">练P8·4即可</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P7·5</span><br><span class="status-dot dot-ready"></span></td>
+          <td>几岁移民最合适？</td>
+          <td><span class="tag t-blue">年轻人学语言优势</span><span class="tag t-green">一个人移民好处</span></td>
+          <td class="note">年轻=适应快+语言优势，但要有经济准备</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P10·4</span><br><span class="status-dot dot-ready"></span></td>
+          <td>在外国交友容易吗？</td>
+          <td><span class="tag t-green">移民坏处</span><span class="tag t-purple">朋友好处</span></td>
+          <td class="note">语言/文化障碍 + 共同兴趣建立友谊，两面回答</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P9·1</span><br><span class="status-dot dot-ready"></span></td>
+          <td>喜欢独自旅行吗？</td>
+          <td><span class="tag t-green">一个人旅游好处</span><span class="tag t-green">一个人旅游坏处</span></td>
+          <td class="note">直接拼接，结论：看个人性格和旅行目的</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P1·2</span><br><span class="status-dot dot-ready"></span></td>
+          <td>向外国人推荐你的国家</td>
+          <td><span class="tag t-green">旅游移民·一个人</span></td>
+          <td class="note">直接套用旅游好处框架，替换主语为"我的国家"</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P6·3</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>独居比家庭生活更简单？</td>
+          <td><span class="tag t-green">一个人好处</span><span class="tag t-green">和家人坏处</span></td>
+          <td class="note">独居=自由但孤独；家庭=复杂但支持，结论：看个人</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TECH -->
+  <div class="section-block" data-section="tech">
+    <div class="section-header sh-tech">💻 电子设备 · 科技 <span class="count">— 观点被用到 11 次</span></div>
+    <table>
+      <thead><tr>
+        <th class="col-num">#</th><th class="col-q">题目</th><th class="col-src">对应观点</th><th class="col-note">备注 / 调整方向</th>
+      </tr></thead>
+      <tbody>
+        <tr data-status="ready">
+          <td><span class="num">P4·1</span><br><span class="status-dot dot-ready"></span></td>
+          <td>今天可以不用互联网生活吗？</td>
+          <td><span class="tag t-blue">电子设备好处</span><span class="tag t-blue">电子设备坏处</span></td>
+          <td class="note">好处说明依赖性，坏处说明副作用，结论：减少依赖但无法完全放弃</td>
+        </tr>
+        <tr data-status="dup" class="dup-row">
+          <td><span class="num">P10·5</span><br><span class="status-dot dot-dup"></span></td>
+          <td><span class="dup-badge">去重 ≈ P4·1</span>日常生活可以不用互联网？</td>
+          <td><span class="tag t-gray">≈ P4·1</span></td>
+          <td class="note">练P4·1即可</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P3·3</span><br><span class="status-dot dot-ready"></span></td>
+          <td>今天可以不用手机生活吗？</td>
+          <td><span class="tag t-blue">电子设备坏处</span></td>
+          <td class="note">坏处观点为主，结论：减少依赖而非完全放弃</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P5·3</span><br><span class="status-dot dot-ready"></span></td>
+          <td>互联网让人感到孤独？</td>
+          <td><span class="tag t-blue">电子设备坏处</span><span class="tag t-purple">朋友好处</span></td>
+          <td class="note">减少真实社交 + 真实联系的重要性</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P8·1</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>手机应禁用于工作场所？</td>
+          <td><span class="tag t-blue">电子设备坏处</span><span class="tag t-blue">学校监控</span></td>
+          <td class="note">坏处（分心/效率低）为主，监控"规则维持秩序"逻辑迁移到职场</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P8·5</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>电视对儿童教育不可或缺？</td>
+          <td><span class="tag t-blue">电子设备好处</span><span class="tag t-blue">电子设备坏处</span></td>
+          <td class="note">好处（教育内容）+ 坏处（过度使用），结论：工具而非必需品</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P5·1</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>不看电视新闻，你怎么看？</td>
+          <td><span class="tag t-blue">电子设备好坏</span><span class="tag t-purple">书的好处</span></td>
+          <td class="note">科技让信息碎片化，阅读的深度价值可对比</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P9·3</span><br><span class="status-dot dot-ready"></span></td>
+          <td>应该从小学习新技术吗？</td>
+          <td><span class="tag t-blue">小孩学语言优势</span><span class="tag t-blue">电子设备好处</span></td>
+          <td class="note">大脑可塑性论点 + 科技好处，框架完全可迁移</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P10·2</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>年轻人越来越不尊重人？</td>
+          <td><span class="tag t-blue">电子设备坏处</span><span class="tag t-blue">激励教学方式</span></td>
+          <td class="note">屏幕减少真实社交→缺乏礼貌；教育可以培养尊重</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P4·2</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>需要权威来养好孩子？</td>
+          <td><span class="tag t-blue">激励教学方式</span><span class="tag t-blue">学校监控</span></td>
+          <td class="note">监控观点中"纪律/规则"逻辑迁移到家庭权威</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P8·3</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>文化课不应纳入教学？</td>
+          <td><span class="tag t-blue">激励教学方式</span><span class="tag t-blue">男女平等教育</span></td>
+          <td class="note">立场：应该纳入。创造力 + 全面发展</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- WORK -->
+  <div class="section-block" data-section="work">
+    <div class="section-header sh-work">💼 职业 · 工作 <span class="count">— 观点被用到 8 次</span></div>
+    <table>
+      <thead><tr>
+        <th class="col-num">#</th><th class="col-q">题目</th><th class="col-src">对应观点</th><th class="col-note">备注 / 调整方向</th>
+      </tr></thead>
+      <tbody>
+        <tr data-status="ready">
+          <td><span class="num">P4·5</span><br><span class="status-dot dot-ready"></span></td>
+          <td>高学历是否必要才能成功？</td>
+          <td><span class="tag t-amber">影响职业成功·论点1</span></td>
+          <td class="note">直接用，有社交媒体创业者的具体例子</td>
+        </tr>
+        <tr data-status="dup" class="dup-row">
+          <td><span class="num">P7·1</span><br><span class="status-dot dot-dup"></span></td>
+          <td><span class="dup-badge">去重 ≈ P4·5</span>职业成功取决于学历？</td>
+          <td><span class="tag t-gray">≈ P4·5</span></td>
+          <td class="note">练P4·5即可</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P1·5</span><br><span class="status-dot dot-ready"></span></td>
+          <td>员工最看重薪资吗？</td>
+          <td><span class="tag t-amber">影响职业成功</span><span class="tag t-amber">选择工作的因素</span></td>
+          <td class="note">论点3（工作的个人意义）+ 论点2（热爱工作），薪资不是唯一动力</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P2·2</span><br><span class="status-dot dot-ready"></span></td>
+          <td>工作幸福是人生核心？</td>
+          <td><span class="tag t-amber">影响职业成功·论点3</span></td>
+          <td class="note">直接用"工作带来个人意义"那段，加"但幸福不只来自工作"</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P3·2</span><br><span class="status-dot dot-ready"></span></td>
+          <td>远程办公是对所有人的进步？</td>
+          <td><span class="tag t-amber">远程上班好处</span><span class="tag t-amber">远程上班坏处</span></td>
+          <td class="note">两个观点拼接，结论用"混合模式是未来"收尾</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P7·2</span><br><span class="status-dot dot-ready"></span></td>
+          <td>老年人继续工作是好事？</td>
+          <td><span class="tag t-amber">老年人工作好处</span></td>
+          <td class="note">直接用，有日本劳动力短缺的具体例子</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P6·4</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>工作到70岁合理吗？</td>
+          <td><span class="tag t-amber">老年人工作好处</span></td>
+          <td class="note">老年人观点直接用，加"但要看工作性质和健康状况"作为平衡</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P1·1</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>大学应获更多资金？</td>
+          <td><span class="tag t-amber">影响职业成功</span><span class="tag t-blue">激励教学方式</span></td>
+          <td class="note">套用"教育投入→机会公平"逻辑，强调学历+培训的重要性</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- HEALTH -->
+  <div class="section-block" data-section="health">
+    <div class="section-header sh-health">🌿 健康 · 环境 · 交通 <span class="count">— 观点被用到 6 次</span></div>
+    <table>
+      <thead><tr>
+        <th class="col-num">#</th><th class="col-q">题目</th><th class="col-src">对应观点</th><th class="col-note">备注 / 调整方向</th>
+      </tr></thead>
+      <tbody>
+        <tr data-status="ready">
+          <td><span class="num">P3·1</span><br><span class="status-dot dot-ready"></span></td>
+          <td>现在可以不用汽车生活吗？</td>
+          <td><span class="tag t-amber">保护环境·无车生活</span></td>
+          <td class="note">直接用，有多伦多无车周的具体例子</td>
+        </tr>
+        <tr data-status="dup" class="dup-row">
+          <td><span class="num">P6·2</span><br><span class="status-dot dot-dup"></span></td>
+          <td><span class="dup-badge">去重 ≈ P3·1</span>现在可以不用汽车生活吗？</td>
+          <td><span class="tag t-gray">≈ P3·1</span></td>
+          <td class="note">完全相同，练P3·1即可</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P4·3</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>大城市公共交通应免费？</td>
+          <td><span class="tag t-amber">保护环境</span><span class="tag t-gray">社会福利好处</span></td>
+          <td class="note">免费→减少汽车→环保 + 免费→社会公平→弱势群体受益</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P9·2</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>为什么人们喜欢坐火车/飞机旅行？</td>
+          <td><span class="tag t-green">旅游好处</span><span class="tag t-amber">保护环境·火车论点</span></td>
+          <td class="note">环境观点里有"火车比飞机更环保"的具体论述</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P1·4</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>如何鼓励人们多运动？</td>
+          <td><span class="tag t-blue">激励教学方式</span><span class="tag t-amber">保护环境</span></td>
+          <td class="note">把"激励学生"框架迁移到"激励大众"，加入步行/骑车的环保论点</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P2·5</span><br><span class="status-dot dot-ready"></span></td>
+          <td>保持健康最重要的是饮食？</td>
+          <td><span class="tag t-purple">饮食习惯</span><span class="tag t-amber">保护环境·步行论点</span></td>
+          <td class="note">饮食重要但不是唯一，加入运动论点作为补充</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P4·4</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>健康必须只吃有机食品？</td>
+          <td><span class="tag t-purple">饮食习惯</span></td>
+          <td class="note">立场：不必须。饮食均衡比有机更重要，有机成本高不公平</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SOCIAL -->
+  <div class="section-block" data-section="social">
+    <div class="section-header sh-social">👥 独居 · 人际关系 <span class="count">— 观点被用到 5 次</span></div>
+    <table>
+      <thead><tr>
+        <th class="col-num">#</th><th class="col-q">题目</th><th class="col-src">对应观点</th><th class="col-note">备注 / 调整方向</th>
+      </tr></thead>
+      <tbody>
+        <tr data-status="adapt">
+          <td><span class="num">P2·4</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>独居能否活得充实？</td>
+          <td><span class="tag t-green">一个人旅游好处</span><span class="tag t-purple">朋友好处</span></td>
+          <td class="note">独自生活→自律成长 + 朋友作为社交补充</td>
+        </tr>
+        <tr data-status="dup" class="dup-row">
+          <td><span class="num">P10·3</span><br><span class="status-dot dot-dup"></span></td>
+          <td><span class="dup-badge">去重 ≈ P2·4</span>独居真的不容易？</td>
+          <td><span class="tag t-gray">≈ P2·4</span></td>
+          <td class="note">练P2·4即可</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P5·2</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>年轻加拿大人住父母家，你怎么看？</td>
+          <td><span class="tag t-green">和家人移民好处</span><span class="tag t-gray">社会福利</span></td>
+          <td class="note">家人支持（经济+情感）的论点，背景换成加拿大高房价</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P7·3</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>志愿者活动有意义吗？</td>
+          <td><span class="tag t-gray">残障人士·志愿者部分</span><span class="tag t-gray">社会福利好处</span></td>
+          <td class="note">建议单独整理一段志愿者核心论点</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P8·2</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>NGO是帮助穷人的唯一途径？</td>
+          <td><span class="tag t-gray">社会福利好处</span><span class="tag t-gray">残障人士</span></td>
+          <td class="note">立场：不是唯一。政府+企业+个人都有责任，NGO是补充而非替代</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CULTURE -->
+  <div class="section-block" data-section="culture">
+    <div class="section-header sh-culture">📚 文化 · 阅读 · 娱乐 <span class="count">— 观点被用到 4 次</span></div>
+    <table>
+      <thead><tr>
+        <th class="col-num">#</th><th class="col-q">题目</th><th class="col-src">对应观点</th><th class="col-note">备注 / 调整方向</th>
+      </tr></thead>
+      <tbody>
+        <tr data-status="ready">
+          <td><span class="num">P2·3</span><br><span class="status-dot dot-ready"></span></td>
+          <td>阅读是无用活动？</td>
+          <td><span class="tag t-purple">书的好处</span></td>
+          <td class="note">直接用，立场：阅读非常有用，反驳题目观点</td>
+        </tr>
+        <tr data-status="ready">
+          <td><span class="num">P6·1</span><br><span class="status-dot dot-ready"></span></td>
+          <td>人们不再写信/寄贺卡，可惜吗？</td>
+          <td><span class="tag t-purple">书信好处</span></td>
+          <td class="note">直接用，有情感价值 vs 即时消息的对比</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P7·4</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>喜欢看电影还是戏剧？</td>
+          <td><span class="tag t-purple">书的好处</span><span class="tag t-blue">电子设备好处</span></td>
+          <td class="note">个人偏好题，套用"文化体验的沉浸感"逻辑，替换具体例子</td>
+        </tr>
+        <tr data-status="adapt">
+          <td><span class="num">P2·1</span><br><span class="status-dot dot-adapt"></span></td>
+          <td>应保护所有濒危动物？</td>
+          <td><span class="tag t-amber">保护环境</span><span class="tag t-purple">宠物重要性</span></td>
+          <td class="note">需补充：动物保护的独立论点（生态系统、物种多样性）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- NEW -->
+  <div class="section-block" data-section="new">
+    <div class="section-header sh-new">❌ 需要新备 <span class="count">— 4 道题无对应观点</span></div>
+    <table>
+      <thead><tr>
+        <th class="col-num">#</th><th class="col-q">题目</th><th class="col-src">方向</th><th class="col-note">需要准备的论点</th>
+      </tr></thead>
+      <tbody>
+        <tr data-status="new">
+          <td><span class="num">P3·4</span><br><span class="status-dot dot-new"></span></td>
+          <td>名人应在公共生活更积极？</td>
+          <td><span class="tag t-red">❌ 无对应观点</span></td>
+          <td class="note">正面影响力 vs 隐私权，名人的社会责任</td>
+        </tr>
+        <tr data-status="new">
+          <td><span class="num">P5·4</span><br><span class="status-dot dot-new"></span></td>
+          <td>当今最重要的议题是什么？</td>
+          <td><span class="tag t-red">❌ 开放题</span></td>
+          <td class="note">选定一个立场（如气候变化/社会不平等）并准备论点</td>
+        </tr>
+        <tr data-status="new">
+          <td><span class="num">P7·3</span><br><span class="status-dot dot-new"></span></td>
+          <td>志愿者活动有意义吗？</td>
+          <td><span class="tag t-red">❌ 需整理</span></td>
+          <td class="note">观点散落各处，建议整理成独立一段</td>
+        </tr>
+        <tr data-status="new">
+          <td><span class="num">P9·4</span><br><span class="status-dot dot-new"></span></td>
+          <td>什么促使人参与人道主义行动？</td>
+          <td><span class="tag t-red">❌ 无对应观点</span></td>
+          <td class="note">同理心、个人经历、社会责任感</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+function filter(status, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const rows = document.querySelectorAll('tr[data-status]');
+  rows.forEach(r => {
+    if (status === 'all' || r.dataset.status === status) {
+      r.classList.remove('hidden');
+    } else {
+      r.classList.add('hidden');
+    }
+  });
+  document.querySelectorAll('.section-block').forEach(block => {
+    const visibleRows = block.querySelectorAll('tr[data-status]:not(.hidden)');
+    block.style.display = visibleRows.length === 0 ? 'none' : '';
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>环保出行与城市生活</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f6f3; padding: 2rem 1rem; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+  .deck-title { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; margin-top: 2rem; }
+  .card { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; }
+  .card-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; user-select: none; }
+  .card-header:hover { background: #fafaf8; }
+  .card-left { flex: 1; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 6px; margin-bottom: 6px; }
+  .b-purple { background: #ede9fe; color: #5b21b6; }
+  .b-blue   { background: #dbeafe; color: #1e40af; }
+  .b-teal   { background: #d1fae5; color: #065f46; }
+  .b-amber  { background: #fef3c7; color: #92400e; }
+  .b-coral  { background: #fee2e2; color: #991b1b; }
+  .prompt { font-size: 15px; font-weight: 500; color: #1a1a1a; line-height: 1.5; }
+  .hint { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .toggle-icon { font-size: 14px; color: #bbb; margin-top: 2px; flex-shrink: 0; transition: transform 0.2s; }
+  .toggle-icon.open { transform: rotate(90deg); }
+  .card-body { display: none; border-top: 1px solid #f0ede8; padding: 1rem 1.25rem 0.75rem; }
+  .card-body.open { display: block; }
+  .kw-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.9rem; }
+  .kw { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: #f3f2ef; color: #555; border: 1px solid #e8e6e1; font-family: monospace; }
+  .ans-toggle-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #aaa; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; user-select: none; transition: color 0.15s; }
+  .ans-toggle-btn:hover { color: #555; }
+  .ans-arrow { font-size: 11px; transition: transform 0.2s; display: inline-block; }
+  .ans-arrow.open { transform: rotate(90deg); }
+  .answer-section { display: none; border-top: 1px solid #f0ede8; margin-top: 0.75rem; padding-top: 0.75rem; }
+  .answer-section.open { display: block; }
+  .answer-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .answer-fr { font-size: 14px; font-style: italic; color: #444; line-height: 1.7; }
+  .answer-fr p { margin-bottom: 0.5rem; }
+  .answer-fr p:last-child { margin-bottom: 0; }
+  .answer-zh { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .answer-note { font-size: 12px; color: #b08d57; background: #fef9f0; border-left: 3px solid #f5c97a; border-radius: 0 5px 5px 0; padding: 6px 10px; margin-top: 8px; line-height: 1.5; }
+  .progress-wrap { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; }
+  .prog-bg { flex: 1; height: 6px; background: #f0ede8; border-radius: 3px; }
+  .prog-fill { height: 6px; border-radius: 3px; background: #7c3aed; transition: width 0.4s; }
+  .prog-text { font-size: 12px; color: #999; white-space: nowrap; }
+  .reset-btn { font-size: 12px; color: #7c3aed; cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .reset-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>环保出行与城市生活</h1>
+  <p class="subtitle">看中文提示，组织法语句子，展开关键词后再查看参考答案</p>
+
+  <div class="progress-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <span class="prog-text" id="prog-text">已打开 0 张</span>
+    <button class="reset-btn" onclick="resetAll()">重置</button>
+  </div>
+
+  <div class="deck-title">Que pensez-vous des actions individuelles pour protéger l'environnement ?</div>
+
+  <!-- 观点 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">我认为，简单的行动有真实的效果，尤其是当数千人重复这些行动时。</div>
+        <div class="hint">提示：À mon avis，les actions simples ont un effet réel，surtout quand elles sont répétées par des milliers de personnes</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">À mon avis</span>
+        <span class="kw">les actions simples ont un effet réel</span>
+        <span class="kw">surtout quand elles sont répétées</span>
+        <span class="kw">par des milliers de personnes</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>À mon avis, les actions simples ont un effet réel, surtout quand elles sont répétées par des milliers de personnes.</p></div>
+        <div class="answer-zh">我认为，简单的行动有真实的效果，尤其是当数千人重复这些行动时。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点1 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1</div>
+        <div class="prompt">首先，我坚信简单的行动有真实的效果。比如，步行短途、乘公交代替开车或拼车，都能大幅减少污染。很多人觉得这是小举动，但正是这些小举动汇聚在一起，能改变一座城市。</div>
+        <div class="hint">提示：je suis convaincu que，choisir de marcher / prendre le bus plutôt que / partager sa voiture，ce sont ces petits gestes qui... mis ensemble... peuvent transformer，réduire l'utilisation de la voiture 是最有效的方式之一</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">je suis convaincu que</span>
+        <span class="kw">choisir de marcher pour de courts trajets</span>
+        <span class="kw">prendre le bus plutôt que la voiture</span>
+        <span class="kw">partager sa voiture avec d'autres</span>
+        <span class="kw">réduire la pollution</span>
+        <span class="kw">ces petits gestes, mis ensemble</span>
+        <span class="kw">transformer une ville</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr">
+          <p>Tout d'abord, je suis convaincu que les actions simples ont un effet réel, surtout quand elles sont répétées par des milliers de personnes. Par exemple, choisir de marcher pour de courts trajets, prendre le bus plutôt que la voiture ou même partager sa voiture avec d'autres permet de beaucoup réduire la pollution.</p>
+          <p>Beaucoup pensent que ce sont de petits gestes, mais ce sont ces petits gestes qui, mis ensemble, peuvent transformer une ville. D'ailleurs, réduire l'utilisation de la voiture est l'un des moyens les plus efficaces de diminuer la pollution de l'air, le bruit et les embouteillages.</p>
+        </div>
+        <div class="answer-zh">首先，我坚信简单的行动有真实的效果，尤其是当数千人重复这些行动时。比如，选择步行短途、乘公交代替开车，甚至和他人拼车，都能大幅减少污染。很多人认为这是小举动，但正是这些小举动汇聚在一起，能改变一座城市。况且，减少开车是降低空气污染、噪音和堵车最有效的方式之一。</div>
+        <div class="answer-note">💡 ce sont ces petits gestes qui... = 强调句，强调"正是这些小举动"（c'est... qui... 强调主语）｜mis ensemble = 放在一起、汇聚（过去分词短语，修饰 gestes）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点2 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2</div>
+        <div class="prompt">其次，无车生活的话题越来越重要。我个人觉得在大城市里，这不仅可行，甚至很愉快。</div>
+        <div class="hint">提示：Ensuite，la question de vivre sans voiture，de plus en plus importante，Personnellement，non seulement possible mais même agréable</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Ensuite</span>
+        <span class="kw">la question de vivre sans voiture</span>
+        <span class="kw">de plus en plus importante</span>
+        <span class="kw">Personnellement</span>
+        <span class="kw">dans les grandes villes</span>
+        <span class="kw">non seulement possible mais même agréable</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Ensuite, la question de vivre sans voiture devient de plus en plus importante. Personnellement, je trouve que dans les grandes villes, c'est non seulement possible mais même agréable.</p></div>
+        <div class="answer-zh">其次，无车生活的话题越来越重要。我个人觉得，在大城市里，这不仅可行，甚至很愉快。</div>
+        <div class="answer-note">💡 non seulement... mais même... = 不仅……甚至……（比 non seulement... mais aussi... 语气更强，même 加强递进）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例：多伦多无车周 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">我在多伦多参加过一个叫"无车周"的活动。几条街道封闭禁车，专供行人和骑车人使用。气氛宁静、更有人情味，空气也明显更清新。这次经历让我明白，无车生活不是一种困难，有时甚至是一种享受。</div>
+        <div class="hint">提示：J'ai participé à Toronto à，« Une semaine sans voiture »，rues fermées aux voitures / réservées aux piétons et cyclistes，L'ambiance était calme / plus humaine，respirer un air plus pur，vivre sans voiture n'est pas quelque chose de difficile mais parfois un plaisir</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">J'ai participé à Toronto à un événement</span>
+        <span class="kw">« Une semaine sans voiture »</span>
+        <span class="kw">rues fermées aux voitures</span>
+        <span class="kw">réservées aux piétons et aux cyclistes</span>
+        <span class="kw">L'ambiance était calme, plus humaine</span>
+        <span class="kw">respirer un air plus pur</span>
+        <span class="kw">pas quelque chose de difficile, mais parfois un plaisir</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>J'ai participé à Toronto à un événement appelé « Une semaine sans voiture ». Plusieurs rues étaient fermées aux voitures et réservées aux piétons et aux cyclistes. L'ambiance était calme, plus humaine, et on pouvait vraiment respirer un air plus pur. Cette expérience m'a montré que vivre sans voiture n'est pas quelque chose de difficile, mais parfois un plaisir.</p></div>
+        <div class="answer-zh">我在多伦多参加了一个叫"无车周"的活动。几条街道被封闭禁车，专供行人和骑车人使用。气氛宁静、更有人情味，空气也明显更清新。这次经历让我明白，无车生活不是一种困难，有时甚至是一种享受。</div>
+        <div class="answer-note">⏱ 时态提示：J'ai participé（复合过去时）= 讲一次具体事件｜rues étaient fermées / L'ambiance était（未完成时）= 描述当时的状态和背景</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点3 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 3</div>
+        <div class="prompt">最后，减少汽车让城市更安静、更绿色、更宜居。这不仅改善空气质量，也提升整体生活品质。当然这需要时间、投资和习惯的缓慢改变，但我真诚地认为这是可能的。</div>
+        <div class="hint">提示：Enfin，vivre avec moins de voitures，plus calmes / plus vertes / plus agréables，améliorer non seulement... mais aussi...，Bien sûr cela demande + 三项，je pense sincèrement que c'est possible</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Enfin</span>
+        <span class="kw">rend les villes plus calmes, plus vertes, plus agréables</span>
+        <span class="kw">améliore non seulement la qualité de l'air</span>
+        <span class="kw">mais aussi notre qualité de vie en général</span>
+        <span class="kw">Bien sûr, cela demande du temps, des investissements</span>
+        <span class="kw">un changement lent des habitudes</span>
+        <span class="kw">je pense sincèrement que c'est possible</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Enfin, vivre avec moins de voitures rend les villes plus calmes, plus vertes et plus agréables. Cela améliore non seulement la qualité de l'air, mais aussi notre qualité de vie en général. Bien sûr, cela demande du temps, des investissements et un changement lent des habitudes, mais je pense sincèrement que c'est possible.</p></div>
+        <div class="answer-zh">最后，减少汽车让城市更安静、更绿色、更宜居。这不仅改善空气质量，也提升整体生活品质。当然，这需要时间、投资和习惯的缓慢改变，但我真诚地认为这是可能的。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let opened = new Set();
+  const total = document.querySelectorAll('.card').length;
+
+  function toggleKw(header) {
+    const body = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    icon.classList.toggle('open', !isOpen);
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(header);
+    if (!isOpen) {
+      opened.add(idx + '-kw');
+    } else {
+      opened.delete(idx + '-kw');
+      opened.delete(idx + '-ans');
+    }
+    updateProgress();
+  }
+
+  function toggleAns(event, btn) {
+    event.stopPropagation();
+    const ansSection = btn.nextElementSibling;
+    const arrow = btn.querySelector('.ans-arrow');
+    const isOpen = ansSection.classList.contains('open');
+    ansSection.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+    const card = btn.closest('.card');
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(card.querySelector('.card-header'));
+    if (!isOpen) opened.add(idx + '-ans'); else opened.delete(idx + '-ans');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const ansCount = Array.from(opened).filter(k => k.endsWith('-ans')).length;
+    const pct = Math.round(ansCount / total * 100);
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = '已打开 ' + ansCount + ' / ' + total + ' 张';
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.toggle-icon').forEach(i => i.classList.remove('open'));
+    document.querySelectorAll('.answer-section').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.ans-arrow').forEach(a => a.classList.remove('open'));
+    opened.clear();
+    updateProgress();
+  }
+</script>
+</body>
+</html>

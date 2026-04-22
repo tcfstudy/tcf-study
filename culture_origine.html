@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>旅居海外与文化认同</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f6f3; padding: 2rem 1rem; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+  .deck-title { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; margin-top: 2rem; }
+  .card { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; }
+  .card-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; user-select: none; }
+  .card-header:hover { background: #fafaf8; }
+  .card-left { flex: 1; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 6px; margin-bottom: 6px; }
+  .b-purple { background: #ede9fe; color: #5b21b6; }
+  .b-blue   { background: #dbeafe; color: #1e40af; }
+  .b-teal   { background: #d1fae5; color: #065f46; }
+  .b-amber  { background: #fef3c7; color: #92400e; }
+  .b-coral  { background: #fee2e2; color: #991b1b; }
+  .prompt { font-size: 15px; font-weight: 500; color: #1a1a1a; line-height: 1.5; }
+  .hint { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .toggle-icon { font-size: 14px; color: #bbb; margin-top: 2px; flex-shrink: 0; transition: transform 0.2s; }
+  .toggle-icon.open { transform: rotate(90deg); }
+
+  .card-body { display: none; border-top: 1px solid #f0ede8; padding: 1rem 1.25rem 0.75rem; }
+  .card-body.open { display: block; }
+
+  .kw-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.9rem; }
+  .kw { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: #f3f2ef; color: #555; border: 1px solid #e8e6e1; font-family: monospace; }
+
+  .ans-toggle-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; color: #aaa; background: none; border: none;
+    cursor: pointer; font-family: inherit; padding: 0;
+    user-select: none; transition: color 0.15s;
+  }
+  .ans-toggle-btn:hover { color: #555; }
+  .ans-arrow { font-size: 11px; transition: transform 0.2s; display: inline-block; }
+  .ans-arrow.open { transform: rotate(90deg); }
+
+  .answer-section { display: none; border-top: 1px solid #f0ede8; margin-top: 0.75rem; padding-top: 0.75rem; }
+  .answer-section.open { display: block; }
+  .answer-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .answer-fr { font-size: 14px; font-style: italic; color: #444; line-height: 1.7; }
+  .answer-fr p { margin-bottom: 0.5rem; }
+  .answer-fr p:last-child { margin-bottom: 0; }
+  .answer-zh { font-size: 12px; color: #999; margin-top: 4px; line-height: 1.5; }
+  .answer-note { font-size: 12px; color: #b08d57; background: #fef9f0; border-left: 3px solid #f5c97a; border-radius: 0 5px 5px 0; padding: 6px 10px; margin-top: 8px; line-height: 1.5; }
+
+  .progress-wrap { background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; }
+  .prog-bg { flex: 1; height: 6px; background: #f0ede8; border-radius: 3px; }
+  .prog-fill { height: 6px; border-radius: 3px; background: #7c3aed; transition: width 0.4s; }
+  .prog-text { font-size: 12px; color: #999; white-space: nowrap; }
+  .reset-btn { font-size: 12px; color: #7c3aed; cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .reset-btn:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>旅居海外与文化认同</h1>
+  <p class="subtitle">看中文提示，组织法语句子，展开关键词后再查看参考答案</p>
+
+  <div class="progress-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <span class="prog-text" id="prog-text">已打开 0 张</span>
+    <button class="reset-btn" onclick="resetAll()">重置</button>
+  </div>
+
+  <div class="deck-title">À votre avis, vivre de longues années à l'étranger fait-il oublier sa culture d'origine ?</div>
+
+  <!-- 观点 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-purple">观点</div>
+        <div class="prompt">不必放弃自己的传统，而应该在融入和个人身份认同之间找到平衡。</div>
+        <div class="hint">提示：用 Il ne faut pas renoncer à 开头，但用 mais plutôt 转折，提到 équilibre 和 identité personnelle</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Il ne faut pas renoncer à</span>
+        <span class="kw">mais plutôt</span>
+        <span class="kw">trouver un équilibre</span>
+        <span class="kw">intégration</span>
+        <span class="kw">identité personnelle</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Il ne faut pas renoncer à ses traditions, mais plutôt trouver un équilibre entre intégration et identité personnelle.</p></div>
+        <div class="answer-zh">不必放弃自己的传统，而应该在融入和个人身份认同之间找到平衡。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点1 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 1</div>
+        <div class="prompt">首先，传统是身份认同的一部分，提醒我们来自哪里，在异乡尤其如此。</div>
+        <div class="hint">提示：用 Tout d'abord 开头，les traditions font partie de notre identité，用 rappeler à + 从句 表示"提醒"</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Tout d'abord</span>
+        <span class="kw">faire partie de notre identité</span>
+        <span class="kw">rappeler à quelqu'un + 从句</span>
+        <span class="kw">d'où l'on vient</span>
+        <span class="kw">surtout quand on vit loin de son pays</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Tout d'abord, les traditions font partie de notre identité. Elles nous rappellent d'où l'on vient, surtout quand on vit loin de son pays.</p></div>
+        <div class="answer-zh">首先，传统是身份认同的一部分。它们提醒我们来自哪里，尤其是当我们远离故土生活时。</div>
+        <div class="answer-note">💡 rappeler à quelqu'un + 从句 = 提醒某人……→ elles nous rappellent d'où l'on vient = 它们提醒我们来自哪里</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例1 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">比如，很多移民仍然庆祝春节等节日，以此与家人保持联系，并把文化传承给孩子。</div>
+        <div class="hint">提示：用 Par exemple, beaucoup d'immigrés 引出，célébrer leurs fêtes nationales，garder un lien，transmettre la culture aux enfants</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">beaucoup d'immigrés</span>
+        <span class="kw">célébrer leurs fêtes nationales</span>
+        <span class="kw">le Nouvel An chinois</span>
+        <span class="kw">garder un lien avec la famille</span>
+        <span class="kw">transmettre la culture aux enfants</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Par exemple, beaucoup d'immigrés continuent de célébrer leurs fêtes nationales comme le Nouvel An chinois. Cela permet de garder un lien avec la famille et de transmettre la culture aux enfants.</p></div>
+        <div class="answer-zh">比如，很多移民仍然庆祝春节等本国节日。这有助于与家人保持联系，也能把文化传承给孩子。</div>
+        <div class="answer-note">🔗 可串题材：传统文化的重要性</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 延伸：分享传统丰富多样性 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">延伸</div>
+        <div class="prompt">此外，分享自己的传统可以丰富多样性。多伦多这样的城市经常举办多元文化节，这种融合让生活更有趣，也促进开放的心态。</div>
+        <div class="hint">提示：En plus 开头，partager ses traditions，enrichir la diversité，举多伦多例子，favoriser l'ouverture d'esprit 收尾</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">En plus</span>
+        <span class="kw">partager ses traditions</span>
+        <span class="kw">enrichir la diversité</span>
+        <span class="kw">des festivals multiculturels</span>
+        <span class="kw">ce mélange rend la vie plus intéressante</span>
+        <span class="kw">favoriser l'ouverture d'esprit</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr">
+          <p>En plus, partager ses traditions peut enrichir la diversité. Dans une ville comme Toronto, on voit régulièrement des festivals multiculturels : cuisine, musique, danse. Ce mélange rend la vie plus intéressante et favorise l'ouverture d'esprit.</p>
+        </div>
+        <div class="answer-zh">此外，分享自己的传统可以丰富多样性。在多伦多这样的城市，经常能看到多元文化节：美食、音乐、舞蹈。这种融合让生活更有趣，也促进开放的心态。</div>
+        <div class="answer-note">🔗 可串题材：多样性话题 — 学校里的多元文化是否有助于学生成长</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点2 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 2</div>
+        <div class="prompt">然而，尊重并适应当地的生活习惯也同样重要。比如中国习惯把菜放在桌子中间共享，而在这里每个人更喜欢有自己的盘子。</div>
+        <div class="hint">提示：用 Cependant 转折，essentiel de respecter et de s'adapter，用 alors que 对比中西饮食习惯</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Cependant</span>
+        <span class="kw">essentiel de respecter et de s'adapter</span>
+        <span class="kw">les habitudes du pays où l'on vit</span>
+        <span class="kw">mettre tous les plats au milieu</span>
+        <span class="kw">alors que</span>
+        <span class="kw">chacun préfère avoir son assiette</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Cependant, il est aussi essentiel de respecter et de s'adapter aux habitudes du pays où l'on vit. Par exemple, en Chine, on a l'habitude de mettre tous les plats au milieu de la table pour partager, alors qu'ici chacun préfère avoir son assiette.</p></div>
+        <div class="answer-zh">然而，尊重并适应当地的生活习惯也同样重要。比如在中国，习惯把所有菜放在桌子中间共享，而在这里每个人更喜欢有自己的盘子。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例2：语言 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">此外，掌握语言对融入当地生活至关重要。语言是沟通的钥匙：无论是找餐厅、办行政手续还是交朋友，都需要掌握基本词汇。不必完美，但能进行简单对话就已经很有帮助。</div>
+        <div class="hint">提示：maîtriser la langue，La langue, c'est la clé，用 que ce soit pour A, B ou C 列举三个场景，tenir une conversation 收尾</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">maîtriser la langue</span>
+        <span class="kw">la clé de la communication</span>
+        <span class="kw">que ce soit pour A, B ou C</span>
+        <span class="kw">une démarche administrative</span>
+        <span class="kw">tenir une conversation</span>
+        <span class="kw">Pas besoin d'être parfait</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr">
+          <p>De plus, maîtriser la langue est également essentiel pour s'adapter à la vie à l'étranger. La langue, c'est la clé de la communication : que ce soit pour trouver un bon restaurant, comprendre une démarche administrative ou simplement se faire des amis, il faut connaître un minimum de vocabulaire.</p>
+          <p>Pas besoin d'être parfait, mais savoir tenir une petite conversation aide déjà beaucoup.</p>
+        </div>
+        <div class="answer-zh">此外，掌握语言对适应海外生活同样至关重要。语言是沟通的钥匙：无论是找一家好餐厅、办理行政手续，还是简单地交朋友，都需要掌握基本词汇。不必做到完美，但能进行简单对话就已经很有帮助。</div>
+        <div class="answer-note">💡 que ce soit pour A, B ou C = 无论是为了A、B还是C（虚拟式结构，列举所有情况，非常地道）｜ tenir une conversation = 进行/维持对话
+🔗 可串题材：适应国外生活需要掌握语言吗 &amp; 一个人旅游的困难</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 论点3 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-blue">论点 3</div>
+        <div class="prompt">因此我认为，最重要的不是放弃传统，而是找到平衡。可以保留家乡的习惯，同时接受新的当地习惯，这是一个互相给予与接受的交流过程。</div>
+        <div class="hint">提示：Je dirais donc que 开头（条件式，委婉），ce n'est pas de... mais de...，tout en + 动词原形，C'est un processus d'échange</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">Je dirais donc que</span>
+        <span class="kw">ce n'est pas de renoncer... mais de trouver un équilibre</span>
+        <span class="kw">tout en adoptant de nouvelles habitudes</span>
+        <span class="kw">C'est un processus d'échange</span>
+        <span class="kw">on donne et on reçoit</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Je dirais donc que le plus important, ce n'est pas de renoncer à ses traditions, mais de trouver un équilibre. On peut garder ses coutumes familiales tout en adoptant de nouvelles habitudes locales. C'est un processus d'échange : on donne et on reçoit.</p></div>
+        <div class="answer-zh">因此我认为，最重要的不是放弃传统，而是找到平衡。可以保留家庭习俗，同时接受新的当地习惯。这是一个互相交流的过程：我们给予，也接受。</div>
+        <div class="answer-note">💡 Je dirais donc que = 因此我认为……（条件式 dirais 比 je dis 更委婉，是口语中表达个人判断的高级用法）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 举例3 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-teal">举例</div>
+        <div class="prompt">比如我自己，保留了一些原来的习惯，比如烹饪方式或庆祝节日，但也接受了当地的习惯，比如在加拿大随时说"thank you"或"sorry"，因为这是这里的礼貌文化。</div>
+        <div class="hint">提示：用 Par exemple, moi je garde 引出个人经历，comme 列举具体习惯，mais j'ai aussi adopté 转折，parce que c'est une marque de politesse ici 解释原因</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">moi je garde certaines habitudes</span>
+        <span class="kw">mon pays d'origine</span>
+        <span class="kw">la manière de cuisiner</span>
+        <span class="kw">célébrer les fêtes</span>
+        <span class="kw">j'ai aussi adopté des habitudes locales</span>
+        <span class="kw">une marque de politesse</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>Par exemple, moi je garde certaines habitudes de mon pays d'origine, comme la manière de cuisiner ou de célébrer les fêtes, mais j'ai aussi adopté des habitudes locales comme dire « thank you » ou « sorry » tout le temps au Canada, parce que c'est une marque de politesse ici.</p></div>
+        <div class="answer-zh">比如，我自己保留了一些来自原籍国的习惯，比如烹饪方式或庆祝节日的方式，但我也接受了当地的习惯，比如在加拿大随时说"thank you"或"sorry"，因为这是这里的礼貌文化。</div>
+        <div class="answer-note">🔗 可串题材：如何平衡文化差异 &amp; 如何适应国外生活</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 小结 -->
+  <div class="card">
+    <div class="card-header" onclick="toggleKw(this)">
+      <div class="card-left">
+        <div class="badge b-coral">小结</div>
+        <div class="prompt">总之，完全放弃传统没有必要，重要的是尊重当地文化，同时保护自己的根。</div>
+        <div class="hint">提示：En conclusion 开头，renoncer totalement n'est pas nécessaire，ce qui compte c'est...，respecter + préserver ses racines</div>
+      </div>
+      <div class="toggle-icon">▶</div>
+    </div>
+    <div class="card-body">
+      <div class="kw-label">关键词</div>
+      <div class="keywords">
+        <span class="kw">En conclusion</span>
+        <span class="kw">renoncer totalement n'est pas nécessaire</span>
+        <span class="kw">ce qui compte, c'est</span>
+        <span class="kw">respecter la culture locale</span>
+        <span class="kw">préserver ses racines</span>
+      </div>
+      <button class="ans-toggle-btn" onclick="toggleAns(event, this)">
+        <span class="ans-arrow">▶</span> 参考答案
+      </button>
+      <div class="answer-section">
+        <div class="answer-label">参考答案</div>
+        <div class="answer-fr"><p>En conclusion, renoncer totalement à ses traditions n'est pas nécessaire, ce qui compte, c'est respecter la culture locale, mais aussi préserver ses racines.</p></div>
+        <div class="answer-zh">总之，完全放弃自己的传统没有必要，重要的是尊重当地文化，同时保护自己的根。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let opened = new Set();
+  const total = document.querySelectorAll('.card').length;
+
+  function toggleKw(header) {
+    const body = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    icon.classList.toggle('open', !isOpen);
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(header);
+    if (!isOpen) {
+      opened.add(idx + '-kw');
+    } else {
+      opened.delete(idx + '-kw');
+      opened.delete(idx + '-ans');
+    }
+    updateProgress();
+  }
+
+  function toggleAns(event, btn) {
+    event.stopPropagation();
+    const ansSection = btn.nextElementSibling;
+    const arrow = btn.querySelector('.ans-arrow');
+    const isOpen = ansSection.classList.contains('open');
+    ansSection.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+    const card = btn.closest('.card');
+    const idx = Array.from(document.querySelectorAll('.card-header')).indexOf(card.querySelector('.card-header'));
+    if (!isOpen) opened.add(idx + '-ans'); else opened.delete(idx + '-ans');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const ansCount = Array.from(opened).filter(k => k.endsWith('-ans')).length;
+    const pct = Math.round(ansCount / total * 100);
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = '已打开 ' + ansCount + ' / ' + total + ' 张';
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.toggle-icon').forEach(i => i.classList.remove('open'));
+    document.querySelectorAll('.answer-section').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.ans-arrow').forEach(a => a.classList.remove('open'));
+    opened.clear();
+    updateProgress();
+  }
+</script>
+</body>
+</html>
