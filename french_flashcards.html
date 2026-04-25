@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>法语词组闪卡</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, "PingFang SC", sans-serif; background: #f7f6f3; height: 100vh; display: flex; overflow: hidden; }
+
+/* sidebar */
+#sidebar {
+  width: 220px; min-width: 220px;
+  background: #fff;
+  border-right: 1px solid #ebe8e2;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+#sidebar h2 {
+  padding: 18px 16px 10px;
+  font-size: 14px; font-weight: 600; color: #1a1a1a;
+  border-bottom: 1px solid #ebe8e2;
+  flex-shrink: 0;
+}
+#sidebar h2 span { font-size: 11px; font-weight: 400; color: #aaa; margin-left: 6px; }
+#list { overflow-y: auto; flex: 1; padding: 6px 0; }
+.li {
+  padding: 8px 16px; cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 0.1s;
+}
+.li:hover { background: #f5f3ef; }
+.li.on { background: #fef6ec; border-left-color: #c8864a; }
+.li-num { font-size: 10px; color: #ccc; margin-bottom: 1px; }
+.li-zh { font-size: 12px; color: #333; line-height: 1.4; }
+.li-cat { font-size: 10px; color: #bbb; margin-top: 1px; }
+
+/* main */
+#main {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px 24px; gap: 24px;
+}
+#counter { font-size: 12px; color: #bbb; letter-spacing: 0.05em; }
+
+/* card flip */
+#scene {
+  width: 100%; max-width: 480px; height: 300px;
+  perspective: 1000px; cursor: pointer; flex-shrink: 0;
+}
+#inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.45s ease;
+}
+#inner.flipped { transform: rotateY(180deg); }
+.face {
+  position: absolute; inset: 0;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  padding: 32px 36px;
+  display: flex; flex-direction: column;
+}
+#front {
+  background: #fff;
+  border: 1px solid #e8e4dc;
+  align-items: center; justify-content: center; text-align: center; gap: 8px;
+}
+#front-zh { font-size: 30px; color: #1a1a1a; line-height: 1.3; font-weight: 500; }
+#front-hint { font-size: 11px; color: #ccc; margin-top: 18px; letter-spacing: 0.07em; }
+#back {
+  background: #fffcf7;
+  border: 1px solid #e0d8cc;
+  transform: rotateY(180deg);
+  overflow-y: auto; gap: 0;
+}
+#back-fr { font-size: 18px; color: #1a1a1a; font-weight: 500; line-height: 1.4; margin-bottom: 4px; }
+#back-zh { font-size: 12px; color: #c8864a; font-weight: 500; margin-bottom: 16px; }
+.sep { width: 28px; height: 1px; background: #ddd5c0; margin-bottom: 14px; flex-shrink: 0; }
+#back-ex { display: flex; flex-direction: column; gap: 10px; }
+.ex-fr { font-size: 12px; font-style: italic; color: #222; line-height: 1.65; margin-bottom: 2px; }
+.ex-zh { font-size: 11px; color: #aaa; line-height: 1.5; }
+#back-note {
+  margin-top: 12px; padding: 7px 10px;
+  background: #f2ede4; border-radius: 5px;
+  font-size: 11px; color: #7a6850; line-height: 1.6;
+  flex-shrink: 0;
+}
+
+/* controls */
+#controls { display: flex; gap: 10px; }
+.btn {
+  padding: 9px 20px;
+  border: 1px solid #ddd5c4; border-radius: 8px;
+  background: #fff; cursor: pointer;
+  font-size: 13px; color: #333;
+  font-family: inherit;
+  transition: background 0.1s;
+}
+.btn:hover { background: #f5f2ee; }
+.btn-flip { background: #c8864a; color: #fff; border-color: #c8864a; padding: 9px 28px; }
+.btn-flip:hover { background: #b07440; }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <h2>法语词组 <span id="total"></span></h2>
+  <div id="list"></div>
+</div>
+
+<div id="main">
+  <div id="counter"></div>
+  <div id="scene" onclick="flip()">
+    <div id="inner">
+      <div class="face" id="front">
+        <div id="front-zh"></div>
+        <div id="front-hint">点击翻面查看法语和例句</div>
+      </div>
+      <div class="face" id="back">
+        <div id="back-fr"></div>
+        <div id="back-zh"></div>
+        <div class="sep"></div>
+        <div id="back-ex"></div>
+        <div id="back-note"></div>
+      </div>
+    </div>
+  </div>
+  <div id="controls">
+    <button class="btn" onclick="go(cur-1)">← 上一张</button>
+    <button class="btn btn-flip" onclick="flip()">翻面</button>
+    <button class="btn" onclick="go(cur+1)">下一张 →</button>
+  </div>
+</div>
+
+<script>
+var CARDS = [
+{"cat":"数量程度","zh":"至少","fr":"au moins","ex":[{"fr":"Il faut au moins cinq ans pour maîtriser une langue étrangère.","zh":"至少需要五年才能掌握一门外语。"},{"fr":"Un adulte doit passer au moins 5 ans pour atteindre le même niveau qu'un enfant.","zh":"成年人通常需要至少五年才能达到孩子同等水平。"}],"note":"对应英语 at least，极高频必背。"},
+{"cat":"数量程度","zh":"越来越多的","fr":"de plus en plus de + 名词","ex":[{"fr":"On voit de plus en plus de gens qui réussissent sans grandes études.","zh":"越来越多的人不靠名校也能成功。"},{"fr":"Le marché du travail est de plus en plus compétitif.","zh":"就业市场竞争越来越激烈。"},{"fr":"De plus en plus de familles font le choix du télétravail.","zh":"越来越多的家庭选择远程办公。"}],"note":"修饰名词：de plus en plus de + 名词；修饰形容词：de plus en plus + 形容词。"},
+{"cat":"数量程度","zh":"越来越少的","fr":"de moins en moins de + 名词","ex":[{"fr":"Les gens écrivent de moins en moins de lettres.","zh":"人们写的信越来越少了。"},{"fr":"Les jeunes ont de moins en moins de patience pour les échanges lents.","zh":"年轻人对慢节奏的交流越来越没有耐心。"}],"note":""},
+{"cat":"数量程度","zh":"差点（几乎但没发生）","fr":"faillir + 动词原形","ex":[{"fr":"Il a failli se perdre dans la ville.","zh":"他差点在城里迷路。"},{"fr":"Comme il était seul, il a failli paniquer complètement.","zh":"因为一个人，他差点完全慌了。"}],"note":"复合过去时：il a failli。对应英语 he almost / he nearly。"},
+{"cat":"数量程度","zh":"如此……以至于……","fr":"tellement + 形容词 + que","ex":[{"fr":"Certaines applis sont tellement attractives que les parents n'ont plus besoin de surveiller.","zh":"有些应用如此吸引人，以至于父母不再需要盯着。"},{"fr":"Le rythme est tellement intense qu'il est difficile de trouver des moments de calme.","zh":"节奏如此之快，以至于很难找到平静的时刻。"}],"note":""},
+{"cat":"数量程度","zh":"……得多（加强比较级）","fr":"bien + 比较级","ex":[{"fr":"Une visite au zoo rend la leçon bien plus concrète.","zh":"参观动物园让课程具体得多。"},{"fr":"Certains trajets sont bien meilleurs pour l'environnement en train qu'en avion.","zh":"坐火车比坐飞机对环境好得多。"}],"note":"比 beaucoup plus 更口语自然。"},
+{"cat":"时间频率","zh":"从小 从……起","fr":"dès l'enfance / dès + 名词","ex":[{"fr":"C'est vraiment mieux d'apprendre une langue dès l'enfance.","zh":"从小学一门语言真的更好。"},{"fr":"Dès son arrivée à l'étranger, il a appris à se débrouiller.","zh":"一到国外，他就学会了自己想办法。"}],"note":"dès 比 depuis 更强调从那一刻起，带有立即性。"},
+{"cat":"时间频率","zh":"才刚刚开始","fr":"tout juste + 动词","ex":[{"fr":"Les jeunes qui commencent tout juste à travailler n'ont pas assez d'économies.","zh":"刚刚开始工作的年轻人没有足够的积蓄。"}],"note":"强调才刚刚，比 vient de 更强调时间的新鲜感。"},
+{"cat":"时间频率","zh":"随时随地","fr":"à tout moment et n'importe où","ex":[{"fr":"Il suffit d'un téléphone pour regarder des cours à tout moment et n'importe où.","zh":"只需一部手机就能随时随地看在线课程。"}],"note":"n'importe où 任何地方，n'importe qui 任何人，n'importe quand 任何时候。"},
+{"cat":"时间频率","zh":"在那一刻","fr":"à ce moment-là","ex":[{"fr":"À ce moment-là, il n'avait plus de Google Maps ni personne pour l'aider.","zh":"在那一刻，他既没有导航也没有人可以帮他。"},{"fr":"À ce moment-là, il ne connaissait pas bien la ville et a failli se perdre.","zh":"在那一刻，他对这座城市并不熟悉，差点迷路。"}],"note":""},
+{"cat":"时间频率","zh":"如今、从此以后","fr":"désormais","ex":[{"fr":"Désormais, beaucoup d'entreprises acceptent le télétravail.","zh":"如今，很多企业接受远程办公。"}],"note":"比 aujourd'hui 更书面，强调从现在这个节点起。"},
+{"cat":"动作行为","zh":"靠……为生","fr":"vivre de + 名词","ex":[{"fr":"Beaucoup d'artistes ont du mal à vivre de leur travail.","zh":"很多艺术家很难靠自己的作品为生。"},{"fr":"Il est difficile de vivre de sa passion dans le monde actuel.","zh":"在当今世界，靠自己的热爱为生很困难。"}],"note":"固定搭配不加冠词：vivre de son art / vivre de sa passion。"},
+{"cat":"动作行为","zh":"自己想办法应付","fr":"se débrouiller","ex":[{"fr":"Quand on est seul à l'étranger, sans personne sur qui compter, on apprend à se débrouiller.","zh":"一个人在国外，没有可以依靠的人，就学会了自己想办法。"},{"fr":"On doit se débrouiller avec une langue qu'on ne maîtrise pas totalement.","zh":"我们得用一门自己还没完全掌握的语言想办法应付。"}],"note":"口语感强，英语对应 to manage / to figure it out。"},
+{"cat":"动作行为","zh":"敢于做某事","fr":"oser + 动词原形","ex":[{"fr":"Les jeunes osent plus parler, même avec des fautes.","zh":"年轻人更敢于开口说话，即使会犯错。"},{"fr":"Il faut oser discuter une instruction si elle semble inadaptée.","zh":"如果指令看起来不合适，就需要敢于提出讨论。"}],"note":""},
+{"cat":"动作行为","zh":"依靠某人","fr":"compter sur quelqu'un","ex":[{"fr":"Sans personne sur qui compter, on apprend à être autonome.","zh":"没有可以依靠的人，就学会了独立。"}],"note":"亮点：sans personne sur qui compter 没有任何可以依靠的人。"},
+{"cat":"动作行为","zh":"花时间做某事","fr":"passer du temps à + 动词原形","ex":[{"fr":"Je passais du temps à jouer dehors avec mes cousins.","zh":"我花时间在外面和表兄弟们玩耍。"},{"fr":"On passe parfois plus de temps à discuter qu'à profiter.","zh":"我们有时花在讨论上的时间比享受还多。"}],"note":""},
+{"cat":"动作行为","zh":"下决心开始做某事","fr":"se mettre à + 动词原形","ex":[{"fr":"Beaucoup de gens se sont mis à cuisiner chez eux après la pandémie.","zh":"很多人在疫情后开始在家做饭。"},{"fr":"Quand une langue devient vivante, on se met à l'apprendre sans effort.","zh":"当一门语言变得生动，就开始不费力地学习了。"}],"note":"比 commencer à 更强调下决心动手，带有转折点意味。"},
+{"cat":"动作行为","zh":"放弃……","fr":"renoncer à + 动词原形/名词","ex":[{"fr":"Il ne faut pas renoncer à ses traditions.","zh":"不应该放弃自己的传统。"},{"fr":"Le plus important, ce n'est pas de renoncer à ses coutumes, mais de trouver un équilibre.","zh":"最重要的不是放弃自己的风俗，而是找到平衡。"}],"note":""},
+{"cat":"动作行为","zh":"记得……","fr":"se souvenir de + 名词/que","ex":[{"fr":"Je me souviens très bien des moments où je jouais dehors.","zh":"我还清楚记得在外面玩耍的那些时光。"},{"fr":"Je me souviens que je pêchais dans la rivière avec mes cousins.","zh":"我还记得和表兄弟们在河里钓鱼。"}],"note":""},
+{"cat":"动作行为","zh":"适应……","fr":"s'habituer à / s'adapter à","ex":[{"fr":"Les enfants s'habituent très vite à une nouvelle langue.","zh":"孩子们很快就习惯了一门新语言。"},{"fr":"On doit s'adapter à une nouvelle culture, parfois même à une langue qu'on ne maîtrise pas.","zh":"我们必须适应新的文化，有时甚至是一门还没掌握的语言。"}],"note":"s'habituer à 强调慢慢习惯；s'adapter à 强调主动调整。"},
+{"cat":"动作行为","zh":"只需……就能……","fr":"il suffit de + 名词/动词 + pour","ex":[{"fr":"Il suffit d'un téléphone pour regarder des cours en ligne.","zh":"只需一部手机就能看在线课程。"},{"fr":"Il suffit de savoir tenir une petite conversation pour commencer à s'intégrer.","zh":"只需能进行简单的交流就能开始融入。"}],"note":"非人称句，强调某件事非常容易实现。"},
+{"cat":"状态感受","zh":"难以做某事","fr":"avoir du mal à + 动词原形","ex":[{"fr":"Beaucoup d'artistes ont du mal à vivre de leur travail.","zh":"很多艺术家很难靠工作维生。"},{"fr":"Certaines personnes ont du mal à rester motivées en télétravail.","zh":"有些人在远程办公时很难保持积极性。"},{"fr":"D'autres ont du mal à trouver un équilibre entre vie pro et vie personnelle.","zh":"另一些人很难在工作和个人生活之间找到平衡。"}],"note":"超高频！比 c'est difficile de 更地道自然。"},
+{"cat":"状态感受","zh":"感到自在舒适","fr":"se sentir à l'aise","ex":[{"fr":"La relation basée sur la confiance permet de se sentir à l'aise.","zh":"建立在信任上的关系让人感到自在。"},{"fr":"Avec des amis, on peut parler librement et se sentir à l'aise.","zh":"和朋友在一起，可以自由交流，感到自在。"}],"note":""},
+{"cat":"状态感受","zh":"感到有用、被需要","fr":"se sentir utile","ex":[{"fr":"Continuer à travailler permet aux personnes âgées de se sentir utiles.","zh":"继续工作让老年人感到自己有用。"},{"fr":"Le travail nous aide à nous sentir utiles dans la société.","zh":"工作帮助我们在社会中感到有用。"}],"note":""},
+{"cat":"状态感受","zh":"为自己感到骄傲","fr":"être fier / fière de soi","ex":[{"fr":"Quand on finit une tâche difficile, on est fier de soi.","zh":"当完成一项艰难的任务时，我们会为自己感到骄傲。"},{"fr":"Ce sentiment est aussi important que l'argent qu'on gagne.","zh":"这种感觉和赚到的钱一样重要。"}],"note":""},
+{"cat":"状态感受","zh":"承受压力","fr":"être sous pression","ex":[{"fr":"Lorsqu'un salarié est sous pression, savoir gérer ses émotions aide beaucoup.","zh":"当员工承受压力时，懂得管理情绪非常有帮助。"},{"fr":"Les citadins ont tendance à être sous pression en permanence.","zh":"城市居民往往持续处于压力之下。"}],"note":""},
+{"cat":"状态感受","zh":"习惯于……","fr":"avoir l'habitude de + 动词原形","ex":[{"fr":"En Chine, on a l'habitude de mettre tous les plats au milieu de la table.","zh":"在中国，我们习惯把所有菜放在桌子中间。"},{"fr":"Le cerveau est déjà habitué à fonctionner d'une certaine façon.","zh":"大脑已经习惯了以某种方式运作。"}],"note":""},
+{"cat":"状态感受","zh":"容易分心","fr":"se laisser distraire","ex":[{"fr":"Certaines personnes se laissent facilement distraire quand elles travaillent chez elles.","zh":"有些人在家工作时容易分心。"}],"note":"se laisser + 动词原形 = 任由自己被……，表示被动陷入某状态。"},
+{"cat":"因果关系","zh":"多亏了……（正面）","fr":"grâce à + 名词","ex":[{"fr":"Grâce au numérique, on peut garder des contacts sans se déplacer.","zh":"多亏数字技术，我们可以不出行也能保持联系。"},{"fr":"Grâce à cela, ils ont une vie assez confortable.","zh":"多亏了这个，他们的生活相当舒适。"},{"fr":"Grâce à un bon système social, les gens vivent plus tranquillement.","zh":"多亏了完善的社会制度，人们生活更安心。"}],"note":"只用于积极结果！负面原因用 à cause de。"},
+{"cat":"因果关系","zh":"因为……（负面原因）","fr":"à cause de + 名词","ex":[{"fr":"À cause de la mondialisation, la pression au travail augmente.","zh":"由于全球化，工作压力增加了。"},{"fr":"À cause de trop d'écrans, les enfants ont des troubles du sommeil.","zh":"由于过多使用屏幕，孩子们出现了睡眠障碍。"}],"note":""},
+{"cat":"因果关系","zh":"这使得……（结果从句）","fr":"ce qui + 动词","ex":[{"fr":"Il n'y a pas de soutien immédiat, ce qui augmente le stress.","zh":"没有即时支持，这使得压力增加。"},{"fr":"La culture devient un plaisir du quotidien, ce qui rend la société plus ouverte.","zh":"文化成为日常乐趣，这使社会更加开放。"}],"note":"ce qui 代替整个前句做主语，比重新开句更地道。"},
+{"cat":"因果关系","zh":"这有助于……","fr":"cela contribue à / aide à + 动词原形","ex":[{"fr":"La nature contribue à réduire le stress et améliorer la concentration.","zh":"大自然有助于减少压力、提高专注力。"},{"fr":"Une éducation égalitaire contribue à créer une société plus juste.","zh":"平等教育有助于建立一个更公平的社会。"}],"note":""},
+{"cat":"因果关系","zh":"这导致……","fr":"cela entraîne / provoque + 名词","ex":[{"fr":"Trop d'écrans entraîne des troubles du sommeil.","zh":"过多屏幕会导致睡眠障碍。"},{"fr":"Le manque de contact humain provoque un sentiment d'isolement.","zh":"缺乏人际接触会导致孤立感。"}],"note":""},
+{"cat":"描述事物","zh":"宝贵的珍贵的","fr":"précieux / précieuse","ex":[{"fr":"Leur expérience est un atout précieux pour les jeunes.","zh":"他们的经验对年轻人来说是宝贵的财富。"},{"fr":"Les supérieurs âgés apportent une expérience précieuse et une vision stratégique.","zh":"年长上级带来宝贵的经验和战略性视角。"}],"note":""},
+{"cat":"描述事物","zh":"过时的不再适用的","fr":"dépassé(e)","ex":[{"fr":"Si un supérieur donne une instruction qui semble dépassée, on peut proposer une alternative.","zh":"如果上级给出看起来过时的指令，可以提出替代方案。"},{"fr":"Certaines méthodes traditionnelles sont dépassées face aux nouvelles technologies.","zh":"某些传统方法在新技术面前显得过时了。"}],"note":""},
+{"cat":"描述事物","zh":"不可替代的","fr":"irremplaçable / indispensable","ex":[{"fr":"La lettre garde une valeur humaine irremplaçable.","zh":"书信保留着不可替代的人情价值。"},{"fr":"Le livre papier garde une valeur unique : il permet de lire avec profondeur.","zh":"纸质书保留着独特的价值：它让人深度阅读。"}],"note":""},
+{"cat":"描述事物","zh":"均衡的平衡的","fr":"équilibré(e)","ex":[{"fr":"Ce n'est pas un usage équilibré des écrans.","zh":"这不是一种均衡的屏幕使用方式。"},{"fr":"La campagne aide à vivre de façon plus équilibrée.","zh":"乡村有助于以更均衡的方式生活。"}],"note":""},
+{"cat":"高频搭配","zh":"在……方面","fr":"sur le plan de / en matière de","ex":[{"fr":"Voyager seul peut être difficile sur le plan psychologique.","zh":"独自旅行在心理层面可能比较困难。"},{"fr":"Les progrès en matière de protection sociale sont encore insuffisants.","zh":"在社会保障方面的进步仍然不够。"}],"note":"可替换：sur le plan financier / pratique / émotionnel / professionnel。"},
+{"cat":"高频搭配","zh":"就……而言","fr":"pour ce qui est de / en ce qui concerne","ex":[{"fr":"Pour ce qui est de mon pays, les actions ne sont pas encore assez importantes.","zh":"就我的国家而言，措施还不够有力。"}],"note":"比 en ce qui concerne 更口语，适合过渡到新话题。"},
+{"cat":"高频搭配","zh":"保持联系","fr":"garder le contact / rester en contact avec","ex":[{"fr":"Grâce au numérique, on peut garder des contacts professionnels sans se déplacer.","zh":"借助数字技术，我们可以不出行也能保持职业联系。"},{"fr":"Ces traditions permettent de garder un lien avec la famille.","zh":"这些传统有助于与家人保持联系。"}],"note":""},
+{"cat":"高频搭配","zh":"发挥重要作用","fr":"jouer un rôle important / essentiel","ex":[{"fr":"La langue joue un rôle essentiel dans l'intégration.","zh":"语言在融入社会中发挥重要作用。"},{"fr":"La nature joue un rôle important pour réduire le stress.","zh":"大自然在减少压力方面发挥重要作用。"},{"fr":"L'école joue un rôle essentiel dans la construction d'une société plus juste.","zh":"学校在建设更公平社会中发挥重要作用。"}],"note":""},
+{"cat":"高频搭配","zh":"缺乏……","fr":"manquer de + 名词 / le manque de","ex":[{"fr":"Les habitants des grandes villes manquent parfois de contact avec la nature.","zh":"大城市居民有时缺乏与大自然的接触。"},{"fr":"Le manque d'exercice physique est l'un des effets négatifs des écrans.","zh":"缺乏体育锻炼是屏幕带来的负面影响之一。"}],"note":""},
+{"cat":"高频搭配","zh":"不一定未必","fr":"pas forcément / pas nécessairement","ex":[{"fr":"Il ne s'agit pas forcément de donner de l'argent.","zh":"不一定非得给钱。"},{"fr":"Les diplômes ne garantissent pas nécessairement le succès.","zh":"学历未必保证成功。"}],"note":"比 peut-être pas 更肯定地表示没必要这样。"},
+{"cat":"高频搭配","zh":"对……持开放态度","fr":"être ouvert(e) aux différences","ex":[{"fr":"Voyager nous rend plus ouverts aux différences.","zh":"旅行让我们对差异更加开放。"},{"fr":"On devient des adultes plus ouverts et plus tolérants.","zh":"我们变成更加开放、更加包容的成年人。"}],"note":""}
+];
+
+var cur = 0, flipped = false;
+
+function build() {
+  document.getElementById("total").textContent = CARDS.length + " 张";
+  var html = "";
+  for (var i = 0; i < CARDS.length; i++) {
+    html += '<div class="li" id="li' + i + '" onclick="go(' + i + ')">' +
+      '<div class="li-num">' + (i+1 < 10 ? "0"+(i+1) : i+1) + '</div>' +
+      '<div class="li-zh">' + CARDS[i].zh + '</div>' +
+      '<div class="li-cat">' + CARDS[i].cat + '</div></div>';
+  }
+  document.getElementById("list").innerHTML = html;
+}
+
+function render() {
+  var c = CARDS[cur];
+  document.getElementById("counter").textContent = (cur+1) + " / " + CARDS.length;
+  document.getElementById("front-zh").textContent = c.zh;
+  document.getElementById("back-fr").textContent = c.fr;
+  document.getElementById("back-zh").textContent = c.zh;
+  var exhtml = "";
+  var exs = c.ex.slice(0, 3);
+  for (var i = 0; i < exs.length; i++) {
+    exhtml += '<div><div class="ex-fr">' + exs[i].fr + '</div><div class="ex-zh">' + exs[i].zh + '</div></div>';
+  }
+  document.getElementById("back-ex").innerHTML = exhtml;
+  var n = document.getElementById("back-note");
+  if (c.note) { n.textContent = c.note; n.style.display = "block"; }
+  else { n.style.display = "none"; }
+  var items = document.querySelectorAll(".li");
+  for (var i = 0; i < items.length; i++) items[i].classList.remove("on");
+  var li = document.getElementById("li" + cur);
+  if (li) { li.classList.add("on"); li.scrollIntoView({block:"nearest"}); }
+}
+
+function go(i) {
+  if (i < 0 || i >= CARDS.length) return;
+  cur = i; flipped = false;
+  document.getElementById("inner").classList.remove("flipped");
+  render();
+}
+
+function flip() {
+  flipped = !flipped;
+  document.getElementById("inner").classList.toggle("flipped", flipped);
+}
+
+build();
+render();
+</script>
+</body>
+</html>
