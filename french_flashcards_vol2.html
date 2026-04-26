@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>法语表达闪卡 Vol.2</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, "PingFang SC", sans-serif; background: #f7f6f3; height: 100vh; display: flex; overflow: hidden; }
+
+#sidebar {
+  width: 220px; min-width: 220px;
+  background: #fff;
+  border-right: 1px solid #ebe8e2;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+#sidebar h2 {
+  padding: 18px 16px 10px;
+  font-size: 14px; font-weight: 600; color: #1a1a1a;
+  border-bottom: 1px solid #ebe8e2;
+  flex-shrink: 0;
+}
+#sidebar h2 span { font-size: 11px; font-weight: 400; color: #aaa; margin-left: 6px; }
+#list { overflow-y: auto; flex: 1; padding: 6px 0; }
+.li {
+  padding: 8px 16px; cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 0.1s;
+}
+.li:hover { background: #f5f3ef; }
+.li.on { background: #fef6ec; border-left-color: #c8864a; }
+.li-num { font-size: 10px; color: #ccc; margin-bottom: 1px; }
+.li-zh { font-size: 12px; color: #333; line-height: 1.4; }
+
+#main {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px 24px; gap: 24px;
+}
+#counter { font-size: 12px; color: #bbb; letter-spacing: 0.05em; }
+
+#scene {
+  width: 100%; max-width: 480px; height: 300px;
+  perspective: 1000px; cursor: pointer; flex-shrink: 0;
+}
+#inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.45s ease;
+}
+#inner.flipped { transform: rotateY(180deg); }
+.face {
+  position: absolute; inset: 0;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  padding: 32px 36px;
+  display: flex; flex-direction: column;
+}
+#front {
+  background: #fff;
+  border: 1px solid #e8e4dc;
+  align-items: center; justify-content: center; text-align: center; gap: 8px;
+}
+#front-zh { font-size: 28px; color: #1a1a1a; line-height: 1.3; font-weight: 500; }
+#front-hint { font-size: 11px; color: #ccc; margin-top: 18px; letter-spacing: 0.07em; }
+#back {
+  background: #fffcf7;
+  border: 1px solid #e0d8cc;
+  transform: rotateY(180deg);
+  overflow-y: auto; gap: 0;
+}
+#back-fr { font-size: 17px; color: #1a1a1a; font-weight: 500; line-height: 1.4; margin-bottom: 4px; }
+#back-zh { font-size: 12px; color: #c8864a; font-weight: 500; margin-bottom: 16px; }
+.sep { width: 28px; height: 1px; background: #ddd5c0; margin-bottom: 14px; flex-shrink: 0; }
+#back-ex { display: flex; flex-direction: column; gap: 10px; }
+.ex-fr { font-size: 12px; font-style: italic; color: #222; line-height: 1.65; margin-bottom: 2px; }
+.ex-zh { font-size: 11px; color: #aaa; line-height: 1.5; }
+#back-note {
+  margin-top: 12px; padding: 7px 10px;
+  background: #f2ede4; border-radius: 5px;
+  font-size: 11px; color: #7a6850; line-height: 1.6;
+  flex-shrink: 0;
+}
+
+#controls { display: flex; gap: 10px; }
+.btn {
+  padding: 9px 20px;
+  border: 1px solid #ddd5c4; border-radius: 8px;
+  background: #fff; cursor: pointer;
+  font-size: 13px; color: #333;
+  font-family: inherit;
+  transition: background 0.1s;
+}
+.btn:hover { background: #f5f2ee; }
+.btn-flip { background: #c8864a; color: #fff; border-color: #c8864a; padding: 9px 28px; }
+.btn-flip:hover { background: #b07440; }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <h2>表达闪卡 Vol.2 <span id="total"></span></h2>
+  <div id="list"></div>
+</div>
+
+<div id="main">
+  <div id="counter"></div>
+  <div id="scene" onclick="flip()">
+    <div id="inner">
+      <div class="face" id="front">
+        <div id="front-zh"></div>
+        <div id="front-hint">点击翻面查看法语和例句</div>
+      </div>
+      <div class="face" id="back">
+        <div id="back-fr"></div>
+        <div id="back-zh"></div>
+        <div class="sep"></div>
+        <div id="back-ex"></div>
+        <div id="back-note"></div>
+      </div>
+    </div>
+  </div>
+  <div id="controls">
+    <button class="btn" onclick="go(cur-1)">← 上一张</button>
+    <button class="btn btn-flip" onclick="flip()">翻面</button>
+    <button class="btn" onclick="go(cur+1)">下一张 →</button>
+  </div>
+</div>
+
+<script>
+var CARDS = [
+{"zh":"不仅……而且……","fr":"non seulement... mais aussi...","ex":[{"fr":"Non seulement ils partagent des coutumes locales, mais ils recommandent aussi des restaurants typiques.","zh":"他们不仅分享当地习俗，还推荐地道餐馆。"},{"fr":"Non seulement c'est possible, mais c'est même agréable.","zh":"这不仅是可行的，甚至令人愉快。"},{"fr":"Cela améliore non seulement la qualité de l'air, mais aussi notre qualité de vie.","zh":"这不仅改善了空气质量，也提升了生活质量。"}],"note":"非常高频的递进结构；加强语气时用 mais même（甚至）代替 mais aussi。"},
+{"zh":"而不是……","fr":"au lieu de + 动词原形/名词","ex":[{"fr":"Au lieu d'étudier des listes de vocabulaire, ils apprennent en regardant les épisodes.","zh":"他们没有死记词汇表，而是通过看剧集来学习。"},{"fr":"Beaucoup d'enfants passent leur week-end chez eux au lieu de découvrir la vie réelle.","zh":"很多孩子把周末关在家里，而不是去发现真实世界。"}],"note":"au lieu de + 动词原形，表示替代关系；比 plutôt que 更强调对比。"},
+{"zh":"……而不是……（更倾向于）","fr":"plutôt que (de) + 动词原形","ex":[{"fr":"On préfère envoyer un message instantané plutôt que de prendre le temps d'écrire.","zh":"人们更愿意发即时消息，而不是花时间写信。"},{"fr":"Prendre le bus plutôt que la voiture permet de réduire la pollution.","zh":"乘公交而不是开车可以减少污染。"}],"note":"plutôt que de + 动词原形；plutôt que + 名词。表示主观上更倾向于哪一边。"},
+{"zh":"使……变得……","fr":"rendre + 名词 + 形容词","ex":[{"fr":"Les appareils rendent l'apprentissage plus interactif et plus motivant.","zh":"电子设备使学习变得更有互动性。"},{"fr":"Ce mélange rend la vie plus intéressante.","zh":"这种融合使生活变得更有趣。"},{"fr":"Cela rend le savoir accessible à tous.","zh":"这使知识对所有人都触手可及。"}],"note":"超高频万能结构，比 faire que 更简洁优雅。"},
+{"zh":"正是……（强调句）","fr":"c'est... qui / que...","ex":[{"fr":"Ce sont ces petits gestes qui, mis ensemble, peuvent transformer une ville.","zh":"正是这些小举动，汇聚在一起，能改变一座城市。"},{"fr":"C'est la passion qui permet de tenir aussi longtemps.","zh":"正是热情让人能坚持那么长时间。"}],"note":"强调主语用 qui，强调宾语用 que。"},
+{"zh":"推动某人做某事","fr":"pousser quelqu'un à + 动词原形","ex":[{"fr":"Cela nous pousse à devenir plus autonomes et plus ouverts.","zh":"这推动我们变得更自主、更开放。"},{"fr":"Limiter les vols pousse les gens à changer leurs habitudes.","zh":"限制航班推动人们改变出行习惯。"}],"note":"带有外力促使的感觉；类似还有 inciter à、encourager à。"},
+{"zh":"对……的获取/接触","fr":"un accès (immédiat) à","ex":[{"fr":"Ils offrent un accès immédiat à une quantité énorme d'informations.","zh":"它们提供对海量信息的即时获取。"},{"fr":"Grâce à Internet, on a un accès illimité à des ressources éducatives.","zh":"借助互联网，我们可以无限获取教育资源。"}],"note":"avoir accès à = 能获取；donner accès à = 提供途径；accès 后面接 à。"},
+{"zh":"无论是……还是……","fr":"que ce soit... ou...","ex":[{"fr":"Que ce soit pour trouver un restaurant, comprendre une démarche ou se faire des amis, il faut connaître la langue.","zh":"无论是找餐厅、办手续还是交朋友，都需要懂这门语言。"},{"fr":"Que ce soit par des activités en plein air, ou en lisant à la maison, l'important est de vivre le monde réel.","zh":"无论是户外活动还是在家阅读，重要的是体验真实世界。"}],"note":"que ce soit 后接虚拟式，是列举所有情况的高级表达。"},
+{"zh":"仅仅……就足以……","fr":"rien que le fait de + 动词原形","ex":[{"fr":"Rien que le fait de savoir qu'il y a une caméra peut décourager certaines personnes.","zh":"仅仅知道有摄像头这件事本身，就足以让一些人打消念头。"}],"note":"强调光是这件事本身就已经产生效果，非常地道的口语表达。"},
+{"zh":"只是在做……（仅仅）","fr":"ne faire que + 动词原形","ex":[{"fr":"Je ne faisais pas que lire des manuels, je discutais avec des locuteurs natifs.","zh":"我不只是在读课本，我和母语者交流。"}],"note":"ne faire que = 只是/仅仅在做，含有对比或轻微批评的语气。"},
+{"zh":"构成、代表（正式）","fr":"représenter / constituer + 名词","ex":[{"fr":"Voyager seul peut représenter une charge financière importante.","zh":"独自出国可能构成一笔不小的经济负担。"},{"fr":"La famille représente un soutien essentiel dans un nouveau pays.","zh":"家庭在新的国家构成一种不可或缺的支持。"}],"note":"比 être 更正式；représenter 常用于抽象概念，constituer 常用于构成要素。"},
+{"zh":"走出舒适区","fr":"sortir de sa zone de confort","ex":[{"fr":"On doit sortir de sa zone de confort, s'adapter à une nouvelle culture.","zh":"我们必须走出舒适区，适应新的文化。"}],"note":"zone de confort 已是法语中的固定表达，口语和书面都很常用。"},
+{"zh":"将……与……联系起来","fr":"associer A à B","ex":[{"fr":"On associe la langue au plaisir, à l'émotion et à la culture.","zh":"人们将语言与快乐、情感和文化联系起来。"},{"fr":"On associe souvent le succès aux longues études.","zh":"人们常常将成功与长期学习联系起来。"}],"note":"associer A à B；au = à + le，注意缩写。"},
+{"zh":"以……的方式","fr":"de façon / de manière + 形容词","ex":[{"fr":"Il faut utiliser les écrans de manière équilibrée.","zh":"必须以均衡的方式使用屏幕。"},{"fr":"Il apprenait la langue de façon naturelle, comme sa langue maternelle.","zh":"他以一种自然的方式学习这门语言，就像母语一样。"}],"note":"de façon 和 de manière 可互换；比副词更正式，更强调方式本身。"},
+{"zh":"据研究 / 研究表明","fr":"selon les recherches / les études montrent que","ex":[{"fr":"Selon les recherches, un enfant peut apprendre deux langues en seulement deux ans.","zh":"据研究，一个孩子仅需两年就能掌握双语能力。"},{"fr":"Les études montrent que même une petite récompense peut aider les élèves.","zh":"研究表明，即便是微小的奖励也能帮助学生。"}],"note":"引用权威依据的万能开头，增强说服力。"},
+{"zh":"传递、传授（知识/文化）","fr":"transmettre + 名词","ex":[{"fr":"Cela permet de transmettre la culture aux enfants.","zh":"这有助于将文化传递给下一代。"},{"fr":"Ces personnes peuvent transmettre leurs connaissances aux jeunes employés.","zh":"这些人可以将知识传授给年轻员工。"}],"note":"transmettre 比 donner 更强调代际或文化层面的传承。"},
+{"zh":"促进、有利于","fr":"favoriser + 名词","ex":[{"fr":"Ce mélange favorise l'ouverture d'esprit.","zh":"这种融合促进开放心态。"},{"fr":"Les activités en plein air favorisent le développement personnel.","zh":"户外活动有利于个人成长。"}],"note":"favoriser = 促进/有利于（正面推动）；和 renforcer（加强）区分：renforcer 强调巩固已有的。"},
+{"zh":"加强、巩固","fr":"renforcer + 名词","ex":[{"fr":"La formation renforce la cohésion de l'équipe.","zh":"培训加强了团队凝聚力。"},{"fr":"Ces expériences renforcent notre confiance en nous.","zh":"这些经历增强了我们的自信心。"}],"note":"renforcer = 加强/巩固（使已有的更强）；区别于 favoriser（促进尚未形成的）。"},
+{"zh":"预防、阻止（负面事物）","fr":"prévenir / décourager + 名词/动词","ex":[{"fr":"Les caméras peuvent aider à prévenir les crimes.","zh":"摄像头可以帮助预防犯罪。"},{"fr":"La présence d'une caméra peut décourager certaines personnes de commettre un vol.","zh":"摄像头的存在可以阻止一些人实施盗窃。"}],"note":"prévenir = 预防；décourager quelqu'un de faire = 使某人打消做某事的念头。"},
+{"zh":"意识到……","fr":"prendre conscience de / se rendre compte de","ex":[{"fr":"Cette expérience m'a fait prendre conscience de l'importance de la tranquillité.","zh":"这次经历让我意识到宁静的重要性。"},{"fr":"Aujourd'hui, nous avons enfin compris que les filles peuvent réussir en sciences.","zh":"如今我们终于意识到女孩可以在科学领域取得成功。"}],"note":"prendre conscience de = 逐渐觉醒（认知层面）；se rendre compte de = 发现/意识到（更日常）。"},
+{"zh":"身心健康/幸福感","fr":"le bien-être","ex":[{"fr":"Les femmes leaders sont plus attentives au bien-être des employés.","zh":"女性领导者更关注员工的幸福感。"},{"fr":"Il est important de prendre soin de son bien-être mental.","zh":"关注自己的心理健康很重要。"}],"note":"bien-être 是法语超高频名词，等于英语 well-being；常见搭配：bien-être physique / mental / social。"},
+{"zh":"有……的倾向","fr":"avoir tendance à + 动词原形","ex":[{"fr":"Les citadins ont tendance à ressentir une pression continue.","zh":"城市居民往往持续感受到压力。"},{"fr":"Les jeunes ont tendance à préférer les solutions rapides.","zh":"年轻人往往倾向于选择快速的解决方案。"}],"note":"比 souvent 更强调一种规律性的倾向，更有分析感。"},
+{"zh":"产生、造成（效果/后果）","fr":"avoir des effets sur / entraîner des conséquences","ex":[{"fr":"Trop d'écrans peut avoir des effets négatifs sur la santé.","zh":"过多使用屏幕可能对健康产生负面影响。"},{"fr":"Cela entraîne des conséquences importantes sur la planète.","zh":"这对地球造成重要影响。"}],"note":"avoir des effets sur + 名词 = 对……产生影响；可用 positifs/négatifs 修饰。"},
+{"zh":"充当……的作用","fr":"servir de + 名词（不加冠词）","ex":[{"fr":"La tablette devient presque une baby-sitter intelligente.","zh":"平板电脑几乎成了一个智能保姆。"},{"fr":"L'école sert de lieu d'apprentissage mais aussi de socialisation.","zh":"学校既充当学习场所，也是社交场所。"}],"note":"servir de + 名词（不加冠词），强调功能性作用，比 être 更强调用途。"},
+{"zh":"从长远来看","fr":"à long terme / sur le long terme","ex":[{"fr":"À long terme, investir dans l'éducation est toujours rentable.","zh":"从长远来看，投资教育总是值得的。"},{"fr":"Sur le long terme, ces habitudes peuvent avoir des effets négatifs sur la santé.","zh":"从长远来看，这些习惯可能对健康产生负面影响。"}],"note":"对应：à court terme（短期）、à moyen terme（中期）。"},
+{"zh":"帮助某人做某事","fr":"aider quelqu'un à + 动词原形","ex":[{"fr":"Un accompagnement individuel aide les nouveaux employés à s'intégrer sans stress.","zh":"个性化支持帮助新员工无压力地融入。"},{"fr":"Ces outils aident les élèves à mieux comprendre des concepts compliqués.","zh":"这些工具帮助学生更好地理解复杂概念。"}],"note":"aider à 是固定搭配，不能说 aider de。"},
+{"zh":"有能力做某事","fr":"être capable de + 动词原形","ex":[{"fr":"Les filles sont tout à fait capables de réussir en mathématiques.","zh":"女孩完全有能力在数学领域取得成功。"},{"fr":"Sa capacité à gérer les situations difficiles est un vrai atout.","zh":"他处理困难情况的能力是真正的优势。"}],"note":"être capable de（口语常用）；avoir la capacité de（更正式书面）。"},
+{"zh":"改变/养成习惯","fr":"changer ses habitudes / adopter de nouvelles habitudes","ex":[{"fr":"Limiter les vols oblige les gens à changer leurs habitudes.","zh":"限制航班迫使人们改变习惯。"},{"fr":"On peut garder ses coutumes tout en adoptant de nouvelles habitudes locales.","zh":"我们可以保留自己的风俗，同时接受当地新习惯。"}],"note":"changer ses habitudes = 改变旧习惯；adopter de nouvelles habitudes = 形成新习惯。"},
+{"zh":"取决于……","fr":"dépendre de / cela dépend de","ex":[{"fr":"Tout dépend du type de travail, de l'environnement et de la capacité à s'organiser.","zh":"一切取决于工作类型、环境以及自我组织能力。"},{"fr":"Le succès professionnel dépend de nombreux facteurs.","zh":"职业成功取决于许多因素。"}],"note":"dépendre de 极高频；Tout dépend = 视情况而定，是口语万能表达。"},
+{"zh":"在……领域/行业","fr":"dans le domaine de / dans le secteur de","ex":[{"fr":"Dans des domaines comme la médecine, il est impossible de travailler sans longues études.","zh":"在医学等领域，没有长期学习是不可能工作的。"},{"fr":"Le manque de travailleurs est très grave dans le secteur de la santé.","zh":"医疗行业的劳动力短缺非常严重。"}],"note":"domaine 更广泛（领域/方向）；secteur 更具体（行业/部门）。"},
+{"zh":"有责任做某事","fr":"avoir la responsabilité de / être responsable de","ex":[{"fr":"Les entreprises ont la responsabilité d'accompagner les nouveaux salariés.","zh":"企业有责任陪伴新员工融入。"},{"fr":"Les parents sont responsables de l'éducation de leurs enfants.","zh":"父母对孩子的教育负有责任。"}],"note":"avoir la responsabilité de 更正式；être responsable de 更日常。"},
+{"zh":"一种孤立/自由/骄傲的感觉","fr":"un sentiment de + 名词","ex":[{"fr":"Le manque de contact humain provoque un sentiment d'isolement.","zh":"缺乏人际接触会产生孤立感。"},{"fr":"Quand on finit une tâche difficile, on ressent un sentiment de fierté.","zh":"完成艰难任务时，会感到一种骄傲感。"}],"note":"固定搭配：sentiment de solitude / liberté / fierté / sécurité / culpabilité。"},
+{"zh":"不得不做某事（被迫）","fr":"être obligé(e) de + 动词原形","ex":[{"fr":"On est obligé de s'adapter à une nouvelle culture.","zh":"我们不得不适应新的文化。"},{"fr":"Les entreprises sont obligées de repenser leurs méthodes de travail.","zh":"企业不得不重新思考工作方式。"}],"note":"être obligé de 强调被迫/不得不；devoir 更中性，表示义务或必要性。"},
+{"zh":"不只是……还……（双重功能）","fr":"ne pas seulement... mais aussi...","ex":[{"fr":"La surveillance n'a pas uniquement un rôle dans la sécurité : elle peut aussi encourager de bonnes habitudes.","zh":"监控不只在安全方面发挥作用，还能鼓励良好习惯。"},{"fr":"Le travail ne permet pas seulement de gagner de l'argent, mais aussi de se sentir utile.","zh":"工作不只是让人赚钱，还让人感到有用。"}],"note":"和 non seulement... mais aussi 意思相同，语序稍有不同。"},
+{"zh":"在……背景下","fr":"dans un contexte de / dans ce contexte","ex":[{"fr":"Dans un contexte où il faut diriger une grande équipe, ce style peut être un avantage.","zh":"在需要管理大型团队的背景下，这种风格可能是一种优势。"},{"fr":"Dans ce contexte, le soutien de la famille permet de réduire la pression.","zh":"在这种背景下，家庭的支持可以减轻压力。"}],"note":"dans un contexte de/où = 在……背景下，是高分书面表达。"},
+{"zh":"完全、彻底（加强语气）","fr":"tout à fait / complètement / entièrement","ex":[{"fr":"Les filles peuvent tout à fait réussir en mathématiques.","zh":"女孩完全可以在数学领域取得成功。"},{"fr":"C'est tout à fait possible de vivre sans voiture dans les grandes villes.","zh":"在大城市完全可以不依赖汽车生活。"}],"note":"tout à fait 是口语中最常用的加强表达，相当于 absolutely / completely。"},
+{"zh":"越来越（形容词/副词）","fr":"de plus en plus + 形容词","ex":[{"fr":"La question devient de plus en plus importante.","zh":"这个问题变得越来越重要。"},{"fr":"Les villes deviennent de plus en plus bruyantes et stressantes.","zh":"城市变得越来越嘈杂和令人紧张。"}],"note":"注意与 de plus en plus de + 名词区分：de plus en plus difficile / de plus en plus de problèmes。"},
+{"zh":"付出努力","fr":"faire des efforts / fournir des efforts","ex":[{"fr":"Pour atteindre le même niveau, un adulte doit fournir beaucoup d'efforts.","zh":"为了达到同等水平，成年人需要付出大量努力。"},{"fr":"Il faut faire des efforts réguliers pour progresser en langue.","zh":"需要持续付出努力才能在语言上进步。"}],"note":"faire des efforts（复数）= 努力付出；fournir un effort（单数）= 付出一次具体的努力。"},
+{"zh":"增强自信心","fr":"renforcer / gagner en confiance en soi","ex":[{"fr":"Ces expériences renforcent notre confiance en nous.","zh":"这些经历增强了我们的自信心。"},{"fr":"Même une petite récompense peut aider les élèves à gagner en confiance.","zh":"即便是小小的奖励也能帮助学生增强自信。"}],"note":"confiance en soi = 自信心（固定表达）；gagner en = 在某方面有所提升。"},
+{"zh":"适合/不适合某人","fr":"convenir à / être adapté(e) à","ex":[{"fr":"Ce n'est donc pas un environnement idéal pour tout le monde.","zh":"因此这并不是对所有人都理想的环境。"},{"fr":"Certaines méthodes sont moins adaptées aux nouvelles technologies.","zh":"某些方法不太适应新技术。"}],"note":"convenir à = 适合（主观上合适）；être adapté à = 适应（客观上匹配）。"},
+{"zh":"不管……还是……（让步）","fr":"peu importe que / quel que soit","ex":[{"fr":"Peu importe qu'un chef soit un homme ou une femme, ce qui compte c'est la communication.","zh":"不管领导是男是女，真正重要的是沟通能力。"},{"fr":"Quel que soit le domaine, la passion est un atout essentiel.","zh":"不管在哪个领域，热情都是重要的优势。"}],"note":"peu importe que + 虚拟式；quel que soit + 名词。都表示让步，强调条件不影响结论。"},
+{"zh":"减少、缩小（差距/不平等）","fr":"réduire les inégalités / combler l'écart","ex":[{"fr":"Une éducation égalitaire contribue à réduire les inégalités entre hommes et femmes.","zh":"平等教育有助于减少男女不平等。"},{"fr":"Ces mesures permettent de combler l'écart entre les différentes classes sociales.","zh":"这些措施有助于缩小不同社会阶层之间的差距。"}],"note":"réduire les inégalités = 减少不平等；combler l'écart = 弥合差距（更具体）。"},
+{"zh":"提高生活质量","fr":"améliorer la qualité de vie","ex":[{"fr":"Vivre avec moins de voitures améliore la qualité de vie en général.","zh":"减少汽车让整体生活质量得到提升。"},{"fr":"L'accès aux soins gratuits améliore considérablement la qualité de vie.","zh":"免费医疗极大改善了生活质量。"}],"note":"qualité de vie 是固定名词短语，极高频，等于英语 quality of life。"},
+{"zh":"对……敏感/关注","fr":"être attentif(ve) à / sensible à","ex":[{"fr":"Les femmes leaders sont souvent plus attentives à la communication.","zh":"女性领导者往往更关注沟通。"},{"fr":"Il est important d'être sensible aux différences culturelles.","zh":"对文化差异保持敏感很重要。"}],"note":"attentif à = 细心关注；sensible à = 对……有感知/敏感（更强调情感层面）。"}
+];
+
+var cur = 0, flipped = false;
+
+function build() {
+  document.getElementById("total").textContent = CARDS.length + " 张";
+  var html = "";
+  for (var i = 0; i < CARDS.length; i++) {
+    html += '<div class="li" id="li' + i + '" onclick="go(' + i + ')">' +
+      '<div class="li-num">' + (i+1 < 10 ? "0"+(i+1) : i+1) + '</div>' +
+      '<div class="li-zh">' + CARDS[i].zh + '</div></div>';
+  }
+  document.getElementById("list").innerHTML = html;
+}
+
+function render() {
+  var c = CARDS[cur];
+  document.getElementById("counter").textContent = (cur+1) + " / " + CARDS.length;
+  document.getElementById("front-zh").textContent = c.zh;
+  document.getElementById("back-fr").textContent = c.fr;
+  document.getElementById("back-zh").textContent = c.zh;
+  var exhtml = "";
+  var exs = c.ex.slice(0, 3);
+  for (var i = 0; i < exs.length; i++) {
+    exhtml += '<div><div class="ex-fr">' + exs[i].fr + '</div><div class="ex-zh">' + exs[i].zh + '</div></div>';
+  }
+  document.getElementById("back-ex").innerHTML = exhtml;
+  var n = document.getElementById("back-note");
+  if (c.note) { n.textContent = c.note; n.style.display = "block"; }
+  else { n.style.display = "none"; }
+  var items = document.querySelectorAll(".li");
+  for (var i = 0; i < items.length; i++) items[i].classList.remove("on");
+  var li = document.getElementById("li" + cur);
+  if (li) { li.classList.add("on"); li.scrollIntoView({block:"nearest"}); }
+}
+
+function go(i) {
+  if (i < 0 || i >= CARDS.length) return;
+  cur = i; flipped = false;
+  document.getElementById("inner").classList.remove("flipped");
+  render();
+}
+
+function flip() {
+  flipped = !flipped;
+  document.getElementById("inner").classList.toggle("flipped", flipped);
+}
+
+build();
+render();
+</script>
+</body>
+</html>
