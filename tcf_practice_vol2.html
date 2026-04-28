@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCF 口语练习 Vol.2</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"DM Sans",sans-serif;background:#f0ede6;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:28px 20px 60px}
+
+.header{text-align:center;margin-bottom:24px}
+.header h1{font-family:"Fraunces",serif;font-size:22px;font-weight:300;color:#1a1a1a;margin-bottom:4px}
+.header .sub{font-size:11px;color:#aaa;font-weight:300;letter-spacing:.06em}
+
+.mode-wrap{width:100%;max-width:580px;margin-bottom:14px}
+.mode-row{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.mode-btn{padding:5px 11px;border-radius:6px;border:1px solid #ddd8d0;background:#fff;font-family:"DM Sans",sans-serif;font-size:11px;font-weight:500;color:#888;cursor:pointer;transition:all .1s;white-space:nowrap}
+.mode-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+
+.progress-wrap{width:100%;max-width:580px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.bar{flex:1;height:2px;background:#ddd8d0;border-radius:2px;overflow:hidden}
+.bar-fill{height:100%;background:#1a1a1a;border-radius:2px;transition:width .4s ease}
+.prog-label{font-size:11px;color:#bbb;white-space:nowrap}
+
+.card{width:100%;max-width:580px;background:#fff;border-radius:16px;border:1px solid #e4dfd6;overflow:hidden}
+
+.step1{padding:44px 44px 36px;text-align:center;cursor:pointer;transition:background .1s;border-bottom:1px solid #f5f2ee}
+.step1:hover{background:#fdfcfa}
+.cat-tag{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#c0b49a;margin-bottom:10px}
+.zh-word{font-family:"Fraunces",serif;font-size:30px;font-weight:300;color:#1a1a1a;line-height:1.3}
+.tap-hint{font-size:11px;color:#ccc;font-weight:300;letter-spacing:.06em;margin-top:14px}
+
+.step2{display:none}
+.step2.show{display:block}
+
+.fr-section{padding:22px 36px 18px;border-bottom:1px solid #f5f2ee}
+.fr-main{font-family:"Fraunces",serif;font-size:19px;font-weight:300;color:#1a1a1a;line-height:1.5;margin-bottom:4px}
+.fr-zh{font-size:12px;color:#b09070;font-weight:400}
+
+.prompt-section{padding:18px 36px;border-bottom:1px solid #f5f2ee;background:#faf8f4}
+.prompt-label{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#c0b49a;margin-bottom:8px}
+.prompt-zh{font-size:15px;color:#1a1a1a;line-height:1.65;font-weight:400}
+.prompt-sub{font-size:11px;color:#bbb;margin-top:5px;font-weight:300}
+
+.ref-section{overflow:hidden;max-height:0;transition:max-height .4s ease,padding .4s ease;padding:0 36px}
+.ref-section.show{max-height:600px;padding:20px 36px;border-top:1px solid #f5f2ee}
+.ref-label{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#5a9a7a;margin-bottom:14px}
+.ref-ex{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0ede6}
+.ref-ex:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.ref-fr{font-size:13px;font-style:italic;color:#1a1a1a;line-height:1.75;margin-bottom:3px}
+.ref-zh{font-size:11px;color:#aaa;line-height:1.5;font-weight:300}
+
+/* highlight colors — 5 distinct ones */
+.hl0{background:#fff0c8;color:#7a5800;border-radius:3px;padding:1px 4px;font-style:normal;font-weight:500}
+.hl1{background:#d4f0e4;color:#1a6640;border-radius:3px;padding:1px 4px;font-style:normal;font-weight:500}
+.hl2{background:#dce8ff;color:#1a3a8a;border-radius:3px;padding:1px 4px;font-style:normal;font-weight:500}
+.hl3{background:#fce0f0;color:#8a1a58;border-radius:3px;padding:1px 4px;font-style:normal;font-weight:500}
+.hl4{background:#e8deff;color:#4a1a8a;border-radius:3px;padding:1px 4px;font-style:normal;font-weight:500}
+
+.btn-row{padding:14px 20px;display:flex;gap:8px;border-top:1px solid #f0ede6}
+.btn{flex:1;padding:11px;border-radius:8px;border:1px solid #e4dfd6;background:#fff;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:400;color:#3a3a3a;cursor:pointer;transition:all .1s;text-align:center}
+.btn:hover{background:#f5f2ee;border-color:#ccc}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a;font-weight:500}
+.btn-primary:hover{background:#333;border-color:#333}
+.btn-ref{background:#eef7f3;color:#2a7a5a;border-color:#c5e8d8;font-weight:500}
+.btn-ref:hover{background:#dff0e8}
+
+.done{display:none;flex-direction:column;align-items:center;gap:16px;text-align:center;max-width:580px;margin-top:40px}
+.done.show{display:flex}
+.done-title{font-family:"Fraunces",serif;font-size:36px;font-weight:300;color:#1a1a1a}
+.done-sub{font-size:13px;color:#aaa;font-weight:300}
+.btn-restart{padding:12px 36px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:8px}
+.btn-restart:hover{background:#333}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>TCF 口语练习 Vol.2</h1>
+  <div class="sub">看中文 · 想法语 · 翻译例句 · 看三句参考</div>
+</div>
+
+<div class="mode-wrap">
+  <div class="mode-row" id="modeRow">
+    <button class="mode-btn active" onclick="setMode('全部',this)">全部随机</button>
+    <button class="mode-btn" onclick="setMode('表达观点',this)">表达观点</button>
+    <button class="mode-btn" onclick="setMode('引入论点',this)">引入论点</button>
+    <button class="mode-btn" onclick="setMode('举例说明',this)">举例说明</button>
+    <button class="mode-btn" onclick="setMode('强调程度',this)">强调程度</button>
+    <button class="mode-btn" onclick="setMode('表达对比',this)">表达对比</button>
+    <button class="mode-btn" onclick="setMode('结果后果',this)">结果后果</button>
+    <button class="mode-btn" onclick="setMode('让步辩证',this)">让步辩证</button>
+    <button class="mode-btn" onclick="setMode('可能建议',this)">可能建议</button>
+    <button class="mode-btn" onclick="setMode('条件假设',this)">条件假设</button>
+    <button class="mode-btn" onclick="setMode('趋势变化',this)">趋势变化</button>
+    <button class="mode-btn" onclick="setMode('人际社会',this)">人际社会</button>
+    <button class="mode-btn" onclick="setMode('职业成功',this)">职业成功</button>
+    <button class="mode-btn" onclick="setMode('责任担当',this)">责任担当</button>
+    <button class="mode-btn" onclick="setMode('文化身份',this)">文化身份</button>
+    <button class="mode-btn" onclick="setMode('教育学习',this)">教育学习</button>
+    <button class="mode-btn" onclick="setMode('科技现代',this)">科技现代</button>
+    <button class="mode-btn" onclick="setMode('总结收尾',this)">总结收尾</button>
+  </div>
+</div>
+
+<div class="progress-wrap" id="progressWrap">
+  <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+  <div class="prog-label" id="progLabel"></div>
+</div>
+
+<div class="card" id="mainCard">
+  <div class="step1" id="step1" onclick="showFr()">
+    <div class="cat-tag" id="catTag"></div>
+    <div class="zh-word" id="zhWord"></div>
+    <div class="tap-hint">在脑子里想法语，想好了再点</div>
+  </div>
+
+  <div class="step2" id="step2">
+    <div class="fr-section">
+      <div class="fr-main" id="frMain"></div>
+      <div class="fr-zh" id="frZh"></div>
+    </div>
+    <div class="prompt-section">
+      <div class="prompt-label">🎯 试着翻译这句话</div>
+      <div class="prompt-zh" id="promptZh"></div>
+      <div class="prompt-sub">说出来，不用完美，用上刚才的词组就行</div>
+    </div>
+    <div class="ref-section" id="refSection">
+      <div class="ref-label">✓ 观点库参考例句（3句）</div>
+      <div class="ref-ex">
+        <div class="ref-fr" id="ref1f"></div>
+        <div class="ref-zh" id="ref1z"></div>
+      </div>
+      <div class="ref-ex">
+        <div class="ref-fr" id="ref2f"></div>
+        <div class="ref-zh" id="ref2z"></div>
+      </div>
+      <div class="ref-ex">
+        <div class="ref-fr" id="ref3f"></div>
+        <div class="ref-zh" id="ref3z"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" id="mainBtn" onclick="showFr()">我想好了，看法语</button>
+  </div>
+</div>
+
+<div class="done" id="doneScreen">
+  <div class="done-title">完成！</div>
+  <div class="done-sub" id="doneSub"></div>
+  <button class="btn-restart" onclick="restart()">再来一轮</button>
+</div>
+
+<script>
+var CARDS = [
+{"zh":"在我看来……","fr":"À mon avis / Selon moi","cat":"表达观点","ex1f":"À mon avis, les appareils électroniques présentent de nombreux avantages pour l'apprentissage.","ex1z":"在我看来，电子设备在学习方面有很多优点。","ex2f":"Selon moi, il est indispensable de trouver un équilibre entre vie professionnelle et vie personnelle.","ex2z":"在我看来，在职业生活和个人生活之间找到平衡是不可或缺的。","ex3f":"À mon avis, la famille reste le pilier le plus important dans la vie d'une personne.","ex3z":"在我看来，家庭仍然是一个人生命中最重要的支柱。","hls":["À mon avis","Selon moi"]},
+{"zh":"我坚信……","fr":"Je suis convaincu(e) que...","cat":"表达观点","ex1f":"Je suis convaincu que les actions simples ont un effet réel sur l'environnement.","ex1z":"我坚信简单的行动对环境真的有影响。","ex2f":"Je suis convaincue que l'éducation est la clé pour réduire les inégalités sociales.","ex2z":"我坚信教育是减少社会不平等的关键。","ex3f":"Je suis convaincu qu'apprendre une langue étrangère change la façon dont on voit le monde.","ex3z":"我坚信学习一门外语会改变人看世界的方式。","hls":["Je suis convaincu","Je suis convaincue"]},
+{"zh":"我个人认为……","fr":"Personnellement, je pense que / je trouve que","cat":"表达观点","ex1f":"Personnellement, je pense que vivre à l'étranger est une expérience qui transforme vraiment.","ex1z":"我个人认为，在国外生活是一种真正改变人的经历。","ex2f":"Personnellement, je trouve que les réseaux sociaux ont plus d'effets négatifs que positifs.","ex2z":"我个人觉得，社交媒体的负面影响多于正面影响。","ex3f":"Personnellement, je crois qu'il faut laisser les enfants faire des erreurs pour qu'ils apprennent.","ex3z":"我个人认为，应该让孩子犯错误，这样他们才能学习。","hls":["Personnellement"]},
+{"zh":"说实话……","fr":"À vrai dire / Pour être honnête","cat":"表达观点","ex1f":"À vrai dire, je ne suis pas totalement convaincu par cet argument.","ex1z":"说实话，我并不完全被这个论点说服。","ex2f":"Pour être honnête, je pense que la situation est plus complexe qu'elle n'y paraît.","ex2z":"说实话，我认为情况比看起来复杂得多。","ex3f":"À vrai dire, j'ai du mal à imaginer ma vie sans technologie.","ex3z":"说实话，我很难想象没有科技的生活。","hls":["À vrai dire","Pour être honnête"]},
+{"zh":"毫无疑问……","fr":"Il est indéniable que / Il est évident que","cat":"表达观点","ex1f":"Il est indéniable que la technologie a transformé notre façon de travailler.","ex1z":"毫无疑问，科技改变了我们的工作方式。","ex2f":"Il est évident que l'éducation joue un rôle fondamental dans le développement d'une société.","ex2z":"显而易见，教育在社会发展中发挥着根本性的作用。","ex3f":"Il est indéniable que les voyages élargissent les horizons.","ex3z":"毫无疑问，旅行拓宽了视野。","hls":["Il est indéniable que","Il est évident que"]},
+{"zh":"首先，有必要指出……","fr":"Il convient de noter que / Il faut souligner que","cat":"引入论点","ex1f":"Il convient de noter que les résultats varient selon les individus.","ex1z":"有必要指出，结果因人而异。","ex2f":"Il faut souligner que cette situation touche surtout les jeunes générations.","ex2z":"必须强调，这种情况主要影响年轻一代。","ex3f":"Il convient de noter que les inégalités persistent malgré les progrès réalisés.","ex3z":"有必要指出，尽管取得了进步，不平等现象仍然存在。","hls":["Il convient de noter","Il faut souligner"]},
+{"zh":"与此同时……","fr":"Par ailleurs / De surcroît","cat":"引入论点","ex1f":"Par ailleurs, il ne faut pas négliger l'impact psychologique de cette situation.","ex1z":"与此同时，不应忽视这种情况的心理影响。","ex2f":"De surcroît, les coûts associés à cette solution sont souvent sous-estimés.","ex2z":"此外，与这一解决方案相关的成本往往被低估。","ex3f":"Par ailleurs, certaines études montrent que l'exercice physique améliore les performances scolaires.","ex3z":"此外，一些研究表明，体育锻炼能提高学业成绩。","hls":["Par ailleurs","De surcroît"]},
+{"zh":"退一步来说……","fr":"Certes... mais / Il faut nuancer","cat":"引入论点","ex1f":"Certes, les réseaux sociaux permettent de rester connecté, mais ils peuvent aussi créer de l'isolement.","ex1z":"固然，社交媒体让人保持联系，但它也可能造成孤立。","ex2f":"Il faut nuancer : tous les enfants ne réagissent pas de la même façon face aux écrans.","ex2z":"需要辩证看待：不是所有孩子对屏幕的反应都一样。","ex3f":"Certes, travailler à l'étranger offre des opportunités, mais cela implique aussi des sacrifices.","ex3z":"固然，在国外工作提供了机会，但也意味着牺牲。","hls":["Certes","Il faut nuancer"]},
+{"zh":"这正好说明了……","fr":"C'est notamment le cas de / C'est l'exemple de","cat":"举例说明","ex1f":"C'est notamment le cas des jeunes qui apprennent l'anglais grâce aux séries américaines.","ex1z":"这正好是年轻人通过美剧学英语的情况。","ex2f":"C'est l'exemple parfait d'une politique qui a eu des effets inattendus.","ex2z":"这正好是一项产生意外效果的政策的例子。","ex3f":"C'est notamment le cas dans les pays nordiques, où l'équilibre travail-vie personnelle est très valorisé.","ex3z":"北欧国家就是如此，那里的工作与生活平衡非常受重视。","hls":["C'est notamment le cas","C'est l'exemple"]},
+{"zh":"以我自己为例……","fr":"Pour ma part / En ce qui me concerne","cat":"举例说明","ex1f":"Pour ma part, j'ai remarqué que lire des livres en français a vraiment amélioré mon vocabulaire.","ex1z":"就我而言，我注意到读法语书真的改善了我的词汇量。","ex2f":"En ce qui me concerne, j'ai toujours pensé que voyager seul était la meilleure façon de se connaître.","ex2z":"就我而言，我一直认为独自旅行是了解自己的最好方式。","ex3f":"Pour ma part, je pense que la passion est plus importante que le diplôme.","ex3z":"就我而言，我认为热情比文凭更重要。","hls":["Pour ma part","En ce qui me concerne"]},
+{"zh":"不难想象……","fr":"On peut facilement imaginer que / Il n'est pas difficile de voir que","cat":"举例说明","ex1f":"On peut facilement imaginer que cette situation crée beaucoup de stress pour les familles concernées.","ex1z":"不难想象，这种情况给相关家庭带来了很大的压力。","ex2f":"Il n'est pas difficile de voir que les inégalités économiques influencent les résultats scolaires.","ex2z":"不难看出，经济不平等影响着学业成绩。","ex3f":"On peut facilement imaginer les conséquences d'un manque d'éducation sur le long terme.","ex3z":"不难想象，长期缺乏教育的后果。","hls":["On peut facilement imaginer","Il n'est pas difficile de voir"]},
+{"zh":"越来越……（动词）","fr":"aller en augmentant / ne cesse de + 动词原形","cat":"强调程度","ex1f":"Le nombre de personnes qui travaillent à distance ne cesse d'augmenter.","ex1z":"远程工作的人数不断增加。","ex2f":"La pression sur les jeunes diplômés ne cesse de croître.","ex2z":"对年轻毕业生的压力不断增长。","ex3f":"Les inégalités entre riches et pauvres vont en augmentant dans de nombreux pays.","ex3z":"在许多国家，贫富差距不断扩大。","hls":["ne cesse de","vont en augmentant"]},
+{"zh":"远不止……","fr":"bien plus que / bien au-delà de","cat":"强调程度","ex1f":"L'impact des réseaux sociaux va bien au-delà de la simple communication.","ex1z":"社交媒体的影响远不止简单的沟通。","ex2f":"Les bénéfices de l'exercice physique sont bien plus importants qu'on ne le pense.","ex2z":"体育锻炼的好处远比人们想象的重要。","ex3f":"Cette question est bien plus complexe qu'il n'y paraît.","ex3z":"这个问题远比看起来复杂得多。","hls":["bien plus","bien au-delà de"]},
+{"zh":"不可忽视的是……","fr":"Il ne faut pas négliger / Il serait naïf d'ignorer","cat":"强调程度","ex1f":"Il ne faut pas négliger l'importance du soutien familial dans la réussite scolaire.","ex1z":"不可忽视家庭支持在学业成功中的重要性。","ex2f":"Il serait naïf d'ignorer que les conditions économiques jouent un rôle majeur.","ex2z":"忽视经济条件发挥重要作用是天真的。","ex3f":"Il ne faut pas négliger les effets à long terme de cette politique.","ex3z":"不可忽视这项政策的长期影响。","hls":["Il ne faut pas négliger","Il serait naïf d'ignorer"]},
+{"zh":"虽然……但是……","fr":"Bien que + 虚拟式 / Même si + 直陈式","cat":"表达对比","ex1f":"Bien que la technologie facilite notre vie, elle crée aussi de nouvelles dépendances.","ex1z":"虽然科技让我们的生活更便利，但它也带来了新的依赖。","ex2f":"Même si les diplômes restent importants, l'expérience pratique est de plus en plus valorisée.","ex2z":"即使学历仍然重要，实践经验也越来越受重视。","ex3f":"Bien qu'il soit difficile de changer ses habitudes, c'est souvent nécessaire.","ex3z":"虽然改变习惯很困难，但这往往是必要的。","hls":["Bien que","Même si","Bien qu'"]},
+{"zh":"与……形成对比","fr":"En revanche / À l'inverse / Contrairement à","cat":"表达对比","ex1f":"En revanche, vivre à la campagne offre un cadre de vie bien plus calme et naturel.","ex1z":"相比之下，住在乡村提供了一个更加平静自然的生活环境。","ex2f":"À l'inverse, certains pays ont choisi de réduire le temps de travail hebdomadaire.","ex2z":"相反，一些国家选择减少每周工作时间。","ex3f":"Contrairement aux idées reçues, les personnes âgées s'adaptent souvent très bien aux nouvelles technologies.","ex3z":"与普遍认知相反，老年人通常能很好地适应新技术。","hls":["En revanche","À l'inverse","Contrairement à"]},
+{"zh":"一方面……另一方面……","fr":"D'une part... d'autre part / D'un côté... de l'autre","cat":"表达对比","ex1f":"D'une part, le télétravail offre plus de flexibilité. D'autre part, il peut créer un sentiment d'isolement.","ex1z":"一方面，远程办公提供了更多灵活性。另一方面，它可能带来孤立感。","ex2f":"D'un côté, vivre en ville offre de nombreuses opportunités. De l'autre, le rythme y est souvent épuisant.","ex2z":"一方面，城市生活提供了很多机会。另一方面，节奏往往令人筋疲力尽。","ex3f":"D'une part, la mondialisation a créé de la richesse. D'autre part, elle a aussi accentué les inégalités.","ex3z":"一方面，全球化创造了财富。另一方面，它也加剧了不平等。","hls":["D'une part","d'autre part","D'un côté","de l'autre"]},
+{"zh":"由此可见……","fr":"On voit donc que / Il en résulte que / Il s'ensuit que","cat":"结果后果","ex1f":"On voit donc que l'accès à l'éducation reste inégal selon les milieux sociaux.","ex1z":"由此可见，受教育机会根据社会背景仍然不平等。","ex2f":"Il en résulte que beaucoup de jeunes se retrouvent sans emploi stable.","ex2z":"由此产生的结果是，很多年轻人没有稳定的工作。","ex3f":"On voit donc que la solution n'est pas simple et nécessite une approche globale.","ex3z":"由此可见，解决方案并不简单，需要全面的方法。","hls":["On voit donc que","Il en résulte que","Il s'ensuit que"]},
+{"zh":"这不可避免地……","fr":"Cela implique inévitablement / Cela ne peut que + 动词原形","cat":"结果后果","ex1f":"Cela implique inévitablement des changements dans notre façon de travailler.","ex1z":"这不可避免地意味着我们工作方式的改变。","ex2f":"Une telle situation ne peut qu'aggraver les tensions sociales existantes.","ex2z":"这种情况只会加剧现有的社会紧张局势。","ex3f":"Ignorer ce problème implique inévitablement des conséquences plus graves à long terme.","ex3z":"忽视这个问题不可避免地会带来更严重的长期后果。","hls":["implique inévitablement","ne peut qu'"]},
+{"zh":"话虽如此……","fr":"Cela dit / Cela étant / Il n'en reste pas moins que","cat":"让步辩证","ex1f":"Cela dit, il serait exagéré de prétendre que la technologie est responsable de tous nos problèmes.","ex1z":"话虽如此，说科技是我们所有问题的根源未免言过其实。","ex2f":"Il n'en reste pas moins que les inégalités persistent malgré les efforts réalisés.","ex2z":"话虽如此，尽管付出了努力，不平等现象仍然存在。","ex3f":"Cela étant, on ne peut pas nier que des progrès ont été accomplis.","ex3z":"话虽如此，不可否认已经取得了进步。","hls":["Cela dit","Cela étant","Il n'en reste pas moins que"]},
+{"zh":"必须看到两面……","fr":"Il faut voir les choses sous un autre angle / Il faut peser le pour et le contre","cat":"让步辩证","ex1f":"Il faut voir les choses sous un autre angle : ce qui est considéré comme un échec peut aussi être une leçon.","ex1z":"必须换个角度看问题：被视为失败的事也可以是一种教训。","ex2f":"Avant de prendre une décision, il faut peser le pour et le contre.","ex2z":"在做决定之前，必须权衡利弊。","ex3f":"Il faut voir les choses sous un autre angle et considérer les bénéfices à long terme.","ex3z":"必须换个角度看问题，考虑长期的收益。","hls":["sous un autre angle","peser le pour et le contre"]},
+{"zh":"可以设想……","fr":"On pourrait envisager de / Il serait possible de","cat":"可能建议","ex1f":"On pourrait envisager de réduire le temps de travail hebdomadaire pour améliorer la qualité de vie.","ex1z":"可以设想减少每周工作时间以改善生活质量。","ex2f":"Il serait possible de mettre en place des politiques plus inclusives pour intégrer les minorités.","ex2z":"可以制定更具包容性的政策来整合少数群体。","ex3f":"On pourrait envisager d'introduire des cours de gestion du stress dans les écoles.","ex3z":"可以设想在学校引入压力管理课程。","hls":["On pourrait envisager","Il serait possible de"]},
+{"zh":"有必要……","fr":"Il est nécessaire de / Il est primordial de / Il est urgent de","cat":"可能建议","ex1f":"Il est nécessaire de repenser notre rapport à la technologie.","ex1z":"有必要重新思考我们与科技的关系。","ex2f":"Il est primordial de sensibiliser les jeunes aux enjeux environnementaux dès le plus jeune âge.","ex2z":"从小就让年轻人了解环境问题至关重要。","ex3f":"Il est urgent de prendre des mesures concrètes pour lutter contre les inégalités.","ex3z":"迫切需要采取具体措施来应对不平等问题。","hls":["Il est nécessaire de","Il est primordial de","Il est urgent de"]},
+{"zh":"值得……","fr":"Il vaut la peine de / Ça vaut vraiment le coup de","cat":"可能建议","ex1f":"Il vaut la peine de faire des sacrifices pour atteindre ses objectifs.","ex1z":"为了实现目标而做出牺牲是值得的。","ex2f":"Ça vaut vraiment le coup de prendre le temps d'apprendre une nouvelle langue.","ex2z":"花时间学一门新语言真的很值得。","ex3f":"Il vaut la peine de réfléchir aux conséquences de nos choix avant d'agir.","ex3z":"在行动之前，值得思考我们选择的后果。","hls":["Il vaut la peine de","Ça vaut vraiment le coup de"]},
+{"zh":"如果……的话（假设）","fr":"Si + 条件式过去时（与过去相反的假设）","cat":"条件假设","ex1f":"S'il avait été avec un ami, ça aurait été beaucoup plus simple et moins stressant.","ex1z":"如果他当时有朋友在，事情会简单得多，也不会那么紧张。","ex2f":"Si on avait investi plus tôt dans les énergies renouvelables, la situation serait bien différente aujourd'hui.","ex2z":"如果早点投资可再生能源，今天的情况会大不相同。","ex3f":"Si j'avais su, j'aurais fait des choix complètement différents.","ex3z":"如果我早知道，我会做出完全不同的选择。","hls":["S'il avait été","aurait été","avait investi","serait","Si j'avais su","j'aurais fait"]},
+{"zh":"只要……（条件）","fr":"Pourvu que + 虚拟式 / Du moment que + 直陈式","cat":"条件假设","ex1f":"Pourvu que les conditions soient réunies, tout projet peut réussir.","ex1z":"只要条件具备，任何项目都能成功。","ex2f":"Du moment que tu travailles régulièrement, tu vas progresser.","ex2z":"只要你定期练习，你就会进步。","ex3f":"Pourvu que l'on trouve un équilibre, la technologie peut être un formidable outil.","ex3z":"只要找到平衡，科技可以成为一种了不起的工具。","hls":["Pourvu que","Du moment que"]},
+{"zh":"正在逐渐……","fr":"Progressivement / Peu à peu / Au fil du temps","cat":"趋势变化","ex1f":"Progressivement, les mentalités évoluent et les femmes accèdent à des postes de direction.","ex1z":"观念逐渐改变，女性越来越多地进入领导岗位。","ex2f":"Peu à peu, les entreprises prennent conscience de l'importance du bien-être des employés.","ex2z":"企业逐渐意识到员工幸福感的重要性。","ex3f":"Au fil du temps, on finit par s'habituer à n'importe quelle situation.","ex3z":"随着时间的推移，人最终会适应任何情况。","hls":["Progressivement","Peu à peu","Au fil du temps"]},
+{"zh":"发生了根本性的变化","fr":"Connaître une transformation profonde / Évoluer considérablement","cat":"趋势变化","ex1f":"Le monde du travail a connu une transformation profonde avec l'essor du numérique.","ex1z":"随着数字化的兴起，职场发生了深刻的变革。","ex2f":"Les habitudes de consommation ont considérablement évolué ces dernières années.","ex2z":"近年来，消费习惯发生了相当大的变化。","ex3f":"Notre rapport à l'information a connu une transformation profonde avec Internet.","ex3z":"互联网的出现使我们与信息的关系发生了深刻变化。","hls":["connu une transformation profonde","considérablement évolué"]},
+{"zh":"拉近人与人之间的距离","fr":"Rapprocher les gens / Tisser des liens / Créer du lien social","cat":"人际社会","ex1f":"Ces activités permettent de rapprocher les gens et de créer une vraie cohésion sociale.","ex1z":"这些活动可以拉近人与人之间的距离，创造真正的社会凝聚力。","ex2f":"Les repas en famille sont un excellent moyen de tisser des liens entre générations.","ex2z":"家庭聚餐是促进代际联系的绝佳方式。","ex3f":"Les associations de quartier jouent un rôle essentiel pour créer du lien social.","ex3z":"街区协会在创造社会联系方面发挥着重要作用。","hls":["rapprocher les gens","tisser des liens","créer du lien social"]},
+{"zh":"边缘化、被排斥","fr":"Être marginalisé(e) / Se sentir exclu(e) / À la marge de la société","cat":"人际社会","ex1f":"Certaines personnes se sentent exclues du marché du travail à cause de leur âge.","ex1z":"一些人因为年龄原因感到被劳动力市场排斥。","ex2f":"Les personnes sans accès à Internet risquent d'être marginalisées dans notre société numérique.","ex2z":"在我们的数字社会中，没有互联网的人面临被边缘化的风险。","ex3f":"Il faut lutter contre toutes les formes d'exclusion à la marge de la société.","ex3z":"必须与社会边缘的各种形式的排斥作斗争。","hls":["se sentent exclues","marginalisées","À la marge de la société"]},
+{"zh":"融入社会","fr":"S'intégrer dans la société / Trouver sa place","cat":"人际社会","ex1f":"Maîtriser la langue du pays est essentiel pour s'intégrer dans la société.","ex1z":"掌握所在国的语言对于融入社会至关重要。","ex2f":"Les jeunes immigrants ont parfois du mal à trouver leur place dans un nouveau pays.","ex2z":"年轻移民有时难以在新的国家找到自己的位置。","ex3f":"Ces programmes aident les réfugiés à s'intégrer dans la société d'accueil.","ex3z":"这些项目帮助难民融入接待国的社会。","hls":["s'intégrer dans la société","trouver leur place"]},
+{"zh":"付出与收获","fr":"Investir du temps et de l'énergie / Récolter les fruits de son travail","cat":"职业成功","ex1f":"Pour réussir, il faut investir du temps et de l'énergie dans ce qu'on fait.","ex1z":"要成功，必须在自己所做的事情上投入时间和精力。","ex2f":"Après des années d'efforts, il a finalement récolté les fruits de son travail.","ex2z":"经过多年的努力，他终于收获了劳动的果实。","ex3f":"On ne peut pas récolter les fruits de son travail sans avoir d'abord semé les graines.","ex3z":"不先播种，就无法收获劳动的果实。","hls":["investir du temps et de l'énergie","récolter les fruits de son travail"]},
+{"zh":"在竞争激烈的市场上……","fr":"Dans un marché hautement concurrentiel / Face à la concurrence","cat":"职业成功","ex1f":"Dans un marché hautement concurrentiel, il est crucial de se démarquer.","ex1z":"在竞争激烈的市场上，脱颖而出至关重要。","ex2f":"Face à la concurrence internationale, les entreprises doivent innover constamment.","ex2z":"面对国际竞争，企业必须不断创新。","ex3f":"Dans un marché hautement concurrentiel, la formation continue est une nécessité.","ex3z":"在竞争激烈的市场上，持续培训是必要的。","hls":["Dans un marché hautement concurrentiel","Face à la concurrence"]},
+{"zh":"对……负有责任","fr":"Être responsable de / Avoir des comptes à rendre","cat":"责任担当","ex1f":"Nous sommes tous responsables de l'état de notre planète.","ex1z":"我们每个人都对地球的状况负有责任。","ex2f":"Les grandes entreprises ont des comptes à rendre en matière d'impact environnemental.","ex2z":"大型企业在环境影响方面有责任交代。","ex3f":"Chaque génération est responsable de l'héritage qu'elle laisse à la suivante.","ex3z":"每一代人都对留给下一代的遗产负有责任。","hls":["responsable de","des comptes à rendre"]},
+{"zh":"从根本上解决问题","fr":"S'attaquer aux causes profondes / Aller à la racine du problème","cat":"责任担当","ex1f":"Pour résoudre ce problème, il faut s'attaquer aux causes profondes et pas seulement aux symptômes.","ex1z":"要解决这个问题，必须从根本原因入手，而不仅仅是处理症状。","ex2f":"Il faut aller à la racine du problème plutôt que d'appliquer des solutions superficielles.","ex2z":"必须从问题的根源入手，而不是应用表面的解决方案。","ex3f":"Les politiques actuelles ne font que contourner le problème sans en traiter les causes profondes.","ex3z":"目前的政策只是在回避问题，而不是处理根本原因。","hls":["s'attaquer aux causes profondes","à la racine du problème"]},
+{"zh":"保留文化身份","fr":"Préserver son identité culturelle / Garder ses racines","cat":"文化身份","ex1f":"Il est possible de s'intégrer dans un nouveau pays tout en préservant son identité culturelle.","ex1z":"在融入新的国家的同时，保留自己的文化身份是可能的。","ex2f":"Même après des années à l'étranger, beaucoup d'immigrés tiennent à garder leurs racines.","ex2z":"即使在国外多年，很多移民仍然坚持保留自己的根。","ex3f":"Préserver son identité culturelle ne signifie pas refuser de s'adapter.","ex3z":"保留文化身份并不意味着拒绝适应。","hls":["préservant son identité culturelle","garder leurs racines"]},
+{"zh":"文化冲击","fr":"Le choc culturel / Dépaysement","cat":"文化身份","ex1f":"Le choc culturel peut être très difficile à surmonter lors d'une première expérience à l'étranger.","ex1z":"文化冲击在第一次出国经历时可能非常难以克服。","ex2f":"Le dépaysement que l'on ressent en arrivant dans un nouveau pays peut être à la fois difficile et enrichissant.","ex2z":"到达新国家时感受到的陌生感既可能很困难，也可能很丰富。","ex3f":"Après le choc culturel initial, beaucoup de gens finissent par apprécier leur nouveau pays.","ex3z":"在最初的文化冲击之后，很多人最终会欣赏自己的新国家。","hls":["choc culturel","Dépaysement","dépaysement"]},
+{"zh":"培养……能力","fr":"Développer / Cultiver + 名词","cat":"教育学习","ex1f":"L'école doit développer l'esprit critique des élèves, pas seulement transmettre des connaissances.","ex1z":"学校必须培养学生的批判性思维，而不仅仅是传授知识。","ex2f":"Voyager seul permet de cultiver l'autonomie et la confiance en soi.","ex2z":"独自旅行可以培养自主性和自信心。","ex3f":"Il est important de développer des compétences sociales dès le plus jeune âge.","ex3z":"从小培养社交能力非常重要。","hls":["développer","cultiver","Cultiver"]},
+{"zh":"终身学习","fr":"L'apprentissage tout au long de la vie / La formation continue","cat":"教育学习","ex1f":"Dans un monde en constante évolution, l'apprentissage tout au long de la vie est devenu indispensable.","ex1z":"在一个不断变化的世界里，终身学习已经变得不可或缺。","ex2f":"La formation continue permet aux employés de rester compétitifs sur le marché du travail.","ex2z":"持续培训使员工能够在劳动力市场上保持竞争力。","ex3f":"L'apprentissage tout au long de la vie est la clé pour s'adapter aux mutations du marché.","ex3z":"终身学习是适应市场变化的关键。","hls":["l'apprentissage tout au long de la vie","La formation continue"]},
+{"zh":"数字鸿沟","fr":"La fracture numérique / L'exclusion numérique","cat":"科技现代","ex1f":"La fracture numérique risque d'aggraver les inégalités sociales existantes.","ex1z":"数字鸿沟有可能加剧现有的社会不平等。","ex2f":"L'exclusion numérique touche particulièrement les personnes âgées et les populations rurales.","ex2z":"数字排斥特别影响老年人和农村人口。","ex3f":"Réduire la fracture numérique devrait être une priorité pour les gouvernements.","ex3z":"缩小数字鸿沟应该成为各国政府的优先事项。","hls":["fracture numérique","exclusion numérique"]},
+{"zh":"人工智能的影响","fr":"L'intelligence artificielle / L'IA transforme","cat":"科技现代","ex1f":"L'intelligence artificielle transforme profondément le marché du travail.","ex1z":"人工智能正在深刻地改变劳动力市场。","ex2f":"L'IA pourrait remplacer certains emplois, mais elle en créera aussi de nouveaux.","ex2z":"人工智能可能会取代某些工作，但它也会创造新的工作岗位。","ex3f":"Face au développement de l'IA, la formation et l'adaptabilité deviennent cruciales.","ex3z":"面对人工智能的发展，培训和适应能力变得至关重要。","hls":["intelligence artificielle","L'IA"]},
+{"zh":"总而言之……","fr":"En somme / Tout compte fait / En définitive","cat":"总结收尾","ex1f":"En somme, les avantages de cette approche l'emportent largement sur ses inconvénients.","ex1z":"总而言之，这种方法的优点远远大于其缺点。","ex2f":"Tout compte fait, c'est l'individu lui-même qui est le mieux placé pour prendre cette décision.","ex2z":"总的来说，个人本身是做出这一决定的最佳人选。","ex3f":"En définitive, la clé réside dans notre capacité à trouver un équilibre.","ex3z":"归根结底，关键在于我们找到平衡的能力。","hls":["En somme","Tout compte fait","En définitive"]},
+{"zh":"留给我们思考的是……","fr":"Ce qui nous amène à nous demander si / La question qui se pose est","cat":"总结收尾","ex1f":"Ce qui nous amène à nous demander si notre société est vraiment prête pour ces changements.","ex1z":"这让我们不禁思考，我们的社会是否真的为这些变化做好了准备。","ex2f":"La question qui se pose est de savoir comment concilier progrès technologique et bien-être humain.","ex2z":"摆在我们面前的问题是，如何协调技术进步与人类福祉。","ex3f":"Ce qui nous amène à nous demander si l'éducation actuelle prépare vraiment les jeunes au monde de demain.","ex3z":"这让我们不禁思考，当前的教育是否真的为年轻人做好了迎接明日世界的准备。","hls":["Ce qui nous amène à nous demander","La question qui se pose"]},
+{"zh":"最终，真正重要的是……","fr":"Au bout du compte, ce qui importe vraiment c'est / L'essentiel est que","cat":"总结收尾","ex1f":"Au bout du compte, ce qui importe vraiment c'est le bonheur et l'épanouissement personnel.","ex1z":"最终，真正重要的是幸福和个人发展。","ex2f":"L'essentiel est que chacun puisse s'exprimer librement et être respecté.","ex2z":"最重要的是每个人都能自由表达并受到尊重。","ex3f":"Au bout du compte, ce qui importe vraiment c'est l'impact que nos actions ont sur les autres.","ex3z":"最终，真正重要的是我们的行动对他人的影响。","hls":["Au bout du compte","ce qui importe vraiment","L'essentiel est que"]}
+];
+
+var COLORS = ["hl0","hl1","hl2","hl3","hl4"];
+var mode="全部", queue=[], cur=0, stage=0;
+
+function setMode(m,el){
+  mode=m;
+  document.querySelectorAll(".mode-btn").forEach(function(b){b.classList.remove("active")});
+  el.classList.add("active");
+  restart();
+}
+
+function buildQueue(){
+  var pool = mode==="全部" ? CARDS.slice() : CARDS.filter(function(c){return c.cat===mode});
+  for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t}
+  return pool;
+}
+
+function highlight(text, hls){
+  if(!hls||!hls.length) return text;
+  hls.forEach(function(hl, idx){
+    var cls = COLORS[idx % COLORS.length];
+    var escaped = hl.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+    var re = new RegExp("("+escaped+")","g");
+    text = text.replace(re, '<span class="'+cls+'">$1</span>');
+  });
+  return text;
+}
+
+function render(){
+  if(cur>=queue.length){showDone();return}
+  stage=0;
+  var c=queue[cur];
+
+  document.getElementById("catTag").textContent=c.cat;
+  document.getElementById("zhWord").textContent=c.zh;
+  document.getElementById("frMain").textContent=c.fr;
+  document.getElementById("frZh").textContent=c.zh;
+  document.getElementById("promptZh").textContent=c.ex1z;
+
+  document.getElementById("ref1f").innerHTML=highlight(c.ex1f,c.hls);
+  document.getElementById("ref1z").textContent=c.ex1z;
+  document.getElementById("ref2f").innerHTML=highlight(c.ex2f,c.hls);
+  document.getElementById("ref2z").textContent=c.ex2z;
+  document.getElementById("ref3f").innerHTML=highlight(c.ex3f,c.hls);
+  document.getElementById("ref3z").textContent=c.ex3z;
+
+  document.getElementById("step1").style.cursor="pointer";
+  document.getElementById("step1").onclick=showFr;
+  document.getElementById("step2").classList.remove("show");
+  document.getElementById("refSection").classList.remove("show");
+
+  var btn=document.getElementById("mainBtn");
+  btn.textContent="我想好了，看法语";
+  btn.className="btn btn-primary";
+  btn.onclick=showFr;
+
+  document.getElementById("barFill").style.width=(cur/queue.length*100).toFixed(0)+"%";
+  document.getElementById("progLabel").textContent=(cur+1)+" / "+queue.length;
+  document.getElementById("mainCard").classList.remove("hidden");
+  document.getElementById("progressWrap").classList.remove("hidden");
+  document.getElementById("doneScreen").classList.remove("show");
+}
+
+function showFr(){
+  if(stage!==0)return;
+  stage=1;
+  document.getElementById("step2").classList.add("show");
+  document.getElementById("step1").style.cursor="default";
+  document.getElementById("step1").onclick=null;
+  var btn=document.getElementById("mainBtn");
+  btn.textContent="看三句参考例句";
+  btn.className="btn btn-ref";
+  btn.onclick=showRef;
+}
+
+function showRef(){
+  if(stage!==1)return;
+  stage=2;
+  document.getElementById("refSection").classList.add("show");
+  var btn=document.getElementById("mainBtn");
+  btn.textContent="下一张 →";
+  btn.className="btn btn-primary";
+  btn.onclick=next;
+}
+
+function next(){cur++;render()}
+
+function showDone(){
+  document.getElementById("mainCard").classList.add("hidden");
+  document.getElementById("progressWrap").classList.add("hidden");
+  document.getElementById("doneSub").textContent="完成了 "+queue.length+" 张，今天练习结束";
+  document.getElementById("doneScreen").classList.add("show");
+}
+
+function restart(){
+  queue=buildQueue();cur=0;
+  document.getElementById("mainCard").classList.remove("hidden");
+  document.getElementById("progressWrap").classList.remove("hidden");
+  document.getElementById("doneScreen").classList.remove("show");
+  render();
+}
+
+restart();
+</script>
+</body>
+</html>
