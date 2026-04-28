@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCF 口语练习</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"DM Sans",sans-serif;background:#f0ede6;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:28px 20px 60px}
+
+.header{text-align:center;margin-bottom:24px}
+.header h1{font-family:"Fraunces",serif;font-size:22px;font-weight:300;color:#1a1a1a;margin-bottom:4px}
+.header .sub{font-size:11px;color:#aaa;font-weight:300;letter-spacing:.06em}
+
+/* mode tabs */
+.mode-wrap{width:100%;max-width:560px;margin-bottom:14px}
+.mode-row{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.mode-btn{padding:5px 11px;border-radius:6px;border:1px solid #ddd8d0;background:#fff;font-family:"DM Sans",sans-serif;font-size:11px;font-weight:500;color:#888;cursor:pointer;transition:all .1s;white-space:nowrap}
+.mode-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+
+/* progress */
+.progress-wrap{width:100%;max-width:560px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.bar{flex:1;height:2px;background:#ddd8d0;border-radius:2px;overflow:hidden}
+.bar-fill{height:100%;background:#1a1a1a;border-radius:2px;transition:width .4s ease}
+.prog-label{font-size:11px;color:#bbb;white-space:nowrap}
+
+/* card */
+.card{width:100%;max-width:560px;background:#fff;border-radius:16px;border:1px solid #e4dfd6;overflow:hidden}
+
+/* step1 */
+.step1{padding:44px 44px 36px;text-align:center;cursor:pointer;transition:background .1s;border-bottom:1px solid #f5f2ee}
+.step1:hover{background:#fdfcfa}
+.cat-tag{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#c0b49a;margin-bottom:10px}
+.zh-word{font-family:"Fraunces",serif;font-size:34px;font-weight:300;color:#1a1a1a;line-height:1.2}
+.tap-hint{font-size:11px;color:#ccc;font-weight:300;letter-spacing:.06em;margin-top:14px}
+
+/* step2 */
+.step2{display:none}
+.step2.show{display:block}
+
+.fr-section{padding:22px 36px 18px;border-bottom:1px solid #f5f2ee}
+.fr-main{font-family:"Fraunces",serif;font-size:20px;font-weight:300;color:#1a1a1a;line-height:1.45;margin-bottom:4px}
+.fr-zh{font-size:12px;color:#b09070;font-weight:400}
+
+/* translate prompt */
+.prompt-section{padding:18px 36px;border-bottom:1px solid #f5f2ee;background:#faf8f4}
+.prompt-label{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#c0b49a;margin-bottom:8px}
+.prompt-zh{font-size:15px;color:#1a1a1a;line-height:1.6;font-weight:400}
+.prompt-sub{font-size:11px;color:#bbb;margin-top:5px;font-weight:300}
+
+/* ref section */
+.ref-section{overflow:hidden;max-height:0;transition:max-height .35s ease,padding .35s ease;padding:0 36px}
+.ref-section.show{max-height:400px;padding:20px 36px;border-top:1px solid #f5f2ee}
+.ref-label{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#5a9a7a;margin-bottom:10px}
+.ref-ex{margin-bottom:14px}
+.ref-ex:last-child{margin-bottom:0}
+.ref-fr{font-size:13px;font-style:italic;color:#1a1a1a;line-height:1.7;margin-bottom:3px}
+.ref-zh{font-size:11px;color:#aaa;line-height:1.5;font-weight:300}
+
+/* highlight */
+.hl{background:#fff0c8;color:#8a6000;border-radius:3px;padding:1px 3px;font-style:normal;font-weight:500}
+
+/* buttons */
+.btn-row{padding:14px 20px;display:flex;gap:8px;border-top:1px solid #f0ede6}
+.btn{flex:1;padding:11px;border-radius:8px;border:1px solid #e4dfd6;background:#fff;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:400;color:#3a3a3a;cursor:pointer;transition:all .1s;text-align:center}
+.btn:hover{background:#f5f2ee;border-color:#ccc}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a;font-weight:500}
+.btn-primary:hover{background:#333;border-color:#333}
+.btn-ref{background:#eef7f3;color:#2a7a5a;border-color:#c5e8d8;font-weight:500}
+.btn-ref:hover{background:#dff0e8}
+
+/* done */
+.done{display:none;flex-direction:column;align-items:center;gap:16px;text-align:center;max-width:560px;margin-top:40px}
+.done.show{display:flex}
+.done-title{font-family:"Fraunces",serif;font-size:36px;font-weight:300;color:#1a1a1a}
+.done-sub{font-size:13px;color:#aaa;font-weight:300}
+.btn-restart{padding:12px 36px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:8px}
+.btn-restart:hover{background:#333}
+
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>TCF 口语练习</h1>
+  <div class="sub">看中文 · 想法语 · 翻译例句 · 看参考答案</div>
+</div>
+
+<div class="mode-wrap">
+  <div class="mode-row" id="modeRow">
+    <button class="mode-btn active" onclick="setMode('全部',this)">全部随机</button>
+    <button class="mode-btn" onclick="setMode('数量·程度',this)">数量·程度</button>
+    <button class="mode-btn" onclick="setMode('时间·频率',this)">时间·频率</button>
+    <button class="mode-btn" onclick="setMode('动作·行为',this)">动作·行为</button>
+    <button class="mode-btn" onclick="setMode('状态·感受',this)">状态·感受</button>
+    <button class="mode-btn" onclick="setMode('因果·关系',this)">因果·关系</button>
+    <button class="mode-btn" onclick="setMode('描述·形容',this)">描述·形容</button>
+    <button class="mode-btn" onclick="setMode('高频搭配',this)">高频搭配</button>
+    <button class="mode-btn" onclick="setMode('句型·结构',this)">句型·结构</button>
+    <button class="mode-btn" onclick="setMode('固定·表达',this)">固定·表达</button>
+    <button class="mode-btn" onclick="setMode('动词·搭配',this)">动词·搭配</button>
+    <button class="mode-btn" onclick="setMode('名词·短语',this)">名词·短语</button>
+    <button class="mode-btn" onclick="setMode('口语·表达',this)">口语·表达</button>
+  </div>
+</div>
+
+<div class="progress-wrap" id="progressWrap">
+  <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+  <div class="prog-label" id="progLabel"></div>
+</div>
+
+<div class="card" id="mainCard">
+
+  <div class="step1" id="step1" onclick="showFr()">
+    <div class="cat-tag" id="catTag"></div>
+    <div class="zh-word" id="zhWord"></div>
+    <div class="tap-hint">在脑子里想法语，想好了再点</div>
+  </div>
+
+  <div class="step2" id="step2">
+
+    <div class="fr-section">
+      <div class="fr-main" id="frMain"></div>
+      <div class="fr-zh" id="frZh"></div>
+    </div>
+
+    <div class="prompt-section">
+      <div class="prompt-label">🎯 试着翻译这句话</div>
+      <div class="prompt-zh" id="promptZh"></div>
+      <div class="prompt-sub">用刚才的词组说出来，不用完美</div>
+    </div>
+
+    <div class="ref-section" id="refSection">
+      <div class="ref-label">✓ 观点库参考例句</div>
+      <div class="ref-ex">
+        <div class="ref-fr" id="ref1Fr"></div>
+        <div class="ref-zh" id="ref1Zh"></div>
+      </div>
+      <div class="ref-ex" id="ref2Wrap">
+        <div class="ref-fr" id="ref2Fr"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="btn-row" id="btnRow">
+    <button class="btn btn-primary" id="mainBtn" onclick="showFr()">我想好了，看法语</button>
+  </div>
+
+</div>
+
+<div class="done" id="doneScreen">
+  <div class="done-title">完成！</div>
+  <div class="done-sub" id="doneSub"></div>
+  <button class="btn-restart" onclick="restart()">再来一轮</button>
+</div>
+
+<script>
+var CARDS = [
+{"zh":"至少","fr":"au moins","cat":"数量·程度","ex1_fr":"Il faut au moins cinq ans pour maîtriser une langue étrangère.","ex1_zh":"至少需要五年才能掌握一门外语。","ex2_fr":"Un adulte doit passer au moins 5 ans pour atteindre le même niveau qu'un enfant.","hl":"au moins"},
+{"zh":"越来越多的……","fr":"de plus en plus de + 名词","cat":"数量·程度","ex1_fr":"On voit de plus en plus de gens qui réussissent sans grandes études.","ex1_zh":"人们看到越来越多的人不靠名校也能成功。","ex2_fr":"De plus en plus de familles font le choix du télétravail.","hl":"de plus en plus"},
+{"zh":"越来越少的……","fr":"de moins en moins de + 名词","cat":"数量·程度","ex1_fr":"Les gens écrivent de moins en moins de lettres.","ex1_zh":"人们写的信越来越少了。","ex2_fr":"Les jeunes ont de moins en moins de patience pour les échanges lents.","hl":"de moins en moins"},
+{"zh":"差点（几乎但没发生）","fr":"faillir + 动词原形","cat":"数量·程度","ex1_fr":"Il a failli se perdre dans la ville.","ex1_zh":"他差点在城里迷路。","ex2_fr":"Comme il était seul, il a failli paniquer complètement.","hl":"a failli"},
+{"zh":"如此……以至于……","fr":"tellement + 形容词 + que","cat":"数量·程度","ex1_fr":"Certaines applis sont tellement attractives que les parents n'ont plus besoin de surveiller.","ex1_zh":"有些应用如此吸引人，以至于父母不再需要盯着。","ex2_fr":"Le rythme est tellement intense qu'il est difficile de trouver des moments de calme.","hl":"tellement"},
+{"zh":"……得多（加强比较级）","fr":"bien + 比较级","cat":"数量·程度","ex1_fr":"Une visite au zoo rend la leçon bien plus concrète.","ex1_zh":"参观动物园让课程具体得多。","ex2_fr":"Certains trajets sont bien meilleurs pour l'environnement en train qu'en avion.","hl":"bien plus"},
+{"zh":"从小 / 从……起","fr":"dès l'enfance / dès + 名词","cat":"时间·频率","ex1_fr":"C'est vraiment mieux d'apprendre une langue dès l'enfance.","ex1_zh":"从小学一门语言真的更好。","ex2_fr":"Dès son arrivée à l'étranger, il a appris à se débrouiller.","hl":"dès"},
+{"zh":"才刚刚开始","fr":"tout juste + 动词","cat":"时间·频率","ex1_fr":"Les jeunes qui commencent tout juste à travailler n'ont pas assez d'économies.","ex1_zh":"刚刚开始工作的年轻人没有足够的积蓄。","ex2_fr":"Elle vient tout juste de terminer ses études et cherche déjà un emploi.","hl":"tout juste"},
+{"zh":"随时随地","fr":"à tout moment et n'importe où","cat":"时间·频率","ex1_fr":"Il suffit d'un téléphone pour regarder des cours à tout moment et n'importe où.","ex1_zh":"只需一部手机就能随时随地看在线课程。","ex2_fr":"Grâce au numérique, on peut travailler à tout moment et n'importe où.","hl":"à tout moment"},
+{"zh":"在那一刻","fr":"à ce moment-là","cat":"时间·频率","ex1_fr":"À ce moment-là, il n'avait plus de Google Maps ni personne pour l'aider.","ex1_zh":"在那一刻，他既没有导航也没有人可以帮他。","ex2_fr":"À ce moment-là, il ne connaissait pas bien la ville et a failli se perdre.","hl":"À ce moment-là"},
+{"zh":"如今、从此以后","fr":"désormais","cat":"时间·频率","ex1_fr":"Désormais, beaucoup d'entreprises acceptent le télétravail.","ex1_zh":"如今，很多企业接受远程办公。","ex2_fr":"Désormais, il est possible d'apprendre une langue sans quitter sa maison.","hl":"Désormais"},
+{"zh":"靠……为生","fr":"vivre de + 名词","cat":"动作·行为","ex1_fr":"Beaucoup d'artistes ont du mal à vivre de leur travail.","ex1_zh":"很多艺术家很难靠自己的作品为生。","ex2_fr":"Il est difficile de vivre de sa passion dans le monde actuel.","hl":"vivre de"},
+{"zh":"自己想办法应付","fr":"se débrouiller","cat":"动作·行为","ex1_fr":"Quand on est seul à l'étranger, sans personne sur qui compter, on apprend à se débrouiller.","ex1_zh":"一个人在国外，没有可以依靠的人，就学会了自己想办法。","ex2_fr":"On doit se débrouiller avec une langue qu'on ne maîtrise pas totalement.","hl":"se débrouiller"},
+{"zh":"敢于做某事","fr":"oser + 动词原形","cat":"动作·行为","ex1_fr":"Les jeunes osent plus parler, même avec des fautes.","ex1_zh":"年轻人更敢于开口说话，即使会犯错。","ex2_fr":"Il faut oser discuter une instruction si elle semble inadaptée.","hl":"osent"},
+{"zh":"依靠某人","fr":"compter sur quelqu'un","cat":"动作·行为","ex1_fr":"Sans personne sur qui compter, on apprend à être autonome.","ex1_zh":"没有可以依靠的人，就学会了独立。","ex2_fr":"Dans les moments difficiles, on a besoin de quelqu'un sur qui compter.","hl":"compter sur"},
+{"zh":"花时间做某事","fr":"passer du temps à + 动词原形","cat":"动作·行为","ex1_fr":"On passe parfois plus de temps à discuter qu'à profiter.","ex1_zh":"我们有时花在讨论上的时间比享受还多。","ex2_fr":"Je passais du temps à jouer dehors avec mes cousins.","hl":"passer du temps à"},
+{"zh":"下决心开始做某事","fr":"se mettre à + 动词原形","cat":"动作·行为","ex1_fr":"Beaucoup de gens se sont mis à cuisiner chez eux après la pandémie.","ex1_zh":"很多人在疫情后开始在家做饭。","ex2_fr":"Quand une langue devient vivante, on se met à l'apprendre sans effort.","hl":"se sont mis à"},
+{"zh":"放弃……","fr":"renoncer à + 动词原形/名词","cat":"动作·行为","ex1_fr":"Il ne faut pas renoncer à ses traditions.","ex1_zh":"不应该放弃自己的传统。","ex2_fr":"Le plus important, ce n'est pas de renoncer à ses coutumes, mais de trouver un équilibre.","hl":"renoncer à"},
+{"zh":"记得……","fr":"se souvenir de + 名词/que","cat":"动作·行为","ex1_fr":"Je me souviens très bien des moments où je jouais dehors avec mes cousins.","ex1_zh":"我还清楚记得在外面和表兄弟们玩耍的那些时光。","ex2_fr":"Je me souviens que je pêchais dans la rivière avec mes cousins.","hl":"me souviens"},
+{"zh":"适应……","fr":"s'habituer à / s'adapter à","cat":"动作·行为","ex1_fr":"Les enfants s'habituent très vite à une nouvelle langue.","ex1_zh":"孩子们很快就习惯了一门新语言。","ex2_fr":"On doit s'adapter à une nouvelle culture, parfois même à une langue qu'on ne maîtrise pas.","hl":"s'habituent"},
+{"zh":"只需……就能……","fr":"il suffit de + 名词/动词 + pour","cat":"动作·行为","ex1_fr":"Il suffit d'un téléphone pour regarder des cours en ligne.","ex1_zh":"只需一部手机就能看在线课程。","ex2_fr":"Il suffit de savoir tenir une petite conversation pour commencer à s'intégrer.","hl":"Il suffit"},
+{"zh":"难以做某事","fr":"avoir du mal à + 动词原形","cat":"状态·感受","ex1_fr":"Certaines personnes ont du mal à rester motivées en télétravail.","ex1_zh":"有些人在远程办公时很难保持积极性。","ex2_fr":"Beaucoup d'artistes ont du mal à vivre de leur travail.","hl":"ont du mal à"},
+{"zh":"感到自在、舒适","fr":"se sentir à l'aise","cat":"状态·感受","ex1_fr":"Avec des amis, on peut parler librement et se sentir à l'aise.","ex1_zh":"和朋友在一起，可以自由交流，感到自在。","ex2_fr":"La relation basée sur la confiance permet de se sentir à l'aise.","hl":"se sentir à l'aise"},
+{"zh":"感到有用、被需要","fr":"se sentir utile","cat":"状态·感受","ex1_fr":"Continuer à travailler permet aux personnes âgées de se sentir utiles.","ex1_zh":"继续工作让老年人感到自己有用。","ex2_fr":"Le travail nous aide à nous sentir utiles dans la société.","hl":"se sentir utiles"},
+{"zh":"为自己感到骄傲","fr":"être fier / fière de soi","cat":"状态·感受","ex1_fr":"Quand on finit une tâche difficile, on est fier de soi.","ex1_zh":"当完成一项艰难的任务时，我们会为自己感到骄傲。","ex2_fr":"Ce sentiment est aussi important que l'argent qu'on gagne.","hl":"fier de soi"},
+{"zh":"承受压力","fr":"être sous pression","cat":"状态·感受","ex1_fr":"Lorsqu'un salarié est sous pression, savoir gérer ses émotions aide beaucoup.","ex1_zh":"当员工承受压力时，懂得管理情绪非常有帮助。","ex2_fr":"Les citadins ont tendance à être sous pression en permanence.","hl":"sous pression"},
+{"zh":"习惯于……","fr":"avoir l'habitude de + 动词原形","cat":"状态·感受","ex1_fr":"En Chine, on a l'habitude de mettre tous les plats au milieu de la table.","ex1_zh":"在中国，我们习惯把所有菜放在桌子中间。","ex2_fr":"Le cerveau est déjà habitué à fonctionner d'une certaine façon.","hl":"a l'habitude de"},
+{"zh":"容易分心","fr":"se laisser distraire","cat":"状态·感受","ex1_fr":"Certaines personnes se laissent facilement distraire quand elles travaillent chez elles.","ex1_zh":"有些人在家工作时容易分心。","ex2_fr":"Les enfants se laissent facilement distraire par les jeux vidéo.","hl":"se laissent facilement distraire"},
+{"zh":"多亏了……（正面）","fr":"grâce à + 名词","cat":"因果·关系","ex1_fr":"Grâce au numérique, on peut garder des contacts sans se déplacer.","ex1_zh":"多亏数字技术，我们可以不出行也能保持联系。","ex2_fr":"Grâce à cela, ils ont une vie assez confortable.","hl":"Grâce à"},
+{"zh":"因为……（负面原因）","fr":"à cause de + 名词","cat":"因果·关系","ex1_fr":"À cause de trop d'écrans, les enfants ont des troubles du sommeil.","ex1_zh":"由于过多使用屏幕，孩子们出现了睡眠障碍。","ex2_fr":"À cause de la mondialisation, la pression au travail augmente.","hl":"À cause de"},
+{"zh":"这使得……（结果从句）","fr":"ce qui + 动词","cat":"因果·关系","ex1_fr":"Il n'y a pas de soutien immédiat, ce qui augmente le stress.","ex1_zh":"没有即时支持，这使得压力增加。","ex2_fr":"La culture devient un plaisir du quotidien, ce qui rend la société plus ouverte.","hl":"ce qui"},
+{"zh":"这有助于……","fr":"cela contribue à / aide à + 动词原形","cat":"因果·关系","ex1_fr":"La nature contribue à réduire le stress et améliorer la concentration.","ex1_zh":"大自然有助于减少压力、提高专注力。","ex2_fr":"Une éducation égalitaire contribue à créer une société plus juste.","hl":"contribue à"},
+{"zh":"这导致……","fr":"cela entraîne / provoque + 名词","cat":"因果·关系","ex1_fr":"Trop d'écrans entraîne des troubles du sommeil.","ex1_zh":"过多屏幕会导致睡眠障碍。","ex2_fr":"Le manque de contact humain provoque un sentiment d'isolement.","hl":"entraîne"},
+{"zh":"宝贵的、珍贵的","fr":"précieux / précieuse","cat":"描述·形容","ex1_fr":"Les supérieurs âgés apportent une expérience précieuse et une vision stratégique.","ex1_zh":"年长上级带来宝贵的经验和战略性视角。","ex2_fr":"Leur expérience est un atout précieux pour les jeunes.","hl":"précieuse"},
+{"zh":"过时的、不再适用的","fr":"dépassé(e)","cat":"描述·形容","ex1_fr":"Certaines méthodes traditionnelles sont dépassées face aux nouvelles technologies.","ex1_zh":"某些传统方法在新技术面前显得过时了。","ex2_fr":"Si un supérieur donne une instruction qui semble dépassée, on peut proposer une alternative.","hl":"dépassées"},
+{"zh":"不可替代的","fr":"irremplaçable / indispensable","cat":"描述·形容","ex1_fr":"La lettre garde une valeur humaine irremplaçable.","ex1_zh":"书信保留着不可替代的人情价值。","ex2_fr":"Le livre papier garde une valeur unique : il permet de lire avec profondeur.","hl":"irremplaçable"},
+{"zh":"均衡的、平衡的","fr":"équilibré(e)","cat":"描述·形容","ex1_fr":"Il faut utiliser les écrans de façon équilibrée.","ex1_zh":"必须以均衡的方式使用屏幕。","ex2_fr":"Ce n'est pas un usage équilibré des écrans.","hl":"équilibrée"},
+{"zh":"在……方面","fr":"sur le plan de / en matière de","cat":"高频搭配","ex1_fr":"Voyager seul peut être difficile sur le plan psychologique.","ex1_zh":"独自旅行在心理层面可能比较困难。","ex2_fr":"Les progrès en matière de protection sociale sont encore insuffisants.","hl":"sur le plan"},
+{"zh":"就……而言","fr":"pour ce qui est de / en ce qui concerne","cat":"高频搭配","ex1_fr":"Pour ce qui est de mon pays, les actions ne sont pas encore assez importantes.","ex1_zh":"就我的国家而言，措施还不够有力。","ex2_fr":"En ce qui concerne les enfants, il est important de limiter le temps d'écran.","hl":"Pour ce qui est de"},
+{"zh":"保持联系","fr":"garder le contact / rester en contact avec","cat":"高频搭配","ex1_fr":"Grâce au numérique, on peut garder des contacts professionnels sans se déplacer.","ex1_zh":"借助数字技术，我们可以不出行也能保持职业联系。","ex2_fr":"Ces traditions permettent de garder un lien avec la famille.","hl":"garder des contacts"},
+{"zh":"发挥重要作用","fr":"jouer un rôle important / essentiel","cat":"高频搭配","ex1_fr":"La langue joue un rôle essentiel dans l'intégration.","ex1_zh":"语言在融入社会中发挥重要作用。","ex2_fr":"L'école joue un rôle essentiel dans la construction d'une société plus juste.","hl":"joue un rôle essentiel"},
+{"zh":"缺乏……","fr":"manquer de + 名词 / le manque de","cat":"高频搭配","ex1_fr":"Les habitants des grandes villes manquent parfois de contact avec la nature.","ex1_zh":"大城市居民有时缺乏与大自然的接触。","ex2_fr":"Le manque d'exercice physique est l'un des effets négatifs des écrans.","hl":"manquent"},
+{"zh":"不一定、未必","fr":"pas forcément / pas nécessairement","cat":"高频搭配","ex1_fr":"Les diplômes ne garantissent pas nécessairement le succès.","ex1_zh":"学历未必保证成功。","ex2_fr":"Il ne s'agit pas forcément de donner de l'argent.","hl":"pas nécessairement"},
+{"zh":"对……持开放态度","fr":"être ouvert(e) aux différences","cat":"高频搭配","ex1_fr":"Voyager nous rend plus ouverts aux différences.","ex1_zh":"旅行让我们对差异更加开放。","ex2_fr":"On devient des adultes plus ouverts et plus tolérants.","hl":"ouverts aux différences"},
+{"zh":"不仅……而且……","fr":"non seulement... mais aussi...","cat":"句型·结构","ex1_fr":"Non seulement ils partagent des coutumes locales, mais ils recommandent aussi des restaurants typiques.","ex1_zh":"他们不仅分享当地习俗，还推荐地道餐馆。","ex2_fr":"Cela améliore non seulement la qualité de l'air, mais aussi notre qualité de vie.","hl":"non seulement"},
+{"zh":"而不是……","fr":"au lieu de + 动词原形/名词","cat":"句型·结构","ex1_fr":"Au lieu d'étudier des listes de vocabulaire, ils apprennent en regardant les épisodes.","ex1_zh":"他们没有死记词汇表，而是通过看剧集来学习。","ex2_fr":"Beaucoup d'enfants restent chez eux au lieu de découvrir la vie réelle.","hl":"Au lieu de"},
+{"zh":"……而不是……（更倾向于）","fr":"plutôt que (de) + 动词原形","cat":"句型·结构","ex1_fr":"On préfère envoyer un message instantané plutôt que de prendre le temps d'écrire.","ex1_zh":"人们更愿意发即时消息，而不是花时间写信。","ex2_fr":"Prendre le bus plutôt que la voiture permet de réduire la pollution.","hl":"plutôt que de"},
+{"zh":"使……变得……","fr":"rendre + 名词 + 形容词","cat":"句型·结构","ex1_fr":"Les appareils rendent l'apprentissage plus interactif et plus motivant.","ex1_zh":"电子设备使学习变得更有互动性。","ex2_fr":"Ce mélange rend la vie plus intéressante et favorise l'ouverture d'esprit.","hl":"rendent"},
+{"zh":"正是……（强调句）","fr":"c'est... qui / que...","cat":"句型·结构","ex1_fr":"Ce sont ces petits gestes qui, mis ensemble, peuvent transformer une ville.","ex1_zh":"正是这些小举动，汇聚在一起，能改变一座城市。","ex2_fr":"C'est la passion qui permet de tenir aussi longtemps.","hl":"Ce sont"},
+{"zh":"推动某人做某事","fr":"pousser quelqu'un à + 动词原形","cat":"句型·结构","ex1_fr":"Cela nous pousse à devenir plus autonomes et plus ouverts.","ex1_zh":"这推动我们变得更自主、更开放。","ex2_fr":"Limiter les vols pousse les gens à changer leurs habitudes.","hl":"pousse"},
+{"zh":"对……的获取/接触","fr":"un accès (immédiat) à","cat":"句型·结构","ex1_fr":"Ils offrent un accès immédiat à une quantité énorme d'informations.","ex1_zh":"它们提供对海量信息的即时获取。","ex2_fr":"Grâce à Internet, on a un accès illimité à des ressources éducatives.","hl":"accès immédiat à"},
+{"zh":"无论是……还是……","fr":"que ce soit... ou...","cat":"句型·结构","ex1_fr":"Que ce soit pour trouver un restaurant ou se faire des amis, il faut connaître la langue.","ex1_zh":"无论是找餐厅还是交朋友，都需要懂这门语言。","ex2_fr":"Que ce soit par des activités en plein air ou en lisant, l'important est de vivre le monde réel.","hl":"Que ce soit"},
+{"zh":"仅仅……就足以……","fr":"rien que le fait de + 动词原形","cat":"句型·结构","ex1_fr":"Rien que le fait de savoir qu'il y a une caméra peut décourager certaines personnes.","ex1_zh":"仅仅知道有摄像头这件事本身，就足以让一些人打消念头。","ex2_fr":"Rien que le fait de parler avec un locuteur natif peut transformer l'apprentissage.","hl":"Rien que le fait de"},
+{"zh":"只是在做……（仅仅）","fr":"ne faire que + 动词原形","cat":"句型·结构","ex1_fr":"Je ne faisais pas que lire des manuels, je discutais avec des locuteurs natifs.","ex1_zh":"我不只是在读课本，我和母语者交流。","ex2_fr":"Ce n'est pas parce qu'on ne fait que travailler qu'on réussit.","hl":"ne faisais pas que"},
+{"zh":"构成、代表（正式）","fr":"représenter / constituer + 名词","cat":"句型·结构","ex1_fr":"La famille représente un soutien essentiel dans un nouveau pays.","ex1_zh":"家庭在新的国家构成一种不可或缺的支持。","ex2_fr":"Voyager seul peut représenter une charge financière importante.","hl":"représente"},
+{"zh":"走出舒适区","fr":"sortir de sa zone de confort","cat":"固定·表达","ex1_fr":"On doit sortir de sa zone de confort, s'adapter à une nouvelle culture.","ex1_zh":"我们必须走出舒适区，适应新的文化。","ex2_fr":"Voyager seul nous oblige à sortir de notre zone de confort.","hl":"sortir de sa zone de confort"},
+{"zh":"将……与……联系起来","fr":"associer A à B","cat":"固定·表达","ex1_fr":"On associe la langue au plaisir, à l'émotion et à la culture.","ex1_zh":"人们将语言与快乐、情感和文化联系起来。","ex2_fr":"On associe souvent le succès aux longues études.","hl":"associe"},
+{"zh":"以……的方式","fr":"de façon / de manière + 形容词","cat":"固定·表达","ex1_fr":"Il faut utiliser les écrans de manière équilibrée.","ex1_zh":"必须以均衡的方式使用屏幕。","ex2_fr":"Il apprenait la langue de façon naturelle, comme sa langue maternelle.","hl":"de manière équilibrée"},
+{"zh":"据研究 / 研究表明","fr":"selon les recherches / les études montrent que","cat":"固定·表达","ex1_fr":"Selon les recherches, un enfant peut apprendre deux langues en seulement deux ans.","ex1_zh":"据研究，一个孩子仅需两年就能掌握双语能力。","ex2_fr":"Les études montrent que même une petite récompense peut aider les élèves.","hl":"Selon les recherches"},
+{"zh":"传递、传授（知识/文化）","fr":"transmettre + 名词","cat":"固定·表达","ex1_fr":"Cela permet de transmettre la culture aux enfants.","ex1_zh":"这有助于将文化传递给下一代。","ex2_fr":"Ces personnes peuvent transmettre leurs connaissances aux jeunes employés.","hl":"transmettre"},
+{"zh":"促进、有利于","fr":"favoriser + 名词","cat":"固定·表达","ex1_fr":"Ce mélange favorise l'ouverture d'esprit.","ex1_zh":"这种融合促进开放心态。","ex2_fr":"Les activités en plein air favorisent le développement personnel.","hl":"favorise"},
+{"zh":"加强、巩固","fr":"renforcer + 名词","cat":"固定·表达","ex1_fr":"La formation renforce la cohésion de l'équipe.","ex1_zh":"培训加强了团队凝聚力。","ex2_fr":"Ces expériences renforcent notre confiance en nous.","hl":"renforce"},
+{"zh":"预防、阻止（负面事物）","fr":"prévenir / décourager + 动词","cat":"固定·表达","ex1_fr":"Les caméras peuvent aider à prévenir les crimes.","ex1_zh":"摄像头可以帮助预防犯罪。","ex2_fr":"La présence d'une caméra peut décourager certaines personnes de commettre un vol.","hl":"prévenir"},
+{"zh":"意识到……","fr":"prendre conscience de / se rendre compte de","cat":"固定·表达","ex1_fr":"Cette expérience m'a fait prendre conscience de l'importance de la tranquillité.","ex1_zh":"这次经历让我意识到宁静的重要性。","ex2_fr":"Aujourd'hui, nous avons enfin compris que les filles peuvent réussir en sciences.","hl":"prendre conscience de"},
+{"zh":"身心健康/幸福感","fr":"le bien-être","cat":"固定·表达","ex1_fr":"Les femmes leaders sont plus attentives au bien-être des employés.","ex1_zh":"女性领导者更关注员工的幸福感。","ex2_fr":"Il est important de prendre soin de son bien-être mental.","hl":"bien-être"},
+{"zh":"有……的倾向","fr":"avoir tendance à + 动词原形","cat":"固定·表达","ex1_fr":"Les citadins ont tendance à ressentir une pression continue.","ex1_zh":"城市居民往往持续感受到压力。","ex2_fr":"Les jeunes ont tendance à préférer les solutions rapides.","hl":"ont tendance à"},
+{"zh":"产生、造成（效果/后果）","fr":"avoir des effets sur + 名词","cat":"固定·表达","ex1_fr":"Trop d'écrans peut avoir des effets négatifs sur la santé.","ex1_zh":"过多使用屏幕可能对健康产生负面影响。","ex2_fr":"Ces politiques ont des effets positifs sur la qualité de vie.","hl":"avoir des effets négatifs"},
+{"zh":"充当……的作用","fr":"servir de + 名词（不加冠词）","cat":"固定·表达","ex1_fr":"L'école sert de lieu d'apprentissage mais aussi de socialisation.","ex1_zh":"学校既充当学习场所，也是社交场所。","ex2_fr":"La tablette devient presque une baby-sitter intelligente.","hl":"sert de"},
+{"zh":"从长远来看","fr":"à long terme / sur le long terme","cat":"固定·表达","ex1_fr":"À long terme, investir dans l'éducation est toujours rentable.","ex1_zh":"从长远来看，投资教育总是值得的。","ex2_fr":"Sur le long terme, ces habitudes peuvent avoir des effets négatifs sur la santé.","hl":"À long terme"},
+{"zh":"帮助某人做某事","fr":"aider quelqu'un à + 动词原形","cat":"固定·表达","ex1_fr":"Ces outils aident les élèves à mieux comprendre des concepts compliqués.","ex1_zh":"这些工具帮助学生更好地理解复杂概念。","ex2_fr":"Un accompagnement individuel aide les nouveaux employés à s'intégrer sans stress.","hl":"aident"},
+{"zh":"有能力做某事","fr":"être capable de + 动词原形","cat":"固定·表达","ex1_fr":"Les filles sont tout à fait capables de réussir en mathématiques.","ex1_zh":"女孩完全有能力在数学领域取得成功。","ex2_fr":"Sa capacité à gérer les situations difficiles est un vrai atout.","hl":"capables de"},
+{"zh":"改变/养成习惯","fr":"changer ses habitudes / adopter de nouvelles habitudes","cat":"固定·表达","ex1_fr":"On peut garder ses coutumes tout en adoptant de nouvelles habitudes locales.","ex1_zh":"我们可以保留自己的风俗，同时接受当地新习惯。","ex2_fr":"Limiter les vols oblige les gens à changer leurs habitudes.","hl":"adoptant de nouvelles habitudes"},
+{"zh":"取决于……","fr":"dépendre de / cela dépend de","cat":"固定·表达","ex1_fr":"Tout dépend du type de travail, de l'environnement et de la capacité à s'organiser.","ex1_zh":"一切取决于工作类型、环境以及自我组织能力。","ex2_fr":"Le succès professionnel dépend de nombreux facteurs.","hl":"Tout dépend"},
+{"zh":"在……领域/行业","fr":"dans le domaine de / dans le secteur de","cat":"固定·表达","ex1_fr":"Dans des domaines comme la médecine, il est impossible de travailler sans longues études.","ex1_zh":"在医学等领域，没有长期学习是不可能工作的。","ex2_fr":"Le manque de travailleurs est très grave dans le secteur de la santé.","hl":"dans le domaine de"},
+{"zh":"有责任做某事","fr":"avoir la responsabilité de","cat":"固定·表达","ex1_fr":"Les entreprises ont la responsabilité d'accompagner les nouveaux salariés.","ex1_zh":"企业有责任陪伴新员工融入。","ex2_fr":"Les parents sont responsables de l'éducation de leurs enfants.","hl":"la responsabilité de"},
+{"zh":"一种……的感觉","fr":"un sentiment de + 名词","cat":"固定·表达","ex1_fr":"Le manque de contact humain provoque un sentiment d'isolement.","ex1_zh":"缺乏人际接触会产生孤立感。","ex2_fr":"Quand on finit une tâche difficile, on ressent un sentiment de fierté.","hl":"sentiment de"},
+{"zh":"不得不做某事（被迫）","fr":"être obligé(e) de + 动词原形","cat":"固定·表达","ex1_fr":"On est obligé de s'adapter à une nouvelle culture.","ex1_zh":"我们不得不适应新的文化。","ex2_fr":"Les entreprises sont obligées de repenser leurs méthodes de travail.","hl":"obligé de"},
+{"zh":"不只是……还……","fr":"ne pas seulement... mais aussi...","cat":"固定·表达","ex1_fr":"La surveillance ne joue pas seulement un rôle dans la sécurité, elle peut aussi encourager de bonnes habitudes.","ex1_zh":"监控不只在安全方面发挥作用，还能鼓励良好习惯。","ex2_fr":"Le travail ne permet pas seulement de gagner de l'argent, mais aussi de se sentir utile.","hl":"pas seulement"},
+{"zh":"在……背景下","fr":"dans un contexte de / dans ce contexte","cat":"固定·表达","ex1_fr":"Dans ce contexte, le soutien de la famille permet de réduire la pression.","ex1_zh":"在这种背景下，家庭的支持可以减轻压力。","ex2_fr":"Dans un contexte où il faut diriger une grande équipe, ce style peut être un avantage.","hl":"Dans ce contexte"},
+{"zh":"完全、彻底（加强语气）","fr":"tout à fait / complètement","cat":"固定·表达","ex1_fr":"Les filles peuvent tout à fait réussir en mathématiques.","ex1_zh":"女孩完全可以在数学领域取得成功。","ex2_fr":"C'est tout à fait possible de vivre sans voiture dans les grandes villes.","hl":"tout à fait"},
+{"zh":"越来越（形容词）","fr":"de plus en plus + 形容词","cat":"固定·表达","ex1_fr":"La question devient de plus en plus importante.","ex1_zh":"这个问题变得越来越重要了。","ex2_fr":"Les villes deviennent de plus en plus bruyantes et stressantes.","hl":"de plus en plus"},
+{"zh":"付出努力","fr":"faire des efforts / fournir des efforts","cat":"固定·表达","ex1_fr":"Il faut faire des efforts réguliers pour progresser en langue.","ex1_zh":"需要持续付出努力才能在语言上进步。","ex2_fr":"Pour atteindre le même niveau, un adulte doit fournir beaucoup d'efforts.","hl":"faire des efforts"},
+{"zh":"增强自信心","fr":"renforcer / gagner en confiance en soi","cat":"固定·表达","ex1_fr":"Ces expériences renforcent notre confiance en nous.","ex1_zh":"这些经历增强了我们的自信心。","ex2_fr":"Même une petite récompense peut aider les élèves à gagner en confiance.","hl":"confiance en nous"},
+{"zh":"适合/不适合某人","fr":"convenir à / être adapté(e) à","cat":"固定·表达","ex1_fr":"Certaines méthodes sont moins adaptées aux nouvelles technologies.","ex1_zh":"某些方法不太适应新技术。","ex2_fr":"Ce n'est donc pas un environnement idéal pour tout le monde.","hl":"adaptées aux"},
+{"zh":"不管……还是……（让步）","fr":"peu importe que / quel que soit","cat":"固定·表达","ex1_fr":"Peu importe qu'un chef soit un homme ou une femme, ce qui compte c'est la communication.","ex1_zh":"不管领导是男是女，真正重要的是沟通能力。","ex2_fr":"Quel que soit le domaine, la passion est un atout essentiel.","hl":"Peu importe"},
+{"zh":"减少不平等/缩小差距","fr":"réduire les inégalités / combler l'écart","cat":"固定·表达","ex1_fr":"Une éducation égalitaire contribue à réduire les inégalités entre hommes et femmes.","ex1_zh":"平等教育有助于减少男女不平等。","ex2_fr":"Ces mesures permettent de combler l'écart entre les différentes classes sociales.","hl":"réduire les inégalités"},
+{"zh":"提高生活质量","fr":"améliorer la qualité de vie","cat":"固定·表达","ex1_fr":"Vivre avec moins de voitures améliore la qualité de vie en général.","ex1_zh":"减少汽车让整体生活质量得到提升。","ex2_fr":"L'accès aux soins gratuits améliore considérablement la qualité de vie.","hl":"améliore la qualité de vie"},
+{"zh":"对……关注/敏感","fr":"être attentif(ve) à / sensible à","cat":"固定·表达","ex1_fr":"Les femmes leaders sont souvent plus attentives à la communication.","ex1_zh":"女性领导者往往更关注沟通。","ex2_fr":"Il est important d'être sensible aux différences culturelles.","hl":"attentives à"},
+{"zh":"提供……（正式）","fr":"offrir / proposer + 名词","cat":"动词·搭配","ex1_fr":"L'école devrait proposer plus d'activités basées sur l'expérience réelle.","ex1_zh":"学校应该提供更多基于真实体验的活动。","ex2_fr":"Ils offrent un accès immédiat à une quantité énorme d'informations.","hl":"proposer"},
+{"zh":"缓解、减轻（压力/负担）","fr":"réduire / soulager + 名词","cat":"动词·搭配","ex1_fr":"Le soutien de la famille permet de réduire la pression économique.","ex1_zh":"家庭的支持可以减轻经济压力。","ex2_fr":"La nature joue un rôle important pour soulager le stress.","hl":"réduire la pression"},
+{"zh":"实现（梦想/计划）","fr":"réaliser + 名词","cat":"动词·搭配","ex1_fr":"Le soutien de la famille permet de réaliser plus facilement ces projets.","ex1_zh":"家庭的支持让人更容易实现这些计划。","ex2_fr":"Il a pu réaliser son rêve grâce à une bourse d'études.","hl":"réaliser"},
+{"zh":"鼓励某人做某事","fr":"encourager quelqu'un à + 动词原形","cat":"动词·搭配","ex1_fr":"Le Japon commence à encourager les personnes âgées à rester actives plus longtemps.","ex1_zh":"日本开始鼓励老年人延长工作年限。","ex2_fr":"Les petites récompenses encouragent les élèves à s'impliquer davantage.","hl":"encourager"},
+{"zh":"损害、影响（负面）","fr":"nuire à / affecter + 名词","cat":"动词·搭配","ex1_fr":"Trop d'écrans peut nuire à la concentration et à la santé.","ex1_zh":"过多屏幕可能损害专注力和健康。","ex2_fr":"Un mauvais environnement peut affecter la motivation de l'employé.","hl":"nuire à"},
+{"zh":"分享……（经历/知识）","fr":"partager + 名词","cat":"动词·搭配","ex1_fr":"Immigrer avec sa famille permet de partager les difficultés et les réussites.","ex1_zh":"和家人一起移民可以共同分担困难、分享成功。","ex2_fr":"Les chauffeurs de taxi partagent des coutumes locales et recommandent des endroits typiques.","hl":"partager"},
+{"zh":"维持、保持（平衡/节奏）","fr":"maintenir / garder + 名词","cat":"动词·搭配","ex1_fr":"Savoir gérer ses émotions permet de maintenir une ambiance harmonieuse.","ex1_zh":"懂得管理情绪有助于维持和谐的工作氛围。","ex2_fr":"Continuer à travailler permet de garder un rythme de vie actif.","hl":"maintenir"},
+{"zh":"接触到……（内容/文化）","fr":"être exposé(e) à / être en contact avec","cat":"动词·搭配","ex1_fr":"Les écrans peuvent exposer les enfants à des contenus dangereux.","ex1_zh":"屏幕可能让孩子接触到危险内容。","ex2_fr":"Les jeunes sont souvent en contact avec d'autres langues à travers la musique.","hl":"exposer les enfants à"},
+{"zh":"必须承认……","fr":"il faut reconnaître que / admettre que","cat":"动词·搭配","ex1_fr":"Il faut reconnaître que les diplômes jouent encore un rôle important au début d'une carrière.","ex1_zh":"必须承认，学历在职业起步阶段仍然发挥着重要作用。","ex2_fr":"Il faut admettre que certaines méthodes traditionnelles sont parfois dépassées.","hl":"Il faut reconnaître"},
+{"zh":"克服困难/面对挑战","fr":"surmonter les difficultés / faire face à","cat":"动词·搭配","ex1_fr":"La famille aide à surmonter les difficultés de l'adaptation.","ex1_zh":"家庭帮助克服适应过程中的困难。","ex2_fr":"Il faut faire face aux défis sans se décourager.","hl":"surmonter les difficultés"},
+{"zh":"积极投入、参与","fr":"s'impliquer (dans) / s'engager (dans)","cat":"动词·搭配","ex1_fr":"Les études montrent que même une petite récompense peut aider les élèves à s'impliquer plus.","ex1_zh":"研究表明，即便是小小的奖励也能帮助学生更积极地投入。","ex2_fr":"Il est important de s'engager dans la vie de la communauté.","hl":"s'impliquer"},
+{"zh":"重视、赋予价值","fr":"valoriser + 名词","cat":"动词·搭配","ex1_fr":"L'école devrait valoriser les efforts des élèves, pas seulement les résultats.","ex1_zh":"学校应该重视学生的努力，而不仅仅是成绩。","ex2_fr":"Il est important de valoriser les compétences pratiques autant que les diplômes.","hl":"valoriser"},
+{"zh":"加深/建立联系","fr":"renforcer / tisser des liens","cat":"动词·搭配","ex1_fr":"Cuisiner avec des amis renforce les liens entre les personnes.","ex1_zh":"和朋友一起做饭能加深彼此之间的联系。","ex2_fr":"Ces traditions permettent de tisser des liens entre les générations.","hl":"renforce les liens"},
+{"zh":"一个信息宝库","fr":"une mine d'informations","cat":"名词·短语","ex1_fr":"Chaque fois que je prends un taxi, c'est une vraie mine d'informations !","ex1_zh":"每次坐出租车，这真是一个信息宝库！","ex2_fr":"Internet est une véritable mine d'informations, mais il faut savoir trier.","hl":"une mine d'informations"},
+{"zh":"日常安排、时间表","fr":"l'emploi du temps","cat":"名词·短语","ex1_fr":"On est totalement libre de son emploi du temps.","ex1_zh":"我们可以完全自由地安排自己的时间。","ex2_fr":"Il est difficile de gérer son emploi du temps quand on a des enfants.","hl":"emploi du temps"},
+{"zh":"文化遗产、文化根源","fr":"le patrimoine (culturel) / les racines","cat":"名词·短语","ex1_fr":"Les musées gratuits renforcent le lien entre la population et le patrimoine.","ex1_zh":"免费博物馆拉近了公众和文化遗产之间的距离。","ex2_fr":"Il est important de préserver ses racines tout en s'adaptant à une nouvelle culture.","hl":"patrimoine"},
+{"zh":"积蓄、储蓄","fr":"des économies","cat":"名词·短语","ex1_fr":"Les jeunes qui commencent tout juste à travailler n'ont pas assez d'économies.","ex1_zh":"刚刚开始工作的年轻人没有足够的积蓄。","ex2_fr":"Il est important de faire des économies pour faire face aux imprévus.","hl":"économies"},
+{"zh":"生活成本","fr":"le coût de la vie","cat":"名词·短语","ex1_fr":"Dans les grandes villes, le coût de la vie est très élevé.","ex1_zh":"在大城市，生活成本非常高。","ex2_fr":"Le coût de la vie à Toronto a beaucoup augmenté ces dernières années.","hl":"coût de la vie"},
+{"zh":"工作氛围/环境","fr":"l'ambiance / le climat de travail","cat":"名词·短语","ex1_fr":"Un bon leader sait créer une ambiance de confiance dans l'équipe.","ex1_zh":"一个好的领导者懂得在团队中营造信任的氛围。","ex2_fr":"Un mauvais environnement peut complètement détruire la motivation.","hl":"ambiance de confiance"},
+{"zh":"刻板印象/偏见","fr":"les stéréotypes / les préjugés","cat":"名词·短语","ex1_fr":"Une éducation égalitaire réduit les stéréotypes et ouvre des portes aux générations futures.","ex1_zh":"平等教育有助于减少刻板印象，为未来世代开启更多可能。","ex2_fr":"Il faut lutter contre les préjugés liés au genre.","hl":"stéréotypes"},
+{"zh":"适应能力","fr":"la capacité d'adaptation","cat":"名词·短语","ex1_fr":"Ces expériences renforcent notre capacité d'adaptation.","ex1_zh":"这些经历增强了我们的适应能力。","ex2_fr":"Dans un monde qui change vite, la capacité d'adaptation est essentielle.","hl":"capacité d'adaptation"},
+{"zh":"自主性、独立性","fr":"l'autonomie / l'indépendance","cat":"名词·短语","ex1_fr":"Voyager seul développe l'autonomie et la flexibilité.","ex1_zh":"独自旅行培养自主性和灵活性。","ex2_fr":"Grâce à leurs parents, ils ont plus d'indépendance financière.","hl":"autonomie"},
+{"zh":"多样性","fr":"la diversité","cat":"名词·短语","ex1_fr":"La diversité dans les équipes favorise la créativité.","ex1_zh":"团队中的多样性促进创造力。","ex2_fr":"Toronto est une ville connue pour sa grande diversité culturelle.","hl":"diversité"},
+{"zh":"包容性的","fr":"inclusif(ve) / l'inclusion","cat":"名词·短语","ex1_fr":"Il faut des politiques plus inclusives pour intégrer les personnes handicapées.","ex1_zh":"需要更具包容性的政策来融入残障人士。","ex2_fr":"Toronto commence à organiser des événements accessibles et inclusifs.","hl":"inclusives"},
+{"zh":"劳动力短缺","fr":"le manque de travailleurs / la pénurie de main-d'oeuvre","cat":"名词·短语","ex1_fr":"Au Japon, le manque de travailleurs devient de plus en plus grave.","ex1_zh":"在日本，劳动力短缺问题变得越来越严重。","ex2_fr":"La pénurie de main-d'oeuvre touche surtout les secteurs de la santé et de l'éducation.","hl":"manque de travailleurs"},
+{"zh":"换句话说","fr":"en d'autres termes / autrement dit","cat":"口语·表达","ex1_fr":"Autrement dit, les appareils ne remplacent pas l'école, mais augmentent nos possibilités.","ex1_zh":"换句话说，设备不能取代学校，但扩大了我们的可能性。","ex2_fr":"En d'autres termes, trouver un équilibre est plus important que choisir un camp.","hl":"Autrement dit"},
+{"zh":"通过、经由（媒介）","fr":"à travers + 名词","cat":"口语·表达","ex1_fr":"Les jeunes sont souvent en contact avec d'autres langues à travers la musique et les films.","ex1_zh":"年轻人通过音乐和电影经常接触到其他语言。","ex2_fr":"À travers ces activités, les enfants développent leur curiosité.","hl":"à travers"},
+{"zh":"围绕……（共同兴趣）","fr":"autour de + 名词","cat":"口语·表达","ex1_fr":"On peut se faire des amis autour d'intérêts communs, sans avoir besoin de se déplacer.","ex1_zh":"可以围绕共同兴趣结交朋友，而不需要出行。","ex2_fr":"Des communautés se forment autour de la passion pour les animaux.","hl":"autour de"},
+{"zh":"从……的角度来看","fr":"du côté de / du point de vue de","cat":"口语·表达","ex1_fr":"Du côté des entreprises, le télétravail offre aussi plusieurs avantages.","ex1_zh":"从企业的角度来看，远程办公也有几个优点。","ex2_fr":"Du point de vue économique, cette solution est plus rentable.","hl":"Du côté de"},
+{"zh":"至于……、关于……","fr":"quant à / en ce qui concerne","cat":"口语·表达","ex1_fr":"Quant aux enfants, il est important de limiter le temps d'écran.","ex1_zh":"至于孩子，限制屏幕时间很重要。","ex2_fr":"En ce qui concerne l'environnement, les actions individuelles ont un impact réel.","hl":"Quant à"},
+{"zh":"尤其是、特别是","fr":"en particulier / surtout / notamment","cat":"口语·表达","ex1_fr":"C'est un problème sérieux, en particulier dans des secteurs comme la santé.","ex1_zh":"这是一个严重的问题，尤其是在医疗等领域。","ex2_fr":"Les jeunes, notamment ceux qui commencent à travailler, manquent souvent d'économies.","hl":"en particulier"},
+{"zh":"尽管如此、然而","fr":"pourtant / néanmoins / toutefois","cat":"口语·表达","ex1_fr":"Pourtant, elles possèdent les mêmes compétences et la même motivation.","ex1_zh":"然而，她们拥有和其他人一样的能力和动力。","ex2_fr":"Néanmoins, il est important de trouver un équilibre.","hl":"Pourtant"},
+{"zh":"完全靠自己","fr":"tout seul / de son propre chef","cat":"口语·表达","ex1_fr":"L'enfant ouvre son iPad et se concentre tout seul.","ex1_zh":"孩子自己打开iPad，独自专心学习。","ex2_fr":"Il a pris cette décision de son propre chef, sans consulter personne.","hl":"tout seul"},
+{"zh":"同时、在……的同时","fr":"tout en + 动词现在分词","cat":"口语·表达","ex1_fr":"On peut garder ses coutumes tout en adoptant de nouvelles habitudes locales.","ex1_zh":"我们可以保留自己的风俗，同时接受当地的新习惯。","ex2_fr":"Elle travaille tout en élevant ses enfants.","hl":"tout en"},
+{"zh":"从此、从今往后","fr":"à partir de maintenant / dorénavant","cat":"口语·表达","ex1_fr":"Dorénavant, beaucoup d'entreprises acceptent le travail hybride.","ex1_zh":"从今往后，很多企业接受混合办公模式。","ex2_fr":"À partir de maintenant, il faut faire attention à l'environnement.","hl":"Dorénavant"},
+{"zh":"尤其是在……的情况下","fr":"surtout quand / en particulier lorsque","cat":"口语·表达","ex1_fr":"Les actions simples ont un effet réel, surtout quand elles sont répétées par des milliers de personnes.","ex1_zh":"简单的行动确实有效，尤其是当成千上万的人重复去做的时候。","ex2_fr":"Voyager seul peut être difficile, en particulier lorsqu'on rencontre un problème imprévu.","hl":"surtout quand"},
+{"zh":"说实话、坦白讲","fr":"honnêtement / franchement / à vrai dire","cat":"口语·表达","ex1_fr":"Franchement, je ne suis pas très favorable aux écrans pour les enfants.","ex1_zh":"坦率地说，我并不太支持孩子用屏幕。","ex2_fr":"À vrai dire, je pense que l'équilibre est la clé.","hl":"Franchement"},
+{"zh":"实际上、事实是","fr":"en réalité / en fait","cat":"口语·表达","ex1_fr":"Autrement dit, voyager seul semble donner de la liberté, mais en réalité cela peut créer beaucoup de pression.","ex1_zh":"换句话说，独自旅行看起来自由，但实际上可能带来很大压力。","ex2_fr":"En fait, je pense que les deux approches ont des avantages.","hl":"en réalité"},
+{"zh":"从某种程度上说","fr":"dans une certaine mesure / en quelque sorte","cat":"口语·表达","ex1_fr":"On peut dire que la tablette devient en quelque sorte une baby-sitter intelligente.","ex1_zh":"可以说，平板电脑在某种程度上成了一个智能保姆。","ex2_fr":"Dans une certaine mesure, les réseaux sociaux remplacent les interactions réelles.","hl":"en quelque sorte"},
+{"zh":"这证明了……","fr":"cela prouve que / cela montre que","cat":"口语·表达","ex1_fr":"Cela prouve que le respect n'empêche pas la communication.","ex1_zh":"这证明了尊重并不妨碍交流。","ex2_fr":"Cela montre bien la grande différence entre les deux périodes de la vie.","hl":"Cela prouve"},
+{"zh":"这就是为什么……","fr":"c'est la raison pour laquelle / voilà pourquoi","cat":"口语·表达","ex1_fr":"C'est l'une des raisons pour lesquelles beaucoup de gens choisissent d'immigrer au Canada.","ex1_zh":"这是很多人选择移民加拿大的原因之一。","ex2_fr":"Voilà pourquoi beaucoup d'entreprises ont adopté le télétravail.","hl":"raisons pour lesquelles"},
+{"zh":"归根结底、最终","fr":"au fond / en fin de compte / finalement","cat":"口语·表达","ex1_fr":"Au fond, la vraie efficacité vient de la collaboration entre l'expérience et la créativité.","ex1_zh":"归根结底，真正的效率来自经验与创造力的合作。","ex2_fr":"En fin de compte, ce qui compte c'est de trouver un équilibre.","hl":"Au fond"},
+{"zh":"只要……就……（条件）","fr":"à condition de / à condition que","cat":"口语·表达","ex1_fr":"Les filles peuvent tout à fait réussir en sciences, à condition qu'on leur en donne la possibilité.","ex1_zh":"只要给予机会，女孩完全可以在科学领域取得成功。","ex2_fr":"Le télétravail peut être efficace, à condition de bien s'organiser.","hl":"à condition que"},
+{"zh":"不一定需要……","fr":"il n'est pas nécessaire de / pas besoin de","cat":"口语·表达","ex1_fr":"Pas besoin d'être parfait, mais savoir tenir une petite conversation aide déjà beaucoup.","ex1_zh":"不需要做到完美，但能进行简单的交流已经很有帮助了。","ex2_fr":"Il n'est pas nécessaire de renoncer à ses traditions pour s'intégrer.","hl":"Pas besoin de"},
+{"zh":"不管怎样","fr":"dans tous les cas / quoi qu'il en soit","cat":"口语·表达","ex1_fr":"Dans tous les cas, il est important de respecter la culture locale.","ex1_zh":"无论如何，尊重当地文化都很重要。","ex2_fr":"Quoi qu'il en soit, trouver un équilibre reste essentiel.","hl":"Dans tous les cas"}
+];
+
+var mode="全部", queue=[], cur=0, stage=0;
+
+function setMode(m,el){
+  mode=m;
+  document.querySelectorAll(".mode-btn").forEach(function(b){b.classList.remove("active")});
+  el.classList.add("active");
+  restart();
+}
+
+function buildQueue(){
+  var pool = mode==="全部" ? CARDS.slice() : CARDS.filter(function(c){return c.cat===mode});
+  for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t}
+  return pool;
+}
+
+function highlight(text, hl){
+  if(!hl) return text;
+  // escape regex special chars
+  var escaped = hl.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  var re = new RegExp("("+escaped+")","gi");
+  return text.replace(re,'<span class="hl">$1</span>');
+}
+
+function render(){
+  if(cur>=queue.length){showDone();return}
+  stage=0;
+  var c=queue[cur];
+
+  document.getElementById("catTag").textContent=c.cat;
+  document.getElementById("zhWord").textContent=c.zh;
+  document.getElementById("frMain").textContent=c.fr;
+  document.getElementById("frZh").textContent=c.zh;
+  document.getElementById("promptZh").textContent=c.ex1_zh;
+  document.getElementById("ref1Fr").innerHTML=highlight(c.ex1_fr,c.hl);
+  document.getElementById("ref1Zh").textContent=c.ex1_zh;
+  document.getElementById("ref2Fr").innerHTML=highlight(c.ex2_fr,c.hl);
+
+  // reset
+  document.getElementById("step1").style.cursor="pointer";
+  document.getElementById("step1").onclick=showFr;
+  document.getElementById("step2").classList.remove("show");
+  document.getElementById("refSection").classList.remove("show");
+
+  var btn=document.getElementById("mainBtn");
+  btn.textContent="我想好了，看法语";
+  btn.className="btn btn-primary";
+  btn.onclick=showFr;
+
+  document.getElementById("barFill").style.width=(cur/queue.length*100).toFixed(0)+"%";
+  document.getElementById("progLabel").textContent=(cur+1)+" / "+queue.length;
+
+  document.getElementById("mainCard").classList.remove("hidden");
+  document.getElementById("progressWrap").classList.remove("hidden");
+  document.getElementById("doneScreen").classList.remove("show");
+}
+
+function showFr(){
+  if(stage!==0)return;
+  stage=1;
+  document.getElementById("step2").classList.add("show");
+  document.getElementById("step1").style.cursor="default";
+  document.getElementById("step1").onclick=null;
+  var btn=document.getElementById("mainBtn");
+  btn.textContent="看观点库例句";
+  btn.className="btn btn-ref";
+  btn.onclick=showRef;
+}
+
+function showRef(){
+  if(stage!==1)return;
+  stage=2;
+  document.getElementById("refSection").classList.add("show");
+  var btn=document.getElementById("mainBtn");
+  btn.textContent="下一张 →";
+  btn.className="btn btn-primary";
+  btn.onclick=next;
+}
+
+function next(){cur++;render()}
+
+function showDone(){
+  document.getElementById("mainCard").classList.add("hidden");
+  document.getElementById("progressWrap").classList.add("hidden");
+  document.getElementById("doneSub").textContent="完成了 "+queue.length+" 张，今天练习结束";
+  document.getElementById("doneScreen").classList.add("show");
+}
+
+function restart(){
+  queue=buildQueue();cur=0;
+  document.getElementById("mainCard").classList.remove("hidden");
+  document.getElementById("progressWrap").classList.remove("hidden");
+  document.getElementById("doneScreen").classList.remove("show");
+  render();
+}
+
+restart();
+</script>
+</body>
+</html>
