@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCF Canada — Guide de l'oral CLB7</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #1a1a2e;
+    background: #f5f7fb;
+  }
+
+  .page-title {
+    background: linear-gradient(135deg, #185FA5, #0C447C);
+    color: white;
+    padding: 28px 32px;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .page-title span { font-size: 14px; opacity: 0.8; font-weight: 400; margin-left: 12px; }
+
+  .nav {
+    display: flex; gap: 10px; padding: 18px 24px; flex-wrap: wrap;
+    background: white; border-bottom: 2px solid #e8edf5; position: sticky; top: 0; z-index: 100;
+  }
+  .nav-btn {
+    padding: 10px 22px; border-radius: 24px; border: 2px solid #c8d8ec;
+    background: white; color: #4a6580;
+    font-size: 15px; cursor: pointer; font-family: inherit; transition: all .18s; font-weight: 500;
+  }
+  .nav-btn.active { background: #185FA5; border-color: #185FA5; color: #fff; }
+  .nav-btn:hover:not(.active) { border-color: #185FA5; color: #185FA5; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 28px 24px 60px; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .tense-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tense-tab {
+    padding: 8px 18px; border-radius: 20px; border: 1.5px solid #c8d8ec;
+    background: white; color: #4a6580; font-size: 14px;
+    cursor: pointer; font-family: inherit; transition: all .15s; font-weight: 500;
+  }
+  .tense-tab.active { background: #0C447C; color: #fff; border-color: #0C447C; }
+  .tense-panel { display: none; }
+  .tense-panel.active { display: block; }
+
+  .card {
+    border: 1.5px solid #dde6f0;
+    border-radius: 14px; padding: 22px 26px; margin-bottom: 18px;
+    background: white; box-shadow: 0 2px 8px rgba(24,95,165,0.06);
+  }
+  .card-title { font-size: 18px; font-weight: 600; color: #0C447C; margin-bottom: 6px; }
+  .card-subtitle { font-size: 14px; color: #6b7a8d; margin-bottom: 16px; font-style: italic; }
+
+  .conj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; margin: 12px 0; }
+  .conj-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid #eef2f8; font-size: 15px;
+  }
+  .conj-row:last-child { border-bottom: none; }
+  .pronoun { color: #6b7a8d; font-size: 14px; min-width: 80px; }
+  .form { font-weight: 600; color: #185FA5; font-size: 16px; }
+
+  /* PRONUNCIATION BADGES */
+  .pron-badge {
+    display: inline-block; padding: 2px 9px; border-radius: 9px; font-size: 11px; font-weight: 600;
+    margin-left: 7px; vertical-align: middle; white-space: nowrap;
+  }
+  .pron-silent { background: #FDEAEA; color: #B02020; border: 1px solid #F5AAAA; }
+  .pron-liaison { background: #E0F5EC; color: #0C6644; border: 1px solid #70D4A8; }
+  .pron-note { background: #FEF3E0; color: #7A4800; border: 1px solid #FBC96A; }
+
+  .pron-box {
+    border-radius: 12px; padding: 16px 20px; margin: 14px 0;
+    background: #f8fafd; border: 1px solid #dde6f0;
+  }
+  .pron-rule {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 10px 0; border-bottom: 1px solid #eef2f8; font-size: 15px;
+  }
+  .pron-rule:last-child { border-bottom: none; }
+  .pron-label { min-width: 110px; color: #4a6580; font-weight: 500; flex-shrink: 0; }
+  .pron-content { flex: 1; color: #1a1a2e; line-height: 1.7; }
+  .pron-ipa { font-family: monospace; color: #185FA5; font-size: 13px; font-weight: 600; }
+
+  .highlight-box {
+    background: #EBF4FF; border-left: 4px solid #185FA5; border-radius: 0 10px 10px 0;
+    padding: 14px 18px; margin: 12px 0; font-size: 15px; color: #0C447C; line-height: 1.7;
+  }
+
+  .example-list { list-style: none; padding: 0; }
+  .example-list li {
+    padding: 12px 16px; margin: 8px 0; border-radius: 10px;
+    background: #f8fafd; border: 1px solid #dde6f0;
+  }
+  .example-list li .fr { font-weight: 600; font-size: 15px; color: #1a1a2e; }
+  .example-list li .zh { color: #6b7a8d; font-size: 13px; display: block; margin-top: 4px; }
+  .example-list li .pron-tip { color: #B02020; font-size: 12px; display: block; margin-top: 3px; font-style: italic; }
+
+  .irreg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
+  .irreg-card {
+    border-radius: 10px; padding: 12px 14px;
+    background: #f8fafd; border: 1px solid #dde6f0;
+  }
+  .irreg-inf { font-weight: 700; color: #0C447C; font-size: 15px; }
+  .irreg-forms { color: #4a6580; font-size: 13px; margin-top: 4px; line-height: 1.7; }
+
+  .tip-box {
+    background: #EDF7E4; border-radius: 10px; padding: 14px 18px; margin: 14px 0;
+    font-size: 14px; color: #2D5A1B; border: 1px solid #AEDD82; line-height: 1.7;
+  }
+  .tip-box strong { font-weight: 600; }
+
+  .warning-box {
+    background: #FEF4E0; border-radius: 10px; padding: 14px 18px; margin: 14px 0;
+    font-size: 14px; color: #7A4800; border: 1px solid #FBC96A; line-height: 1.7;
+  }
+
+  .section-header {
+    font-size: 16px; font-weight: 700; color: #1a1a2e;
+    margin: 24px 0 12px; padding-bottom: 8px;
+    border-bottom: 2px solid #dde6f0;
+  }
+
+  /* TASK 2 */
+  .q-structure {
+    border-radius: 12px; padding: 16px 20px; margin: 10px 0;
+    border: 1.5px solid #dde6f0; background: white;
+  }
+  .q-label {
+    font-size: 12px; font-weight: 700; color: #6b7a8d;
+    text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px;
+  }
+  .q-pattern { font-size: 16px; font-weight: 700; color: #185FA5; margin-bottom: 10px; }
+  .q-examples { font-size: 14px; color: #4a6580; line-height: 2.1; }
+  .q-zh { font-size: 12px; color: #8a97a8; margin-left: 4px; }
+
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 11px; font-weight: 700; margin-left: 8px; vertical-align: middle;
+  }
+  .badge-blue { background: #D0E8FF; color: #0C447C; }
+  .badge-green { background: #D4EDBE; color: #1B4D0A; }
+  .badge-amber { background: #FDE8B8; color: #6B3D00; }
+
+  /* TASK 3 */
+  .opinion-block {
+    border-radius: 12px; padding: 16px 20px; margin: 10px 0;
+    border-left: 4px solid; border-top: 1.5px solid #dde6f0;
+    border-right: 1.5px solid #dde6f0; border-bottom: 1.5px solid #dde6f0;
+    background: white;
+  }
+  .ob-blue { border-left-color: #378ADD; }
+  .ob-green { border-left-color: #1D9E75; }
+  .ob-amber { border-left-color: #BA7517; }
+  .ob-purple { border-left-color: #534AB7; }
+  .ob-coral { border-left-color: #D85A30; }
+  .ob-title { font-size: 14px; font-weight: 700; color: #4a6580; margin-bottom: 10px; }
+  .ob-phrases { font-size: 15px; color: #1a1a2e; line-height: 2.4; }
+  .ob-phrases span {
+    display: inline-block; background: #f8fafd;
+    border: 1.5px solid #dde6f0; border-radius: 8px;
+    padding: 2px 10px; margin: 3px 4px; font-size: 14px; font-weight: 500;
+  }
+  .ob-example {
+    font-size: 14px; color: #4a6580; margin-top: 12px; line-height: 1.9;
+    border-top: 1px solid #eef2f8; padding-top: 12px;
+  }
+  .ob-example .zh { color: #8a97a8; font-size: 12px; }
+
+  .structure-flow { display: flex; flex-direction: column; gap: 6px; margin: 14px 0; }
+  .flow-step {
+    display: flex; align-items: flex-start; gap: 14px; padding: 12px 16px;
+    border-radius: 10px; background: white; border: 1.5px solid #dde6f0;
+  }
+  .flow-num {
+    min-width: 28px; height: 28px; border-radius: 50%; background: #185FA5;
+    color: #fff; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+  }
+  .flow-content { flex: 1; }
+  .flow-label { font-weight: 700; font-size: 15px; color: #1a1a2e; }
+  .flow-detail { font-size: 13px; color: #6b7a8d; margin-top: 3px; line-height: 1.6; }
+
+  .full-example {
+    border-radius: 12px; padding: 20px 22px; margin: 14px 0;
+    background: white; border: 1.5px solid #c8d8ec;
+    font-size: 15px; line-height: 2.1;
+  }
+  .ann {
+    background: #D0E8FF; color: #0C447C; border-radius: 5px;
+    padding: 1px 7px; font-size: 11px; font-weight: 700; vertical-align: middle;
+    display: inline-block; margin-right: 4px;
+  }
+  .ann-g {
+    background: #D4EDBE; color: #1B4D0A; border-radius: 5px;
+    padding: 1px 7px; font-size: 11px; font-weight: 700; vertical-align: middle;
+    display: inline-block; margin-right: 4px;
+  }
+  .full-zh {
+    font-size: 13px; color: #8a97a8; border-top: 1px solid #eef2f8;
+    margin-top: 14px; padding-top: 14px; line-height: 1.9;
+  }
+
+  .drill-box {
+    border-radius: 10px; padding: 14px 18px; margin: 8px 0;
+    background: #f8fafd; border: 2px dashed #c8d8ec;
+  }
+  .drill-title { font-weight: 700; color: #6b7a8d; font-size: 13px; margin-bottom: 6px; }
+  .drill-list { color: #1a1a2e; line-height: 2.1; font-size: 14px; }
+  .drill-zh { color: #8a97a8; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  TCF Canada — Guide de l'oral CLB7
+  <span>针对口语三个任务的语法学习资料</span>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('t1')">任务一 — 时态</button>
+  <button class="nav-btn" onclick="showSection('t2')">任务二 — 提问</button>
+  <button class="nav-btn" onclick="showSection('t3')">任务三 — 论点</button>
+</div>
+
+<div class="container">
+
+<!-- ========= SECTION 1 ========= -->
+<div class="section active" id="t1">
+
+  <div class="tense-tabs">
+    <button class="tense-tab active" onclick="showTense('pron')">📢 发音总规则</button>
+    <button class="tense-tab" onclick="showTense('pres')">现在时</button>
+    <button class="tense-tab" onclick="showTense('pc')">复合过去时</button>
+    <button class="tense-tab" onclick="showTense('imp')">未完成过去时</button>
+    <button class="tense-tab" onclick="showTense('contrast')">时态对比</button>
+    <button class="tense-tab" onclick="showTense('fut')">将来时</button>
+  </div>
+
+  <!-- PRONUNCIATION -->
+  <div class="tense-panel active" id="pron">
+    <div class="card">
+      <div class="card-title">法语时态发音总规则</div>
+      <div class="card-subtitle">掌握这些规则，变位表中哪些字母发音、哪些不发音一目了然</div>
+
+      <div class="section-header">词尾不发音规则（最重要）</div>
+      <div class="pron-box">
+        <div class="pron-rule">
+          <div class="pron-label"><span class="pron-badge pron-silent">不发音</span> -ent</div>
+          <div class="pron-content">第三人称复数词尾 <strong>-ent 完全不发音</strong>，这是最常见的陷阱。<br>
+          ils parlent <span class="pron-ipa">[il paʁl]</span> = il parle <span class="pron-ipa">[il paʁl]</span> — 发音完全一样！<br>
+          ils finissent <span class="pron-ipa">[il finiss]</span> / ils parlaient <span class="pron-ipa">[il paʁlɛ]</span> = je parlais</div>
+        </div>
+        <div class="pron-rule">
+          <div class="pron-label"><span class="pron-badge pron-silent">不发音</span> -es / -e</div>
+          <div class="pron-content">单数词尾 -e 和 -es 不发音，但会让前面的辅音发出来。<br>
+          tu parles <span class="pron-ipa">[ty paʁl]</span> / je parle <span class="pron-ipa">[ʒə paʁl]</span></div>
+        </div>
+        <div class="pron-rule">
+          <div class="pron-label"><span class="pron-badge pron-silent">不发音</span> -s 结尾</div>
+          <div class="pron-content">词尾 -s 单独出现时不发音（连读除外）。<br>
+          tu parles, ils <span class="pron-ipa">[il]</span>（s不发音）</div>
+        </div>
+        <div class="pron-rule">
+          <div class="pron-label"><span class="pron-badge pron-silent">不发音</span> -d / -t 结尾</div>
+          <div class="pron-content">词尾辅音 d、t 通常不发音（连读时 t 发 /t/）。<br>
+          il prend <span class="pron-ipa">[il pʁɑ̃]</span> / il vend <span class="pron-ipa">[il vɑ̃]</span> / il fait <span class="pron-ipa">[il fɛ]</span></div>
+        </div>
+      </div>
+
+      <div class="section-header">连读规则（Liaison）</div>
+      <div class="pron-box">
+        <div class="pron-rule">
+          <div class="pron-label"><span class="pron-badge pron-liaison">连读</span> ils/elles + 元音</div>
+          <div class="pron-content">ils/elles 后接元音开头的动词，s 连读发 /z/。<br>
+          ils ont <span class="pron-ipa">[il‿zɔ̃]</span> / ils aiment <span class="pron-ipa">[il‿zɛm]</span></div>
+        </div>
+        <div class="pron-rule">
+          <div class="pron-label"><span class="pron-badge pron-liaison">连读</span> on/nous/vous</div>
+          <div class="pron-content">on a <span class="pron-ipa">[ɔ̃‿na]</span> / nous avons <span class="pron-ipa">[nu‿zavɔ̃]</span> / vous avez <span class="pron-ipa">[vu‿zave]</span></div>
+        </div>
+        <div class="pron-rule">
+          <div class="pron-label"><span class="pron-badge pron-liaison">连读</span> c'est + 元音</div>
+          <div class="pron-content">c'est important <span class="pron-ipa">[sɛ‿tɛ̃pɔʁtɑ̃]</span> / c'est évident <span class="pron-ipa">[sɛ‿tevidɑ̃]</span></div>
+        </div>
+      </div>
+
+      <div class="section-header">各时态词尾发音对比</div>
+      <div class="pron-box">
+        <div class="pron-rule">
+          <div class="pron-label">现在时</div>
+          <div class="pron-content">
+            je parle <span class="pron-ipa">[paʁl]</span> / tu parles <span class="pron-ipa">[paʁl]</span> / il parle <span class="pron-ipa">[paʁl]</span> → <strong>三个发音一样！</strong><br>
+            nous parlons <span class="pron-ipa">[paʁlɔ̃]</span> / vous parlez <span class="pron-ipa">[paʁle]</span> / ils parlent <span class="pron-ipa">[paʁl]</span> → <strong>-ent 不发音</strong>
+          </div>
+        </div>
+        <div class="pron-rule">
+          <div class="pron-label">复合过去时</div>
+          <div class="pron-content">
+            过去分词 -é 发 <span class="pron-ipa">[e]</span>：parlé <span class="pron-ipa">[paʁle]</span><br>
+            过去分词 -i 发 <span class="pron-ipa">[i]</span>：fini <span class="pron-ipa">[fini]</span> / pris <span class="pron-ipa">[pʁi]</span>（s不发音）<br>
+            过去分词 -u 发 <span class="pron-ipa">[y]</span>：eu <span class="pron-ipa">[y]</span> / pu <span class="pron-ipa">[py]</span> / voulu <span class="pron-ipa">[vuly]</span>
+          </div>
+        </div>
+        <div class="pron-rule">
+          <div class="pron-label">未完成过去时</div>
+          <div class="pron-content">
+            -ais / -ait 发 <span class="pron-ipa">[ɛ]</span>（同"è"）：parlais <span class="pron-ipa">[paʁlɛ]</span><br>
+            <strong>-aient 的 -ent 不发音</strong>：parlaient <span class="pron-ipa">[paʁlɛ]</span> = parlais = parlait → <strong>三个完全一样！</strong><br>
+            -ions <span class="pron-ipa">[jɔ̃]</span> / -iez <span class="pron-ipa">[je]</span>：parlions <span class="pron-ipa">[paʁljɔ̃]</span>
+          </div>
+        </div>
+        <div class="pron-rule">
+          <div class="pron-label">条件式</div>
+          <div class="pron-content">
+            词尾同 imparfait：-rais/-rait <span class="pron-ipa">[ʁɛ]</span> / -raient <span class="pron-ipa">[ʁɛ]</span>（-ent 不发音）<br>
+            parlerais <span class="pron-ipa">[paʁləʁɛ]</span> = parlerait = parleraient → <strong>三个完全一样！</strong>
+          </div>
+        </div>
+        <div class="pron-rule">
+          <div class="pron-label">虚拟式</div>
+          <div class="pron-content">
+            que je parle / que tu parles / qu'il parle / qu'ils parlent → <strong>四个发音全部一样：</strong><span class="pron-ipa">[paʁl]</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box"><strong>总结口诀：</strong> 法语词尾 -e、-es、-ent、-s（非连读）基本不发音。记住这条，70%的发音问题自动解决。<br>唯一要发音的词尾：-ons <span class="pron-ipa">[ɔ̃]</span>、-ez <span class="pron-ipa">[e]</span>、-ai <span class="pron-ipa">[e]</span>、-as <span class="pron-ipa">[a]</span>、-a <span class="pron-ipa">[a]</span>。</div>
+    </div>
+  </div>
+
+  <!-- PRÉSENT -->
+  <div class="tense-panel" id="pres">
+    <div class="card">
+      <div class="card-title">现在时 — Présent</div>
+      <div class="card-subtitle">任务一核心：描述现在的状态、工作、生活</div>
+
+      <div class="section-header">规则动词变位（-er 类）</div>
+      <div class="conj-grid">
+        <div class="conj-row"><span class="pronoun">je</span><span class="form">parle <span class="pron-badge pron-silent">-e 不发音</span></span></div>
+        <div class="conj-row"><span class="pronoun">nous</span><span class="form">parlons <span class="pron-badge pron-note">-ons 发[ɔ̃]</span></span></div>
+        <div class="conj-row"><span class="pronoun">tu</span><span class="form">parles <span class="pron-badge pron-silent">-es 不发音</span></span></div>
+        <div class="conj-row"><span class="pronoun">vous</span><span class="form">parlez <span class="pron-badge pron-note">-ez 发[e]</span></span></div>
+        <div class="conj-row"><span class="pronoun">il/elle</span><span class="form">parle <span class="pron-badge pron-silent">-e 不发音</span></span></div>
+        <div class="conj-row"><span class="pronoun">ils/elles</span><span class="form">parlent <span class="pron-badge pron-silent">-ent 不发音！</span></span></div>
+      </div>
+      <div class="warning-box">⚠️ je parle / tu parles / il parle / ils parlent → 四个发音全部一样：<span class="pron-ipa">[paʁl]</span>。写法不同，说出来完全一样！</div>
+
+      <div class="section-header">高频不规则动词</div>
+      <div class="irreg-grid">
+        <div class="irreg-card"><div class="irreg-inf">être</div><div class="irreg-forms">je suis / tu es<br>il est / nous sommes<br>vous êtes / ils sont</div></div>
+        <div class="irreg-card"><div class="irreg-inf">avoir</div><div class="irreg-forms">j'ai / tu as<br>il a / nous avons<br>vous avez / ils ont</div></div>
+        <div class="irreg-card"><div class="irreg-inf">aller</div><div class="irreg-forms">je vais / tu vas<br>il va / nous allons<br>vous allez / ils vont</div></div>
+        <div class="irreg-card"><div class="irreg-inf">faire</div><div class="irreg-forms">je fais / tu fais<br>il fait / nous faisons<br>vous faites / ils font</div></div>
+        <div class="irreg-card"><div class="irreg-inf">venir</div><div class="irreg-forms">je viens / tu viens<br>il vient / nous venons<br>vous venez / ils viennent</div></div>
+        <div class="irreg-card"><div class="irreg-inf">pouvoir</div><div class="irreg-forms">je peux / tu peux<br>il peut / nous pouvons<br>vous pouvez / ils peuvent</div></div>
+        <div class="irreg-card"><div class="irreg-inf">vouloir</div><div class="irreg-forms">je veux / tu veux<br>il veut / nous voulons<br>vous voulez / ils veulent</div></div>
+        <div class="irreg-card"><div class="irreg-inf">savoir</div><div class="irreg-forms">je sais / tu sais<br>il sait / nous savons<br>vous savez / ils savent</div></div>
+        <div class="irreg-card"><div class="irreg-inf">prendre</div><div class="irreg-forms">je prends / tu prends<br>il prend / nous prenons<br>vous prenez / ils prennent</div></div>
+      </div>
+
+      <div class="section-header">任务一例句（现在时）</div>
+      <ul class="example-list">
+        <li><span class="fr">Je travaille actuellement dans le secteur de l'informatique.</span><span class="zh">我目前在信息技术领域工作。</span><span class="pron-tip">travaille → [tʁavaj]，词尾 -ille 不发音</span></li>
+        <li><span class="fr">Je vis à Montréal depuis deux ans.</span><span class="zh">我在蒙特利尔住了两年了。（depuis + 现在时！不用过去时！）</span></li>
+        <li><span class="fr">En ce moment, je cherche un emploi dans mon domaine.</span><span class="zh">目前我正在我的专业领域找工作。</span></li>
+        <li><span class="fr">Je m'occupe principalement de la gestion de projets.</span><span class="zh">我主要负责项目管理。</span></li>
+        <li><span class="fr">Je parle trois langues : le mandarin, le français et l'anglais.</span><span class="zh">我会说三种语言：普通话、法语和英语。</span></li>
+        <li><span class="fr">J'ai une famille de quatre personnes et nous habitons en banlieue.</span><span class="zh">我有一个四口之家，我们住在郊区。</span></li>
+        <li><span class="fr">Ce qui me passionne, c'est la technologie et l'innovation.</span><span class="zh">让我充满热情的是技术和创新。（用 ce qui 开头显示语法多样性）</span></li>
+        <li><span class="fr">Je suis en train de m'adapter à la culture québécoise.</span><span class="zh">我正在适应魁北克的文化。（être en train de = 正在进行）</span></li>
+        <li><span class="fr">Mon domaine de compétence, c'est la comptabilité et la finance.</span><span class="zh">我的专业领域是会计和金融。</span></li>
+        <li><span class="fr">Je connais bien le marché local, car j'y travaille depuis six mois.</span><span class="zh">我对本地市场很熟悉，因为我已经在这里工作了六个月。</span></li>
+      </ul>
+      <div class="warning-box">⚠️ depuis + 现在时 = 从过去持续到现在。"Je vis ici depuis 2022." ✓ 千万不要说 "j'ai vécu" ！</div>
+    </div>
+  </div>
+
+  <!-- PASSÉ COMPOSÉ -->
+  <div class="tense-panel" id="pc">
+    <div class="card">
+      <div class="card-title">复合过去时 — Passé composé</div>
+      <div class="card-subtitle">说具体发生过的事：做了什么、去了哪里、完成了什么</div>
+      <div class="highlight-box">结构：avoir / être（现在时变位）+ 过去分词<br>发音：过去分词 -é 发 [e]，-i 发 [i]，-u 发 [y]，词尾辅音 t/s 不发音</div>
+
+      <div class="section-header">用 avoir 变位（绝大多数动词）</div>
+      <div class="conj-grid">
+        <div class="conj-row"><span class="pronoun">j'</span><span class="form">ai parlé <span class="pron-badge pron-note">[e paʁle]</span></span></div>
+        <div class="conj-row"><span class="pronoun">nous</span><span class="form">avons parlé</span></div>
+        <div class="conj-row"><span class="pronoun">tu</span><span class="form">as parlé</span></div>
+        <div class="conj-row"><span class="pronoun">vous</span><span class="form">avez parlé</span></div>
+        <div class="conj-row"><span class="pronoun">il/elle</span><span class="form">a parlé</span></div>
+        <div class="conj-row"><span class="pronoun">ils/elles</span><span class="form">ont parlé <span class="pron-badge pron-liaison">ont连读[ɔ̃t]</span></span></div>
+      </div>
+
+      <div class="tip-box"><strong>必用 être 的动词（过去分词要配合主语性数变化）：</strong><br>
+      aller / venir / arriver / partir / entrer / sortir / naître / mourir / monter / descendre / rester / tomber / retourner + 所有代词动词（se lever, se marier…）<br><br>
+      il est allé / elle est allée / ils sont allés / elles sont allées</div>
+
+      <div class="section-header">不规则过去分词（必背）</div>
+      <div class="irreg-grid">
+        <div class="irreg-card"><div class="irreg-inf">être</div><div class="irreg-forms">→ été <span class="pron-ipa">[ete]</span></div></div>
+        <div class="irreg-card"><div class="irreg-inf">avoir</div><div class="irreg-forms">→ eu <span class="pron-ipa">[y]</span></div></div>
+        <div class="irreg-card"><div class="irreg-inf">faire</div><div class="irreg-forms">→ fait <span class="pron-ipa">[fɛ]</span> t不发音</div></div>
+        <div class="irreg-card"><div class="irreg-inf">dire</div><div class="irreg-forms">→ dit <span class="pron-ipa">[di]</span> t不发音</div></div>
+        <div class="irreg-card"><div class="irreg-inf">prendre</div><div class="irreg-forms">→ pris <span class="pron-ipa">[pʁi]</span> s不发音</div></div>
+        <div class="irreg-card"><div class="irreg-inf">voir</div><div class="irreg-forms">→ vu <span class="pron-ipa">[vy]</span></div></div>
+        <div class="irreg-card"><div class="irreg-inf">venir</div><div class="irreg-forms">→ venu <span class="pron-ipa">[vəny]</span><br>avec être</div></div>
+        <div class="irreg-card"><div class="irreg-inf">pouvoir</div><div class="irreg-forms">→ pu <span class="pron-ipa">[py]</span></div></div>
+        <div class="irreg-card"><div class="irreg-inf">vouloir</div><div class="irreg-forms">→ voulu <span class="pron-ipa">[vuly]</span></div></div>
+        <div class="irreg-card"><div class="irreg-inf">savoir</div><div class="irreg-forms">→ su <span class="pron-ipa">[sy]</span></div></div>
+        <div class="irreg-card"><div class="irreg-inf">mettre</div><div class="irreg-forms">→ mis <span class="pron-ipa">[mi]</span></div></div>
+        <div class="irreg-card"><div class="irreg-inf">écrire</div><div class="irreg-forms">→ écrit <span class="pron-ipa">[ekʁi]</span></div></div>
+      </div>
+
+      <div class="section-header">任务一例句（复合过去时）</div>
+      <ul class="example-list">
+        <li><span class="fr">J'ai obtenu mon diplôme d'ingénieur en 2018.</span><span class="zh">我在2018年获得了工程师学位。</span><span class="pron-tip">obtenu → [ɔbtəny]，-u结尾发[y]</span></li>
+        <li><span class="fr">Je suis arrivé(e) au Canada il y a trois ans.</span><span class="zh">我三年前来到了加拿大。（avec être！）</span><span class="pron-tip">arrivé 加 -e 表示女性，但发音不变</span></li>
+        <li><span class="fr">J'ai travaillé pendant sept ans dans une multinationale.</span><span class="zh">我在一家跨国公司工作了七年。</span></li>
+        <li><span class="fr">J'ai décidé de changer de carrière parce que je voulais évoluer.</span><span class="zh">我决定转行，因为我想要进步。</span></li>
+        <li><span class="fr">J'ai suivi une formation en français pendant six mois.</span><span class="zh">我参加了六个月的法语培训。</span></li>
+        <li><span class="fr">Nous avons déménagé à Montréal pour des raisons professionnelles.</span><span class="zh">我们因为职业原因搬到了蒙特利尔。</span></li>
+        <li><span class="fr">J'ai rencontré beaucoup de difficultés au début, mais j'ai réussi à m'adapter.</span><span class="zh">一开始我遇到了很多困难，但我成功地适应了。</span></li>
+        <li><span class="fr">J'ai participé à plusieurs projets internationaux avant de venir ici.</span><span class="zh">在来这里之前，我参与了多个国际项目。</span></li>
+        <li><span class="fr">J'ai fait mes études à l'université pendant quatre ans.</span><span class="zh">我在大学学习了四年。</span></li>
+        <li><span class="fr">J'ai dû apprendre le français en peu de temps, ce qui n'a pas été facile.</span><span class="zh">我不得不在短时间内学习法语，这并不容易。</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- IMPARFAIT -->
+  <div class="tense-panel" id="imp">
+    <div class="card">
+      <div class="card-title">未完成过去时 — Imparfait</div>
+      <div class="card-subtitle">说过去的习惯、持续状态、背景描述、感受</div>
+      <div class="highlight-box">构成：nous 现在时词干 + -ais/-ais/-ait/-ions/-iez/-aient<br>发音：-ais/-ait/-aient 全部发 [ɛ]（同"è"）— -aient 的 -ent 不发音！</div>
+
+      <div class="section-header">变位示例（parler）</div>
+      <div class="conj-grid">
+        <div class="conj-row"><span class="pronoun">je</span><span class="form">parlais <span class="pron-badge pron-note">[paʁlɛ]</span></span></div>
+        <div class="conj-row"><span class="pronoun">nous</span><span class="form">parlions <span class="pron-badge pron-note">[paʁljɔ̃]</span></span></div>
+        <div class="conj-row"><span class="pronoun">tu</span><span class="form">parlais <span class="pron-badge pron-note">[paʁlɛ]</span></span></div>
+        <div class="conj-row"><span class="pronoun">vous</span><span class="form">parliez <span class="pron-badge pron-note">[paʁlje]</span></span></div>
+        <div class="conj-row"><span class="pronoun">il/elle</span><span class="form">parlait <span class="pron-badge pron-note">[paʁlɛ]</span></span></div>
+        <div class="conj-row"><span class="pronoun">ils/elles</span><span class="form">parlaient <span class="pron-badge pron-silent">-aient=[ɛ] ent不发音！</span></span></div>
+      </div>
+      <div class="warning-box">⚠️ je parlais / il parlait / ils parlaient → 三个发音完全一样 [paʁlɛ]！<br>唯一不规则：être → j'étais [etɛ] / il était / ils étaient（-ent 不发音）</div>
+
+      <div class="section-header">什么时候用 imparfait？</div>
+      <div class="tip-box">
+        <strong>口诀：</strong><br>
+        ✓ 过去有"时间段"、"重复"、"习惯" → imparfait（每天/经常/以前）<br>
+        ✓ 描述"背景"、"状态"、"感受"、"认知" → imparfait<br>
+        ✓ 有"具体事件"、"次数"、"开始/结束"、"行动" → passé composé
+      </div>
+
+      <div class="section-header">任务一例句（未完成过去时）</div>
+      <ul class="example-list">
+        <li><span class="fr">Quand j'étais en Chine, je travaillais dans une grande entreprise.</span><span class="zh">我在中国的时候，在一家大公司工作。（背景+状态，两个 imparfait）</span><span class="pron-tip">étais [etɛ] / travaillais [tʁavajɛ]</span></li>
+        <li><span class="fr">Avant, je ne parlais pas français du tout.</span><span class="zh">以前，我一点法语都不会说。</span></li>
+        <li><span class="fr">À l'époque, ma vie était très différente.</span><span class="zh">那时候，我的生活完全不一样。</span></li>
+        <li><span class="fr">Je rêvais de vivre au Canada depuis mon enfance.</span><span class="zh">我从小就梦想住在加拿大。</span></li>
+        <li><span class="fr">J'avais une bonne situation, mais je cherchais autre chose.</span><span class="zh">我有一份好工作，但我在寻找别的东西。</span></li>
+        <li><span class="fr">Le marché du travail était difficile dans mon pays à cette époque.</span><span class="zh">那个时期，我们国家的就业市场很困难。</span></li>
+        <li><span class="fr">Je passais beaucoup de temps avec ma famille le week-end.</span><span class="zh">我以前周末经常和家人在一起。（重复性习惯）</span></li>
+        <li><span class="fr">Je ne savais pas que l'intégration serait si difficile.</span><span class="zh">我不知道融入会这么困难。（过去的认知状态）</span></li>
+        <li><span class="fr">Mes collègues étaient sympathiques, mais l'ambiance était stressante.</span><span class="zh">我的同事很友好，但氛围很有压力。</span></li>
+        <li><span class="fr">Je voulais progresser, mais les opportunités étaient limitées.</span><span class="zh">我想要进步，但机会很有限。</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CONTRAST -->
+  <div class="tense-panel" id="contrast">
+    <div class="card">
+      <div class="card-title">时态对比 — 同时使用才是真功夫</div>
+      <div class="highlight-box">imparfait = 舞台背景（持续、状态、习惯）<br>passé composé = 演员登场（具体事件、改变、行动）</div>
+
+      <div class="section-header">三段式答题模板（任务一黄金公式）</div>
+      <div class="structure-flow">
+        <div class="flow-step"><div class="flow-num">1</div><div class="flow-content"><div class="flow-label">过去背景 — imparfait</div><div class="flow-detail">Avant… / À l'époque… / Quand j'étais… → 描述当时的状态和习惯</div></div></div>
+        <div class="flow-step"><div class="flow-num">2</div><div class="flow-content"><div class="flow-label">转折事件 — passé composé</div><div class="flow-detail">Puis… / Alors… / C'est pourquoi… → 说发生了什么、做了什么决定</div></div></div>
+        <div class="flow-step"><div class="flow-num">3</div><div class="flow-content"><div class="flow-label">现在状态 — présent</div><div class="flow-detail">Aujourd'hui… / Maintenant… / En ce moment… → 说现在在做什么、有什么计划</div></div></div>
+      </div>
+
+      <div class="section-header">完整示范（任务一：Pourquoi avez-vous choisi de venir au Canada ?）</div>
+      <div class="full-example">
+        <span class="ann">背景 imparfait</span> Avant de venir ici, je <strong>travaillais</strong> comme comptable à Shanghai depuis cinq ans. La situation <strong>était</strong> stable, mais je <strong>cherchais</strong> de nouvelles perspectives pour ma famille et pour moi.<br><br>
+        <span class="ann-g">事件 passé composé</span> J'<strong>ai commencé</strong> à me renseigner sur l'immigration canadienne et j'<strong>ai découvert</strong> le programme d'immigration économique. J'<strong>ai passé</strong> le TCF Canada et j'<strong>ai obtenu</strong> un score suffisant. Ensuite, j'<strong>ai déposé</strong> ma candidature et j'<strong>ai reçu</strong> ma résidence permanente il y a deux ans.<br><br>
+        <span class="ann">现在 présent</span> Aujourd'hui, je <strong>suis</strong> très content(e) de cette décision. Je <strong>travaille</strong> dans une petite entreprise locale et je <strong>continue</strong> à améliorer mon français chaque jour.
+        <div class="full-zh">背景：来这里之前，我在上海做了五年会计。情况很稳定，但我在为家人和自己寻找新的发展空间。事件：我开始了解加拿大移民政策，并发现了经济移民项目。我参加了TCF Canada并取得了足够的分数。之后我提交了申请，两年前获得了永久居留权。现在：今天，我非常高兴做出了这个决定。我在一家小型本地企业工作，每天继续提高我的法语。</div>
+      </div>
+
+      <div class="section-header">更多对比练习例句</div>
+      <ul class="example-list">
+        <li><span class="fr">Je n'<span style="color:#185FA5;font-weight:700">avais</span> pas de famille à Montréal, alors j'<span style="color:#1D9E75;font-weight:700">ai dû</span> tout construire from scratch.</span><span class="zh">我在蒙特利尔没有家人，所以我不得不从零开始建立一切。</span></li>
+        <li><span class="fr">Je <span style="color:#185FA5;font-weight:700">voulais</span> travailler dans mon domaine, mais j'<span style="color:#1D9E75;font-weight:700">ai dû</span> d'abord faire reconnaître mes diplômes.</span><span class="zh">我想在自己的专业领域工作，但我首先不得不进行学历认证。</span></li>
+        <li><span class="fr">Quand je <span style="color:#1D9E75;font-weight:700">suis arrivé(e)</span>, je ne <span style="color:#185FA5;font-weight:700">parlais</span> pas bien français, donc j'<span style="color:#1D9E75;font-weight:700">ai suivi</span> des cours intensifs.</span><span class="zh">当我到达时，我的法语说得不好，所以我参加了强化课程。</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FUTUR -->
+  <div class="tense-panel" id="fut">
+    <div class="card">
+      <div class="card-title">将来时 — Futur proche &amp; Futur simple</div>
+      <div class="card-subtitle">任务一结尾说计划和目标时用</div>
+      <div class="highlight-box">口语首选：Futur proche = aller（现在时）+ infinitif，自然流畅。<br>Futur simple 词尾：-ai/-as/-a/-ons/-ez/-ont — 注意 -ons/-ez/-ont 都要发音！</div>
+
+      <div class="conj-grid">
+        <div class="conj-row"><span class="pronoun">je</span><span class="form">vais travailler</span></div>
+        <div class="conj-row"><span class="pronoun">nous</span><span class="form">allons travailler</span></div>
+        <div class="conj-row"><span class="pronoun">tu</span><span class="form">vas travailler</span></div>
+        <div class="conj-row"><span class="pronoun">vous</span><span class="form">allez travailler</span></div>
+        <div class="conj-row"><span class="pronoun">il/elle</span><span class="form">va travailler</span></div>
+        <div class="conj-row"><span class="pronoun">ils/elles</span><span class="form">vont travailler</span></div>
+      </div>
+
+      <div class="section-header">不规则 futur simple 词干（必背）</div>
+      <div class="irreg-grid">
+        <div class="irreg-card"><div class="irreg-inf">être</div><div class="irreg-forms">→ ser- → je serai</div></div>
+        <div class="irreg-card"><div class="irreg-inf">avoir</div><div class="irreg-forms">→ aur- → j'aurai</div></div>
+        <div class="irreg-card"><div class="irreg-inf">aller</div><div class="irreg-forms">→ ir- → j'irai</div></div>
+        <div class="irreg-card"><div class="irreg-inf">faire</div><div class="irreg-forms">→ fer- → je ferai</div></div>
+        <div class="irreg-card"><div class="irreg-inf">venir</div><div class="irreg-forms">→ viendr- → je viendrai</div></div>
+        <div class="irreg-card"><div class="irreg-inf">pouvoir</div><div class="irreg-forms">→ pourr- → je pourrai</div></div>
+      </div>
+
+      <ul class="example-list">
+        <li><span class="fr">Dans les prochains mois, je vais chercher un emploi dans mon domaine.</span><span class="zh">在接下来几个月，我打算在我的专业领域找工作。</span></li>
+        <li><span class="fr">À terme, je voudrais m'installer définitivement ici et devenir citoyen(ne) canadien(ne).</span><span class="zh">从长远来看，我希望在这里永久定居，成为加拿大公民。</span></li>
+        <li><span class="fr">Je pense que je vais continuer à améliorer mon français.</span><span class="zh">我想我会继续提高我的法语。</span></li>
+        <li><span class="fr">Mon objectif est de trouver un poste à responsabilités d'ici un an.</span><span class="zh">我的目标是在一年内找到一个有责任的职位。</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ========= SECTION 2 ========= -->
+<div class="section" id="t2">
+  <div class="card">
+    <div class="card-title">任务二 — 你来提问 <span class="badge badge-amber">5分30秒 | 2分钟准备</span></div>
+    <div class="card-subtitle">你是提问者，考官扮演一个角色。目标：提出8-10个问题，句型结构多样，覆盖不同维度。</div>
+    <div class="highlight-box">评分关键：问题结构要多样！全用 est-ce que 会被降分。至少混合 3 种不同结构。</div>
+  </div>
+
+  <div class="section-header">5种问句结构详解</div>
+
+  <div class="q-structure">
+    <div class="q-label">结构 1 — 疑问词 + 倒装 <span class="badge badge-green">加分项</span></div>
+    <div class="q-pattern">Combien de… / Depuis quand… / Dans quel cas…</div>
+    <div class="q-examples">
+      Combien d'heures de cours proposez-vous par semaine ? <span class="q-zh">每周提供多少小时的课程？</span><br>
+      Depuis quand votre association existe-t-elle ? <span class="q-zh">您的协会成立多久了？</span><br>
+      Dans quel cas peut-on bénéficier d'une réduction ? <span class="q-zh">在什么情况下可以享受折扣？</span><br>
+      À quel moment les résultats sont-ils disponibles ? <span class="q-zh">结果什么时候可以拿到？</span><br>
+      Combien de personnes avez-vous aidées jusqu'à présent ? <span class="q-zh">您到目前为止帮助了多少人？</span>
+    </div>
+  </div>
+
+  <div class="q-structure">
+    <div class="q-label">结构 2 — 条件式礼貌提问 <span class="badge badge-green">加分项</span></div>
+    <div class="q-pattern">Serait-il possible de… / Pourriez-vous me dire… / Y aurait-il…</div>
+    <div class="q-examples">
+      Serait-il possible d'avoir un horaire flexible ? <span class="q-zh">有可能安排灵活的时间吗？</span><br>
+      Pourriez-vous me donner plus de détails sur les tarifs ? <span class="q-zh">您能给我更多关于费用的详情吗？</span><br>
+      Y aurait-il des places disponibles le week-end ? <span class="q-zh">周末还有名额吗？</span><br>
+      Pourriez-vous m'expliquer comment fonctionne le processus d'inscription ? <span class="q-zh">您能解释一下注册流程是怎么运作的吗？</span><br>
+      Serait-il possible de visiter les locaux avant de s'inscrire ? <span class="q-zh">注册之前可以参观一下场所吗？</span>
+    </div>
+  </div>
+
+  <div class="q-structure">
+    <div class="q-label">结构 3 — Est-ce que <span class="badge badge-blue">基础</span></div>
+    <div class="q-pattern">Est-ce que + sujet + verbe ?</div>
+    <div class="q-examples">
+      Est-ce que les cours sont disponibles en ligne ? <span class="q-zh">课程可以在线上进行吗？</span><br>
+      Est-ce qu'il y a des frais d'inscription ? <span class="q-zh">有注册费吗？</span><br>
+      Est-ce que je dois apporter des documents particuliers ? <span class="q-zh">我需要带什么特别的文件吗？</span><br>
+      Est-ce que vous proposez un essai gratuit ? <span class="q-zh">你们提供免费试用吗？</span><br>
+      Est-ce qu'on peut interrompre et reprendre le service plus tard ? <span class="q-zh">可以中断然后之后再续吗？</span>
+    </div>
+  </div>
+
+  <div class="q-structure">
+    <div class="q-label">结构 4 — 疑问词 + est-ce que <span class="badge badge-blue">基础</span></div>
+    <div class="q-pattern">Quand / Où / Comment / Qui / Pourquoi + est-ce que…</div>
+    <div class="q-examples">
+      Comment est-ce que je peux m'inscrire ? <span class="q-zh">我怎么可以注册？</span><br>
+      Où est-ce que les séances ont lieu ? <span class="q-zh">活动在哪里举行？</span><br>
+      Pourquoi est-ce que vous avez choisi cette approche ? <span class="q-zh">您为什么选择了这种方式？</span><br>
+      Quand est-ce que les résultats seront disponibles ? <span class="q-zh">结果什么时候可以查到？</span><br>
+      Qui est-ce que je dois contacter en cas de problème ? <span class="q-zh">出现问题我应该联系谁？</span>
+    </div>
+  </div>
+
+  <div class="q-structure">
+    <div class="q-label">结构 5 — 简单倒装短句</div>
+    <div class="q-pattern">Proposez-vous… / Y a-t-il… / Acceptez-vous…</div>
+    <div class="q-examples">
+      Proposez-vous un suivi personnalisé ? <span class="q-zh">您提供个性化的跟进服务吗？</span><br>
+      Y a-t-il un tarif étudiant ou familial ? <span class="q-zh">有学生价或家庭价吗？</span><br>
+      Acceptez-vous les paiements échelonnés ? <span class="q-zh">你们接受分期付款吗？</span><br>
+      Disposez-vous de matériel en plusieurs langues ? <span class="q-zh">您有多语言资料吗？</span>
+    </div>
+  </div>
+
+  <div class="section-header">2分钟准备：6个维度快速想问题</div>
+  <div class="structure-flow">
+    <div class="flow-step"><div class="flow-num">⏰</div><div class="flow-content"><div class="flow-label">时间</div><div class="flow-detail">Quels sont les horaires ? / Depuis combien de temps… ? / Combien de temps dure… ?</div></div></div>
+    <div class="flow-step"><div class="flow-num">💰</div><div class="flow-content"><div class="flow-label">费用</div><div class="flow-detail">Quel est le tarif ? / Y a-t-il des frais supplémentaires ? / Serait-il possible d'avoir une réduction ?</div></div></div>
+    <div class="flow-step"><div class="flow-num">📋</div><div class="flow-content"><div class="flow-label">条件资格</div><div class="flow-detail">Quelles sont les conditions requises ? / Faut-il apporter des documents ? / Y a-t-il des prérequis ?</div></div></div>
+    <div class="flow-step"><div class="flow-num">📍</div><div class="flow-content"><div class="flow-label">地点方式</div><div class="flow-detail">Où cela se passe-t-il ? / Est-ce disponible en ligne ? / Comment se déroule… ?</div></div></div>
+    <div class="flow-step"><div class="flow-num">👤</div><div class="flow-content"><div class="flow-label">人员经验</div><div class="flow-detail">Qui s'occupe de… ? / Quelle est votre expérience ? / Combien de personnes ont déjà utilisé ce service ?</div></div></div>
+    <div class="flow-step"><div class="flow-num">🔮</div><div class="flow-content"><div class="flow-label">后续计划</div><div class="flow-detail">Que se passe-t-il après… ? / Y a-t-il un suivi ? / Pourriez-vous me recommander… ?</div></div></div>
+  </div>
+
+  <div class="section-header">示范答题（话题：找人照顾宠物）</div>
+  <div class="full-example">
+    <em style="color:#6b7a8d;font-size:14px">情境：Je pars en vacances et vous proposez de garder mon chat. Je dois vous poser des questions.</em><br><br>
+    1. <strong>Depuis combien de temps</strong> vous occupez-vous d'animaux ? <span style="color:#6b7a8d;font-size:13px">（倒装）</span><br>
+    2. <strong>Est-ce que</strong> vous avez déjà gardé des chats auparavant ? <span style="color:#6b7a8d;font-size:13px">（est-ce que）</span><br>
+    3. <strong>Pourriez-vous me dire</strong> comment vous vous occuperiez de lui au quotidien ? <span style="color:#6b7a8d;font-size:13px">（条件式）</span><br>
+    4. <strong>Y a-t-il</strong> des animaux chez vous qui pourraient l'effrayer ? <span style="color:#6b7a8d;font-size:13px">（倒装短句）</span><br>
+    5. <strong>Combien de fois</strong> par jour le nourrissez-vous ? <span style="color:#6b7a8d;font-size:13px">（疑问词倒装）</span><br>
+    6. <strong>Serait-il possible</strong> de vous contacter en cas d'urgence la nuit ? <span style="color:#6b7a8d;font-size:13px">（条件式）</span><br>
+    7. <strong>Comment est-ce que</strong> vous réagissez si l'animal refuse de manger ? <span style="color:#6b7a8d;font-size:13px">（疑问词+est-ce que）</span><br>
+    8. <strong>Quel est</strong> votre tarif pour une semaine complète ? <span style="color:#6b7a8d;font-size:13px">（直接疑问）</span>
+    <div class="full-zh">1. 您照顾动物多久了？ 2. 您以前照顾过猫吗？ 3. 您能告诉我您每天怎么照顾它吗？ 4. 您家有可能让它害怕的动物吗？ 5. 您每天喂它几次？ 6. 晚上紧急情况下可以联系您吗？ 7. 如果动物不肯吃东西您怎么处理？ 8. 一周的费用是多少？</div>
+  </div>
+</div>
+
+<!-- ========= SECTION 3 ========= -->
+<div class="section" id="t3">
+  <div class="card">
+    <div class="card-title">任务三 — 表达观点 <span class="badge badge-blue">4分30秒 | 无准备</span></div>
+    <div class="card-subtitle">就社会话题发表立场并论证。需要撑满4分半，有逻辑，句子结构多样。这是CLB7最关键的任务。</div>
+    <div class="highlight-box">时间分配：立场30秒 → 论据一1分30秒 → 论据二1分30秒 → 让步转折30秒 → 结论30秒</div>
+  </div>
+
+  <div class="section-header">答题框架（5步骤）</div>
+  <div class="structure-flow">
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-content"><div class="flow-label">表明立场（30秒）</div><div class="flow-detail">直接说你支持还是反对，或者说这是一个复杂的问题，说明你的总体倾向。不要绕弯子。</div></div></div>
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-content"><div class="flow-label">论据一 + 解释 + 例子（1分30秒）</div><div class="flow-detail">说第一个理由 → 解释为什么这很重要 → 举一个具体例子或假设场景 → 小结这个论点</div></div></div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-content"><div class="flow-label">论据二 + 解释 + 例子（1分30秒）</div><div class="flow-detail">说第二个理由（可以是社会影响、个人经历、未来后果） → 解释 → 具体例子 → 小结</div></div></div>
+    <div class="flow-step"><div class="flow-num">4</div><div class="flow-content"><div class="flow-label">让步 + 坚持立场（30秒）</div><div class="flow-detail">承认对立面有一定道理（Certes…），然后说明为什么仍然坚持自己的立场。这是B2的标志句型！</div></div></div>
+    <div class="flow-step"><div class="flow-num">5</div><div class="flow-content"><div class="flow-label">结论（30秒）</div><div class="flow-detail">总结立场，表达一个期望或建议，用将来时或虚拟式结尾，显示语法多样性。</div></div></div>
+  </div>
+
+  <div class="section-header">句型库——按功能分类</div>
+
+  <div class="opinion-block ob-blue">
+    <div class="ob-title">① 表明立场（开头必用）</div>
+    <div class="ob-phrases">
+      <span>Je pense que…</span>
+      <span>J'estime que…</span>
+      <span>Il me semble que…</span>
+      <span>Je suis convaincu(e) que…</span>
+      <span>À mon avis…</span>
+      <span>Selon moi…</span>
+      <span>Ce qui me paraît essentiel, c'est que…</span>
+      <span>Je suis plutôt favorable à…</span>
+      <span>Je suis opposé(e) à l'idée que…</span>
+    </div>
+    <div class="ob-example">
+      Je pense que le télétravail représente une avancée majeure pour les travailleurs modernes. <span class="zh">我认为居家办公是现代工作者的一大进步。</span><br>
+      À mon avis, l'école obligatoire jusqu'à 18 ans serait bénéfique pour la société dans son ensemble. <span class="zh">在我看来，18岁之前义务教育对整个社会有益。</span>
+    </div>
+  </div>
+
+  <div class="opinion-block ob-green">
+    <div class="ob-title">② 引入论据和过渡</div>
+    <div class="ob-phrases">
+      <span>D'abord / Tout d'abord…</span>
+      <span>En premier lieu…</span>
+      <span>De plus…</span>
+      <span>Par ailleurs…</span>
+      <span>Ensuite…</span>
+      <span>En outre…</span>
+      <span>Il faut également souligner que…</span>
+      <span>Un autre aspect important est que…</span>
+    </div>
+    <div class="ob-example">
+      D'abord, le télétravail permet de réduire considérablement le temps passé dans les transports. <span class="zh">首先，居家办公可以大幅减少通勤时间。</span><br>
+      Par ailleurs, cette pratique contribue à réduire les émissions de CO2 liées aux déplacements quotidiens. <span class="zh">此外，这种做法有助于减少日常出行相关的二氧化碳排放。</span>
+    </div>
+  </div>
+
+  <div class="opinion-block ob-coral">
+    <div class="ob-title">③ 举例展开（把论据撑起来的关键！）</div>
+    <div class="ob-phrases">
+      <span>Par exemple…</span>
+      <span>Prenons le cas de…</span>
+      <span>C'est notamment le cas de…</span>
+      <span>On peut citer l'exemple de…</span>
+      <span>Imaginez une personne qui…</span>
+      <span>Dans mon expérience personnelle…</span>
+      <span>Il suffit de regarder…</span>
+      <span>Des études montrent que…</span>
+    </div>
+    <div class="ob-example">
+      Par exemple, une personne qui habite à une heure de son bureau peut économiser dix heures par semaine en travaillant chez elle. <span class="zh">例如，一个住在离公司一小时路程的人，通过居家办公每周可以节省十小时。</span><br>
+      Imaginez une famille monoparentale : le télétravail leur permet de mieux gérer les contraintes familiales sans sacrifier leur carrière. <span class="zh">想象一个单亲家庭：居家办公让他们在不牺牲职业的情况下更好地应对家庭压力。</span><br>
+      Dans mon expérience personnelle, j'ai constaté que la concentration est souvent meilleure à la maison qu'en open space. <span class="zh">根据我的个人经验，我发现在家的专注力往往比在开放式办公室更好。</span>
+    </div>
+  </div>
+
+  <div class="opinion-block ob-amber">
+    <div class="ob-title">④ 让步转折（B2标志性句型，必用！）</div>
+    <div class="ob-phrases">
+      <span>Certes… mais…</span>
+      <span>Il est vrai que… cependant…</span>
+      <span>Même si… je pense que…</span>
+      <span>Je comprends que… néanmoins…</span>
+      <span>On pourrait objecter que… toutefois…</span>
+      <span>Il ne faut pas nier que… mais…</span>
+      <span>Bien que + subjonctif…</span>
+    </div>
+    <div class="ob-example">
+      Certes, certaines personnes peuvent se sentir isolées en travaillant de chez elles. Cependant, des outils numériques permettent aujourd'hui de maintenir un lien social fort. <span class="zh">诚然，有些人在家工作可能会感到孤立。然而，今天的数字工具可以维持强大的社交联系。</span><br>
+      Il est vrai que le présentiel favorise la créativité collective. Néanmoins, je pense que ces avantages ne compensent pas les bénéfices du télétravail pour la qualité de vie. <span class="zh">诚然，面对面工作有利于集体创造力。尽管如此，我认为这些优势无法弥补居家办公对生活质量的好处。</span><br>
+      Bien que certains employeurs craignent une baisse de productivité, les chiffres montrent le contraire. <span class="zh">尽管一些雇主担心生产力下降，但数字显示的恰恰相反。（bien que + 虚拟式）</span>
+    </div>
+  </div>
+
+  <div class="opinion-block ob-purple">
+    <div class="ob-title">⑤ 结论 + 建议（结尾用）</div>
+    <div class="ob-phrases">
+      <span>En conclusion…</span>
+      <span>Pour conclure…</span>
+      <span>En définitive…</span>
+      <span>Il me semble donc que…</span>
+      <span>J'espère que…</span>
+      <span>Il serait souhaitable que + subj.</span>
+      <span>Il faudrait que + subj.</span>
+      <span>À l'avenir…</span>
+    </div>
+    <div class="ob-example">
+      En définitive, je reste convaincu(e) que le télétravail, bien encadré, représente un progrès pour notre société. Il serait souhaitable que les entreprises adoptent un modèle hybride qui combine présence et flexibilité. <span class="zh">总的来说，我仍然相信，在良好管理下，居家办公对我们的社会是一种进步。企业最好能采用结合出勤和灵活性的混合模式。</span>
+    </div>
+  </div>
+
+  <div class="section-header">完整示范答案 — 话题一（约4分30秒）</div>
+  <div class="full-example">
+    <em style="color:#6b7a8d;font-size:14px">话题：Pensez-vous que le télétravail est bénéfique pour les employés ?</em><br><br>
+    <span class="ann">立场</span> <strong>Je pense que</strong> le télétravail est globalement bénéfique pour les employés, même s'il présente certaines limites qu'il ne faut pas ignorer.<br><br>
+    <span class="ann">论据一</span> <strong>D'abord</strong>, le télétravail permet aux salariés de mieux concilier leur vie professionnelle et leur vie personnelle. <strong>Par exemple</strong>, une personne qui habite loin de son bureau peut économiser plusieurs heures de transport chaque jour. Ce temps gagné peut être consacré à la famille, aux loisirs, ou tout simplement au repos. <strong>Il faut également souligner que</strong> le stress lié aux transports bondés est une source d'épuisement important — en le supprimant, on améliore directement la qualité de vie des travailleurs.<br><br>
+    <span class="ann">论据二</span> <strong>De plus</strong>, de nombreuses études montrent que la productivité augmente souvent lorsqu'on travaille depuis chez soi. <strong>Dans mon expérience personnelle</strong>, je constate que la concentration est meilleure dans un environnement calme, sans les interruptions constantes d'un open space. <strong>Par ailleurs</strong>, le télétravail offre une plus grande autonomie, ce qui responsabilise les employés et peut renforcer leur motivation à long terme.<br><br>
+    <span class="ann">让步</span> <strong>Certes</strong>, certains travailleurs peuvent se sentir isolés. <strong>Il est vrai que</strong> le manque de contacts humains directs peut nuire à la cohésion d'équipe. <strong>Néanmoins</strong>, je pense que ces inconvénients peuvent être largement atténués grâce à des outils de communication modernes et à des rencontres régulières en présentiel.<br><br>
+    <span class="ann">结论</span> <strong>En définitive</strong>, je reste convaincu(e) que le télétravail, lorsqu'il est bien organisé, représente une avancée positive. <strong>Il serait souhaitable que</strong> les entreprises <strong>adoptent</strong> un modèle hybride qui permette à chacun de trouver l'équilibre qui lui convient le mieux.
+    <div class="full-zh">立场：我认为居家办公总体上对员工有益，尽管它也有一些不可忽视的局限性。<br>论据一：首先，居家办公让员工能更好地平衡职业和个人生活。比如，住得离公司远的人每天可以节省几小时通勤时间。这些节省的时间可以用于家人、休闲或休息。还需要强调的是，拥挤交通工具带来的压力是严重疲劳的来源——消除它可以直接提高工作者的生活质量。<br>论据二：此外，许多研究表明，在家工作时生产力往往会提高。根据我的个人经验，我发现在安静的环境中，没有开放式办公室的不断打断，专注力更好。另外，居家办公提供了更大的自主性，这让员工更有责任感，长期来看可以增强积极性。<br>让步：诚然，有些工人可能感到孤立。诚然，缺乏直接人际接触可能损害团队凝聚力。尽管如此，借助现代通讯工具和定期面对面会议，这些缺点可以大幅减轻。<br>结论：总的来说，当居家办公组织得当时，是一种积极进步。企业最好能采用混合模式，让每个人都能找到最适合自己的平衡。</div>
+  </div>
+
+  <div class="section-header">完整示范答案 — 话题二：Les réseaux sociaux sont-ils dangereux pour les jeunes ?</div>
+  <div class="full-example">
+    <span class="ann">立场</span> <strong>Je pense que</strong> les réseaux sociaux présentent de vrais risques pour les jeunes, même s'ils offrent aussi des opportunités qu'il ne faut pas négliger.<br><br>
+    <span class="ann">论据一</span> <strong>D'abord</strong>, ils peuvent favoriser des problèmes de santé mentale. Des études montrent que l'utilisation excessive des réseaux sociaux est liée à une augmentation de l'anxiété et de la dépression chez les adolescents. <strong>Imaginez</strong> un jeune qui compare constamment sa vie à des images idéalisées sur Instagram : cela crée une pression psychologique énorme et peut conduire à une perte de confiance en soi.<br><br>
+    <span class="ann">论据二</span> <strong>De plus</strong>, les jeunes sont exposés à des informations fausses et à des contenus inappropriés. Sans un regard critique suffisamment développé, ils peuvent être facilement manipulés par des discours extrémistes. <strong>Il suffit de regarder</strong> comment certaines théories du complot se propagent rapidement parmi les adolescents pour comprendre l'ampleur du problème.<br><br>
+    <span class="ann">让步</span> <strong>Certes</strong>, les réseaux sociaux permettent aux jeunes de maintenir des liens sociaux et de s'informer sur des causes importantes comme l'environnement ou les droits humains. <strong>Néanmoins</strong>, ces avantages ne suffisent pas à compenser les risques réels pour leur santé mentale et leur sens critique.<br><br>
+    <span class="ann">结论</span> <strong>Il faudrait donc que</strong> les parents et les enseignants <strong>accompagnent</strong> davantage les jeunes dans leur utilisation du numérique. À l'avenir, une éducation aux médias dès le plus jeune âge me semble indispensable.
+    <div class="full-zh">立场：我认为社交媒体对年轻人存在真实风险，尽管它也提供了不可忽视的机会。论据一：首先，它们可能导致心理健康问题。研究表明过度使用社交媒体与青少年焦虑和抑郁增加有关。想象一个不断将自己的生活与Instagram上的理想化图像进行比较的年轻人：这会产生巨大的心理压力，并可能导致失去自信。论据二：此外，年轻人面临虚假信息和不当内容的暴露。没有足够的批判性思维，他们很容易被极端言论所操控。只需看看一些阴谋论如何在青少年中迅速传播，就能理解问题的严重性。让步：诚然，社交媒体让年轻人能够维持社交联系，了解环境或人权等重要议题。尽管如此，这些优点不足以弥补对他们心理健康和批判性思维的真实风险。结论：因此，父母和老师需要更多地引导年轻人正确使用数字工具。将来，从小开始的媒体素养教育对我来说是不可或缺的。</div>
+  </div>
+
+  <div class="section-header">完整示范答案 — 话题三：L'IA va-t-elle remplacer les travailleurs ?</div>
+  <div class="full-example">
+    <span class="ann">立场</span> <strong>Selon moi</strong>, l'intelligence artificielle va transformer profondément le marché du travail, mais elle ne remplacera pas complètement les travailleurs humains.<br><br>
+    <span class="ann">论据一</span> <strong>D'abord</strong>, il est indéniable que certaines tâches répétitives seront automatisées. <strong>On peut citer l'exemple</strong> des caisses automatiques dans les supermarchés, ou des logiciels capables de rédiger des rapports comptables. Ces évolutions vont éliminer certains postes, c'est une réalité qu'il faut accepter. Les travailleurs peu qualifiés seront les plus touchés par cette transition.<br><br>
+    <span class="ann">论据二</span> <strong>Cependant</strong>, l'IA crée également de nouveaux métiers. Les ingénieurs en données, les spécialistes en cybersécurité ou les éthiciens de l'IA sont des professions qui n'existaient pas il y a vingt ans. <strong>De plus</strong>, les compétences humaines comme l'empathie, la créativité et le jugement moral complexe ne peuvent pas être reproduites par une machine. Un médecin, un enseignant, ou un travailleur social ne peut pas être remplacé par un algorithme.<br><br>
+    <span class="ann">让步</span> <strong>Il est vrai que</strong> la transition sera difficile et douloureuse pour de nombreux travailleurs. <strong>Néanmoins</strong>, l'histoire montre que chaque révolution technologique a finalement créé plus d'emplois qu'elle n'en a détruits, à condition que les gouvernements investissent dans la formation.<br><br>
+    <span class="ann">结论</span> <strong>En définitive</strong>, <strong>il faudrait que</strong> les États <strong>investissent</strong> massivement dans la reconversion professionnelle. À l'avenir, c'est la collaboration entre l'humain et la machine qui sera la clé du succès économique.
+    <div class="full-zh">立场：在我看来，人工智能将深刻改变劳动力市场，但不会完全取代人类工人。论据一：首先，不可否认，一些重复性任务将被自动化。我们可以举超市自助收银机或能够撰写会计报告的软件为例。这些变化将消除某些岗位，这是必须接受的现实。低技能工人将受到这一转变的最大冲击。论据二：然而，人工智能也创造了新的职业。数据工程师、网络安全专家或人工智能伦理学家都是二十年前不存在的职业。此外，移情能力、创造力和复杂道德判断等人类技能是机器无法复制的。医生、老师或社会工作者无法被算法取代。让步：诚然，过渡对许多工人来说将是困难和痛苦的。尽管如此，历史表明，每次技术革命最终创造的就业岗位都多于它消灭的，前提是政府投资于培训。结论：总的来说，国家需要大力投资于职业再培训。未来，人与机器之间的合作将是经济成功的关键。</div>
+  </div>
+
+  <div class="section-header">虚拟式——任务三必备变位</div>
+  <div class="card">
+    <div class="card-subtitle">构成：que + 动词特殊变位（不是现在时！）。口诀：ils 现在时词干 + -e/-es/-e/-ions/-iez/-ent</div>
+    <div class="irreg-grid">
+      <div class="irreg-card"><div class="irreg-inf">être</div><div class="irreg-forms">que je sois<br>qu'il soit<br>que nous soyons<br>qu'ils soient <span style="font-size:11px;color:#8a97a8">-ent不发音</span></div></div>
+      <div class="irreg-card"><div class="irreg-inf">avoir</div><div class="irreg-forms">que j'aie<br>qu'il ait<br>que nous ayons<br>qu'ils aient <span style="font-size:11px;color:#8a97a8">-ent不发音</span></div></div>
+      <div class="irreg-card"><div class="irreg-inf">faire</div><div class="irreg-forms">que je fasse<br>qu'il fasse<br>que nous fassions<br>qu'ils fassent</div></div>
+      <div class="irreg-card"><div class="irreg-inf">aller</div><div class="irreg-forms">que j'aille<br>qu'il aille<br>que nous allions<br>qu'ils aillent</div></div>
+      <div class="irreg-card"><div class="irreg-inf">pouvoir</div><div class="irreg-forms">que je puisse<br>qu'il puisse<br>que nous puissions<br>qu'ils puissent</div></div>
+      <div class="irreg-card"><div class="irreg-inf">vouloir</div><div class="irreg-forms">que je veuille<br>qu'il veuille<br>que nous voulions<br>qu'ils veuillent</div></div>
+    </div>
+    <div class="tip-box"><strong>任务三最常用的虚拟式套路（背会直接用）：</strong><br>
+    Il faudrait que les gouvernements <strong>investissent</strong> davantage. <span style="color:#2D5A1B">政府需要加大投资。</span><br>
+    Il serait souhaitable que les entreprises <strong>adoptent</strong> un modèle hybride. <span style="color:#2D5A1B">企业最好能采用混合模式。</span><br>
+    Bien que la situation <strong>soit</strong> complexe, des solutions existent. <span style="color:#2D5A1B">尽管情况复杂，解决方案是存在的。</span><br>
+    Je ne suis pas sûr(e) que cette approche <strong>soit</strong> la meilleure. <span style="color:#2D5A1B">我不确定这种方法是否最好。</span></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function showTense(id) {
+    document.querySelectorAll('.tense-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tense-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>
