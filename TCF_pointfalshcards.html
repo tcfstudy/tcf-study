@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>TCF 观点闪卡</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f7f5;min-height:100vh;padding:16px}
+.app{max-width:440px;margin:0 auto}
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.app-title{font-size:17px;font-weight:600;color:#1a1a1a}
+.stats-bar{display:flex;gap:8px;margin-bottom:12px}
+.stat-box{flex:1;text-align:center;background:white;border-radius:10px;padding:8px 4px;border:1px solid #e8e8e8}
+.stat-n{font-size:20px;font-weight:600;color:#1a1a1a}
+.stat-l{font-size:11px;color:#888;margin-top:1px}
+.progress-bar{height:4px;background:#e8e8e8;border-radius:2px;margin-bottom:14px}
+.progress-fill{height:4px;border-radius:2px;background:#1D9E75;transition:width 0.4s}
+.cat-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;scrollbar-width:none}
+.cat-tabs::-webkit-scrollbar{display:none}
+.cat-tab{white-space:nowrap;font-size:12px;padding:5px 11px;border-radius:20px;border:1px solid #ddd;cursor:pointer;background:white;color:#666;transition:all 0.2s}
+.cat-tab.active{background:#1D9E75;color:white;border-color:#1D9E75}
+.stage-dots{display:flex;justify-content:center;gap:6px;margin-bottom:12px}
+.dot{width:8px;height:8px;border-radius:50%;background:#ddd;transition:all 0.3s}
+.dot.active{background:#1D9E75;width:20px;border-radius:4px}
+.dot.done{background:#9FE1CB}
+.card-area{min-height:320px;margin-bottom:14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.card{background:white;border-radius:16px;border:1px solid #e8e8e8;padding:22px;min-height:320px;display:flex;flex-direction:column;animation:fadeIn 0.25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card-tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:12px;display:inline-block;margin-bottom:14px}
+.card-title{font-size:22px;font-weight:700;color:#1a1a1a;line-height:1.3;margin-bottom:16px}
+.hook-grid{display:flex;gap:8px;flex:1}
+.hook-box{flex:1;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.hook-label{font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;opacity:0.7}
+.hook-text{font-size:15px;font-weight:600;line-height:1.3}
+.card-footer{margin-top:16px;text-align:center;font-size:12px;color:#aaa}
+.point-row{display:flex;gap:10px;margin-bottom:12px}
+.point-num{width:22px;height:22px;border-radius:50%;background:#1D9E75;color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.point-body{}
+.point-text{font-size:14px;color:#1a1a1a;line-height:1.5;font-weight:500}
+.point-eg{font-size:12px;color:#666;margin-top:3px;font-style:italic;line-height:1.4}
+.topics-section{margin-top:14px;padding-top:12px;border-top:1px solid #f0f0f0}
+.topics-label{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
+.topic-pills{display:flex;flex-wrap:wrap;gap:4px}
+.topic-pill{font-size:11px;padding:2px 8px;border-radius:8px;background:#f0f0f0;color:#555}
+.fulltext-section{flex:1;overflow:auto}
+.fulltext-block{margin-bottom:14px}
+.ft-lang{font-size:10px;font-weight:700;letter-spacing:0.08em;padding:2px 7px;border-radius:6px;display:inline-block;margin-bottom:6px}
+.ft-fr{background:#E6F1FB;color:#185FA5}
+.ft-zh{background:#F1EFE8;color:#3B6D11}
+.ft-text{font-size:13px;line-height:1.7;color:#333}
+.nav-row{display:flex;gap:8px;margin-bottom:8px}
+.nav-btn{flex:1;padding:12px;border-radius:10px;border:1px solid #ddd;background:white;font-size:15px;cursor:pointer;color:#333;font-weight:500;transition:all 0.15s}
+.nav-btn:active{transform:scale(0.97)}
+.nav-btn.primary{background:#1D9E75;color:white;border-color:#1D9E75}
+.knew-row{display:flex;gap:8px}
+.knew-btn{flex:1;padding:11px;border-radius:10px;border:1px solid;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s}
+.knew-btn:active{transform:scale(0.97)}
+.knew-yes{background:#E1F5EE;color:#085041;border-color:#5DCAA5}
+.knew-no{background:#FAECE7;color:#712B13;border-color:#F0997B}
+.stage-label{font-size:11px;color:#aaa;text-align:center;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top-bar">
+    <span class="app-title">TCF 观点闪卡</span>
+    <span style="font-size:12px;color:#888" id="cardCounter"></span>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-box"><div class="stat-n" id="statTotal">17</div><div class="stat-l">总模块</div></div>
+    <div class="stat-box"><div class="stat-n" id="statKnew" style="color:#0F6E56">0</div><div class="stat-l">已掌握</div></div>
+    <div class="stat-box"><div class="stat-n" id="statLeft" style="color:#993C1D">17</div><div class="stat-l">待复习</div></div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="cat-tabs" id="catTabs"></div>
+  <div class="stage-dots" id="stageDots">
+    <div class="dot active" id="dot0"></div>
+    <div class="dot" id="dot1"></div>
+    <div class="dot" id="dot2"></div>
+  </div>
+  <div class="stage-label" id="stageLabel">第1层：模块名称</div>
+  <div class="card-area" id="cardArea" onclick="nextStage()"></div>
+  <div class="nav-row">
+    <button class="nav-btn" onclick="prevCard()">← 上一张</button>
+    <button class="nav-btn primary" onclick="nextStage()">点击展开 ▼</button>
+    <button class="nav-btn" onclick="nextCard()">下一张 →</button>
+  </div>
+  <div class="knew-row" id="knewRow" style="display:none">
+    <button class="knew-btn knew-yes" onclick="markKnew(true)">✓ 记住了</button>
+    <button class="knew-btn knew-no" onclick="markKnew(false)">✗ 还需练习</button>
+  </div>
+</div>
+
+<script>
+const catColors = {
+  travel:{bg:'#E1F5EE',color:'#085041',name:'🌍 移民旅游'},
+  tech:{bg:'#E6F1FB',color:'#185FA5',name:'📱 电子科技'},
+  work:{bg:'#FFF8E1',color:'#633806',name:'💼 职业工作'},
+  health:{bg:'#FAECE7',color:'#712B13',name:'🏥 健康环境'},
+  culture:{bg:'#EEEDFE',color:'#3C3489',name:'📖 文化兴趣'}
+};
+
+const modules = [
+  {
+    id:1,cat:'travel',name:'一个人旅游·好处',
+    hook1:'🗽 完全自由',hook2:'📈 逼出成长',
+    points:[
+      {n:1,text:'完全自由：随时改计划，不用顾虑别人，适应更快',eg:'关键词：emploi du temps / changer de plan à la dernière minute'},
+      {n:2,text:'成长自立：逼出舒适区 → 更自主、灵活、开放',eg:'关键词：se débrouiller / ouverts aux différences'},
+      {n:3,text:'例子：打车和司机聊天 = 信息宝库（mine d\'informations）',eg:'不仅分享风俗，还推荐游客不知道的地方'}
+    ],
+    fr:`D'abord, on est totalement libre de son emploi du temps. On peut visiter ce qu'on veut, changer de plan à la dernière minute, sans devoir se concerter avec quelqu'un d'autre. On peut s'adapter plus rapidement à un nouvel environnement, parce qu'on n'a pas la responsabilité d'autres personnes.
+
+Ensuite, quand on se retrouve dans un pays étranger, sans personne sur qui compter, on apprend à se débrouiller. On doit sortir de sa zone de confort, s'adapter à une nouvelle culture, parfois même à une langue qu'on ne maîtrise pas totalement. Cela nous pousse à devenir plus autonomes, plus flexibles, et aussi plus ouverts aux différences.
+
+Par exemple, à l'étranger, le moyen le plus rapide pour obtenir des informations, c'est souvent d'échanger avec les habitants. Chaque fois que je prends un taxi, je discute avec le chauffeur — c'est une vraie mine d'informations !`,
+    zh:`我们可以完全自由地安排自己的时间。想去哪里就去哪里，甚至可以在最后一刻改变计划，而不需要和别人商量。因为不需要对他人负责，我们也能更快地适应新的环境。
+
+当我们独自来到一个陌生的国家，没有可以依靠的人时，就会学会独立解决问题。我们不得不走出舒适区，适应新的文化，有时甚至要面对自己并不完全掌握的语言。这种经历会促使我们变得更加自主、更灵活，也更加开放。
+
+比如在国外，获取信息最快的方式往往是和当地人交流。每次我坐出租车时，都会和司机聊几句——这真的是一个信息宝库！`,
+    topics:['P1-3','P6-5','P9-1','P6-3','P10-3','P2-4','P5-2','P9-2']
+  },
+  {
+    id:2,cat:'travel',name:'一个人旅游·坏处',
+    hook1:'😔 孤独感强',hook2:'😰 突发无助',
+    points:[
+      {n:1,text:'心理层面：孤独，尤其晚上或重要时刻，无人分担',eg:'sur le plan psychologique / ressentir la solitude'},
+      {n:2,text:'实际层面：突发问题无人帮（晚点/丢行李/语言障碍）',eg:'pas de soutien immédiat → stress augmente'},
+      {n:3,text:'例子：朋友意大利手机被偷 → 慌张迷路 → 如果有人就好了',eg:'S\'il avait été avec un ami, ça aurait été beaucoup plus simple（条件式过去时）'}
+    ],
+    fr:`D'abord, voyager seul peut être difficile sur le plan psychologique. Sans amis ni famille autour de soi, on peut ressentir la solitude, surtout le soir ou pendant les moments importants.
+
+Ensuite, lorsqu'on rencontre un problème — par exemple un retard de train, une perte de bagage ou une difficulté linguistique — il n'y a pas de soutien immédiat, ce qui augmente le stress.
+
+Par exemple, j'ai un ami qui est parti seul en Italie. Au début, tout allait bien. Mais un jour, son téléphone a été volé. À ce moment-là, il n'avait plus de Google Maps ni personne pour l'aider. Il a failli se perdre. Comme il était seul, il a vraiment paniqué. S'il avait été avec un ami, ça aurait été beaucoup plus simple et moins stressant.`,
+    zh:`首先，独自旅行在心理层面上可能比较困难。身边没有朋友或家人陪伴，人很容易感到孤独，尤其是在晚上或者一些重要时刻。
+
+其次，当遇到问题时——比如火车晚点、行李丢失，或者语言不通——身边没有人可以立刻提供帮助，这会让压力明显增加。
+
+例如，我有一个朋友独自去了意大利旅行。刚开始一切都很顺利。但有一天，他的手机被偷了。那一刻，他既没有 Google 地图，也没有人可以帮他，差点迷路。因为是一个人，他真的非常慌张。如果当时身边有朋友陪着，事情会简单得多。`,
+    topics:['P1-3','P6-5','P9-1','P10-4','P2-4']
+  },
+  {
+    id:3,cat:'travel',name:'和家人移民·好处',
+    hook1:'❤️ 心理支持',hook2:'💰 经济支持',
+    points:[
+      {n:1,text:'心理层面：有家人 → 减少孤独感和压力，情感安慰',eg:'la présence de sa famille / gérer le stress lié à l\'adaptation'},
+      {n:2,text:'经济层面：分担生活成本，年轻人难有积蓄',eg:'charge financière / réduire la pression économique'},
+      {n:3,text:'例子：朋友住父母买的大房子，不用交租，生活舒适',eg:'une vie assez confortable'}
+    ],
+    fr:`D'abord, la présence de sa famille permet de mieux gérer le stress lié à l'adaptation. Quand on arrive dans un nouveau pays, on peut ressentir la solitude, surtout le soir ou pendant les moments importants. Avec la famille, on se sent soutenu émotionnellement.
+
+Ensuite, la famille apporte aussi un soutien financier important. En particulier pour les jeunes qui commencent tout juste à travailler, il est souvent difficile d'avoir des économies suffisantes. Dans ce contexte, le soutien de la famille permet de réduire la pression économique.
+
+Par exemple, certains de mes amis vivent dans une grande maison achetée par leurs parents. Ils n'ont pas besoin de payer de loyer, donc ils peuvent utiliser leur salaire pour eux-mêmes. Grâce à cela, ils ont une vie assez confortable.`,
+    zh:`首先，家人的陪伴可以帮助我们更好地应对适应新环境带来的压力。刚到一个新的国家时，人们往往会感到孤独，尤其是在晚上或者一些重要的时刻。有家人在身边，可以在情感上给予安慰和支持。
+
+其次，家庭还能提供重要的经济支持。尤其是对刚开始工作的年轻人来说，往往很难有足够的积蓄。家庭的帮助可以减轻经济负担。
+
+例如，我的一些朋友住在由父母购买的大房子里，他们不需要支付房租，因此可以把自己的工资更多地用于个人生活。正因为如此，他们的生活相对比较舒适。`,
+    topics:['P5-5','P7-5','P6-3','P10-3','P5-2']
+  },
+  {
+    id:4,cat:'travel',name:'在国外忘记传统',
+    hook1:'🏮 传统=身份',hook2:'🍽️ 找到平衡',
+    points:[
+      {n:1,text:'传统是身份认同：节日维系归属感，分享传统丰富多样性',eg:'多伦多文化节：festivals multiculturels / transmettre la culture aux enfants'},
+      {n:2,text:'也要适应当地：饮食习惯（分餐盘）、掌握语言（clé de la communication）',eg:'que ce soit pour A, B ou C / tenir une conversation'},
+      {n:3,text:'结论：找到平衡，保留根（racines）同时接纳新习惯',eg:'例子：我说thank you / sorry，但保留做饭方式和节日庆祝'}
+    ],
+    fr:`Tout d'abord, les traditions font partie de notre identité. Elles nous rappellent d'où l'on vient, surtout quand on vit loin de son pays. Par exemple, beaucoup d'immigrés continuent de célébrer leurs fêtes nationales. En plus, dans une ville comme Toronto, on voit régulièrement des festivals multiculturels. Ce mélange rend la vie plus intéressante et favorise l'ouverture d'esprit.
+
+Cependant, il est aussi essentiel de s'adapter aux habitudes du pays. Par exemple, en Chine, on met tous les plats au milieu pour partager, alors qu'ici chacun a son assiette. De plus, maîtriser la langue est essentiel — que ce soit pour trouver un restaurant, comprendre une démarche ou se faire des amis.
+
+Je dirais donc que le plus important, ce n'est pas de renoncer à ses traditions, mais de trouver un équilibre. Par exemple, je garde mes habitudes de cuisine et mes fêtes, mais j'ai adopté des habitudes locales comme dire « thank you » ou « sorry » tout le temps.`,
+    zh:`首先，传统是我们身份的一部分。它们提醒我们来自哪里，尤其是在远离祖国生活的时候。许多移民仍然庆祝传统节日。在像多伦多这样的城市，多元文化节丰富了社会生活，培养开放的心态。
+
+然而，尊重并适应居住国的生活习惯同样非常重要。比如，在中国我们习惯把所有菜放在桌子中间分享；而在这里每个人更习惯有自己的一份。另外，掌握当地语言至关重要——无论是找餐厅、办手续还是交朋友。
+
+因此，我认为最重要的不是放弃传统，而是找到平衡。比如，我保留了做饭方式和节日庆祝，但也适应了当地习惯，比如在加拿大经常说"thank you"和"sorry"。`,
+    topics:['P3-5','P5-5','P8-4','P10-1']
+  },
+  {
+    id:5,cat:'travel',name:'朋友·好处',
+    hook1:'🎮 共同兴趣',hook2:'💬 交流自在',
+    points:[
+      {n:1,text:'友谊是自由选择：基于共同爱好，网上也能找到真朋友',eg:'群：游戏/摄影/音乐 → 真正理解彼此，家人不一定有相同兴趣'},
+      {n:2,text:'沟通更轻松：聊八卦、感情、疯狂冒险，不被评判',eg:'basée sur la confiance / se sentir à l\'aise / permettre de se sentir à l\'aise'}
+    ],
+    fr:`D'abord, l'amitié est un choix libre, basée sur ce qu'on aime en commun et la personnalité. Par exemple, certaines personnes trouvent leurs meilleurs amis sur Internet, dans un groupe sur les jeux vidéo, la photographie ou la musique. Même si ces amis vivent loin, ils partagent une passion et se comprennent vraiment bien. Avec sa famille, on n'a pas toujours les mêmes goûts, ce qui peut parfois limiter les conversations.
+
+Ensuite, il est souvent plus facile de communiquer avec des amis. Avec des amis, on peut parler librement de tout : des petits ragots, de sa vie amoureuse ou même de ses aventures un peu folles. Les amis nous comprennent, nous écoutent et donnent leur avis sans juger. Ce type de discussion permet de se sentir à l'aise.`,
+    zh:`首先，友谊是一种自由的选择，它建立在共同的兴趣和性格之上。比如，有些人会在互联网上的游戏群、摄影或音乐社群中找到自己最好的朋友。即使这些朋友住得很远，他们也因为共同的热爱而彼此理解。相比之下，与家人之间并不总是有相同的兴趣。
+
+其次，与朋友沟通通常更加轻松。和朋友在一起，我们可以自由地聊任何事情：一些小八卦、感情生活，甚至是一些有点疯狂的经历。朋友会理解我们、倾听我们，并在不评判的情况下给出建议。`,
+    topics:['P10-4','P5-3','P10-2']
+  },
+  {
+    id:6,cat:'travel',name:'年轻人学语言·优势',
+    hook1:'🧠 大脑可塑性',hook2:'📺 老友记学英语',
+    points:[
+      {n:1,text:'年轻人记忆更灵活：敢开口，即使犯错也不怕，自然习得',eg:'ont plus de facilité / ils osent plus parler même avec des fautes'},
+      {n:2,text:'全球化沉浸环境：音乐/电影/TikTok每天接触其他语言',eg:'例子：靠《老友记》学英语 → 不死背单词，语言与情感联系'}
+    ],
+    fr:`D'abord, il faut reconnaître que les jeunes ont généralement plus de facilité pour apprendre. Leur mémoire est plus flexible et ils osent plus parler, même avec des fautes. Cette façon naturelle de faire les aide beaucoup, car une langue s'apprend surtout en essayant, en répétant et en parlant avec les autres.
+
+Ensuite, dans un monde de plus en plus connecté, les jeunes sont souvent en contact avec d'autres langues — par exemple à travers la musique, les films, les jeux vidéo ou TikTok. Un bon exemple, c'est que beaucoup de jeunes apprennent l'anglais grâce à la série Friends. Au lieu d'étudier des listes de vocabulaire, ils apprennent en regardant les épisodes et en s'habituant à la prononciation naturelle. Ce type d'apprentissage est beaucoup plus vivant, parce qu'on associe la langue au plaisir.`,
+    zh:`首先，年轻人通常具有更强的学习能力。他们的记忆更加灵活，而且更敢开口说话，即使会犯错也不太害怕。这种勇于尝试的态度对语言学习非常有帮助，因为语言主要是通过不断尝试、重复和交流来掌握的。
+
+其次，在一个高度全球化的世界中，年轻人几乎每天都会接触到其他语言，比如通过音乐、电影、游戏或TikTok。很多年轻人通过美剧《老友记》学习英语。他们不再只是枯燥地背单词，而是通过观看剧集、聆听真实对话来学习。这种学习方式更加生动，因为语言与快乐和情感联系在一起。`,
+    topics:['P7-5','P9-3']
+  },
+  {
+    id:7,cat:'tech',name:'电子设备·好处',
+    hook1:'🇲🇨 摩纳哥小姐姐',hook2:'📱 智能保姆',
+    points:[
+      {n:1,text:'即时获取信息：只需一部手机，随时随地学习',eg:'学法语：早上和迷人巴黎男士/晚上和摩纳哥小姐姐练口语 → 语言活起来就忘不掉'},
+      {n:2,text:'互动式学习更高效：做练习/播客/视频，不被教材绑架',eg:'儿童App：孩子自己打开iPad专注学习 = 免费智能保姆（baby-sitter intelligente）'}
+    ],
+    fr:`Tout d'abord, les appareils électroniques offrent un accès immédiat à une quantité énorme d'informations. Aujourd'hui, il suffit d'un téléphone pour regarder des cours en ligne, lire des articles ou suivre des formations, à tout moment et n'importe où.
+
+Par exemple, quand j'apprenais le français, je ne faisais pas que lire des manuels. Le matin, je discutais avec un Parisien très charmant sur une application pour améliorer mon accent, et le soir, je parlais avec une jeune femme très élégante de Monaco pour pratiquer la conversation. Résultat : Quand une langue devient vivante, elle devient mémorable.
+
+Ensuite, les appareils électroniques rendent l'apprentissage plus interactif et plus motivant. Par exemple, chez les enfants, certaines applications éducatives sont tellement attractives que les parents n'ont même plus besoin de rester derrière eux. On peut dire que la tablette devient presque une baby-sitter gratuite, mais une baby-sitter intelligente.`,
+    zh:`首先，电子设备提供对大量信息的即时获取。如今，只需一部手机就能随时随地看在线课程、读文章。
+
+比如我当初学法语的时候，根本不是抱着课本死磕。早上，我会在一个App上跟一位非常迷人的巴黎男士聊天，晚上，我又会和一位气质非常优雅的摩纳哥小姐姐练口语。结果就是——当一门语言"活起来"的时候，它根本忘不掉。
+
+其次，电子产品让学习变得更有互动性。比如对小孩来说，有些学习类App非常有吸引力，家长都不用在旁边盯着。孩子自己打开iPad，点开学习软件，全神贯注地学习，iPad就像一个免费的智能保姆。`,
+    topics:['P3-3','P4-1','P10-5','P8-1','P5-1','P8-5','P7-4']
+  },
+  {
+    id:8,cat:'tech',name:'电子设备·坏处',
+    hook1:'🎮 孩子沉迷游戏',hook2:'🌾 我在乡下长大',
+    points:[
+      {n:1,text:'过度使用危健康：缺运动、睡眠差、难专注（l\'excès）',eg:'例子：孩子玩游戏停不了 → irritables → ce n\'est pas un usage équilibré'},
+      {n:2,text:'限制现实接触：孩子周末关家里刷屏 vs 我在乡下钓鱼',eg:'时态对比：j\'ai grandi（复合过去）/ je passais（未完成过去）/ Aujourd\'hui（现在）'},
+      {n:3,text:'危险内容/fake news：需要家长监督',eg:'On ne trouve pas seulement... mais aussi...（并列结构）'}
+    ],
+    fr:`Le problème, c'est l'excès. Trop d'écrans peut avoir des effets négatifs sur la santé : manque d'exercice physique, troubles du sommeil, ou même difficultés de concentration à l'école. Par exemple, j'ai vu des enfants qui passent des heures à jouer à des jeux vidéo et qui deviennent irritables quand on leur demande d'arrêter.
+
+De plus, passer trop de temps devant les écrans limite le contact avec le monde réel. Dans mon enfance, j'ai grandi à la campagne, je passais du temps à jouer dehors avec mes cousins, à pêcher dans la rivière ou à explorer la nature. Aujourd'hui, beaucoup d'enfants passent leur week-end enfermés chez eux, connectés à une tablette. Cela peut réduire leur curiosité et leurs expériences sociales.
+
+Enfin, les écrans peuvent exposer les enfants à des contenus dangereux. Sur Internet, on ne trouve pas seulement des informations éducatives, mais aussi des images violentes ou des fake news.`,
+    zh:`问题在于过度使用。屏幕使用时间过长可能会对健康产生负面影响：缺乏体育锻炼、睡眠障碍，甚至在学校出现注意力不集中的问题。比如，我见过一些孩子连续几个小时玩电子游戏，当被要求停止时就会变得烦躁易怒。
+
+此外，长时间面对屏幕会减少孩子与现实世界的接触。在我的童年时期，我在乡村长大，我还记得自己经常和表兄弟们一起在户外玩耍、在河里钓鱼，或者探索大自然。而如今，很多孩子周末都待在家里，沉浸在平板电脑或手机中。
+
+最后，屏幕可能会让孩子接触到危险内容。在互联网上，不仅有教育性的信息，也存在暴力画面或虚假信息。`,
+    topics:['P3-3','P4-1','P10-5','P8-1','P5-1','P5-3','P9-3','P10-2','P8-5']
+  },
+  {
+    id:9,cat:'tech',name:'激励孩子·教学方法',
+    hook1:'🦁 动物园最真实',hook2:'🏆 小奖励大动力',
+    points:[
+      {n:1,text:'多媒体工具：平板/视频/App让课堂更生动，自主练习',eg:'我自己注意到：动画演示比读课本定义更容易理解科学概念'},
+      {n:2,text:'体验式学习：参观动物园/博物馆，看真实世界而非抽象描述',eg:'动物园：看到物种多样性/行为/环境 → 激发好奇心，记忆更深'},
+      {n:3,text:'象征性奖励：证书/加分/责任，微小认可也增强投入感',eg:'Les études montrent que même une petite récompense peut aider'}
+    ],
+    fr:`Tout d'abord, utiliser des outils numériques peut rendre les cours plus vivants et plus interactifs. Par exemple, utiliser des tablettes, des vidéos ou des applications éducatives aide les élèves à mieux comprendre des choses compliquées. J'ai moi-même remarqué que certains élèves comprennent mieux un concept scientifique quand ils voient une animation, plutôt que quand ils lisent simplement une définition dans un manuel.
+
+Ensuite, l'école devrait proposer plus d'activités basées sur l'expérience réelle, par exemple des visites au zoo ou aux musées. Une visite au zoo peut rendre une leçon sur les animaux bien plus concrète : les enfants voient vraiment la diversité des animaux, leurs comportements et leur environnement.
+
+Enfin, l'école pourrait aussi mettre en place des récompenses pour encourager les efforts des élèves — pas forcément de l'argent, mais des diplômes, des points bonus ou des responsabilités spéciales. Les études montrent que même une petite récompense peut aider les élèves à s'impliquer plus.`,
+    zh:`首先，合理融入多媒体工具可以让课堂更加生动。例如，使用平板电脑、讲解视频或教育平台，可以帮助学生更直观地理解复杂的概念。我自己就注意到，一些学生在看到动画演示时，比单纯阅读课本中的定义，更容易理解科学概念。
+
+其次，学校应当提供更多基于直接体验的教学方式，例如参观动物园或博物馆。以动物园参观为例，它能让关于动物的课程变得更加具体：孩子们可以真正看到物种的多样性、动物的行为以及它们的生活环境。
+
+最后，学校还可以通过象征性的奖励来鼓励学生的努力——不一定是金钱，而是证书、加分或赋予一定的责任。研究表明，即便是微小的认可，也能增强学生的投入感。`,
+    topics:['P8-3','P9-3']
+  },
+  {
+    id:10,cat:'work',name:'影响职业成功',
+    hook1:'👩‍⚕️ 医生要文凭',hook2:'🎨 万小时激情',
+    points:[
+      {n:1,text:'学历重要：医学/法律必须长期学习，文凭打开大门',eg:'例子：社媒女创业者，无文凭但百万粉丝，也能成功 → 创造力和胆识同样重要'},
+      {n:2,text:'激情是关键：热爱 → 更有创造力和能量 → 万小时理论',eg:'但现实：艺术家难靠才华为生 / 坏环境（mauvais collègues）摧毁动力'},
+      {n:3,text:'个人收益：工作给日常提供结构，感到有用，être fier de soi',eg:'ce sentiment est aussi important que l\'argent qu\'on gagne'}
+    ],
+    fr:`D'abord, il faut reconnaître que les diplômes jouent encore un rôle important, surtout au début d'une carrière. Dans des domaines comme la médecine, la loi ou l'ingénierie, il est impossible de travailler sans faire de longues études. Cependant, même si les diplômes aident à trouver un emploi, ils ne garantissent pas toujours le succès. Par exemple, j'ai vu une jeune femme sur les réseaux sociaux : sans diplôme, elle a eu plus d'un million d'abonnés et a créé sa propre entreprise.
+
+Ensuite, aimer son travail peut vraiment aider à progresser. Quand on est passionné, on est plus créatif et on a plus d'énergie. On dit souvent qu'il faut dix mille heures de pratique pour devenir vraiment bon dans quelque chose, et c'est la passion qui permet de tenir aussi longtemps.
+
+Enfin, le travail apporte aussi beaucoup de choses positives dans la vie personnelle. Il donne une structure à notre journée et nous aide à nous sentir utiles. Quand on finit une tâche difficile, on est fier de soi — et ce sentiment est aussi important que l'argent qu'on gagne.`,
+    zh:`首先必须承认，学历仍然发挥着重要作用，尤其是在职业起步阶段。在医学、工程或法律等领域，没有长期专业学习是不可能工作的。然而，学历也从不保证长期的成功。比如，我最近在社交媒体上发现了一位年轻女创业者：尽管没有学历，她建立了一个超过百万粉丝的社群并创办了自己的企业。
+
+其次，热爱自己的工作真的能帮助进步。当一个人充满热情时，更有创造力，也更有能量。人们常说，要在某件事上变得真正厉害需要一万小时的练习，而正是热情让人能坚持那么长时间。
+
+最后，工作也在个人生活中带来很多积极的东西。工作给我们的一天提供结构，让我们感到有用。当我们完成一项艰难的任务时，会为自己感到骄傲——而这种感觉和我们赚到的钱一样重要。`,
+    topics:['P1-5','P7-1','P4-5','P2-2','P7-3','P8-3']
+  },
+  {
+    id:11,cat:'work',name:'老年人工作·好处',
+    hook1:'🇯🇵 日本老龄化',hook2:'👴 经验传承',
+    points:[
+      {n:1,text:'社会层面：缓解劳动力短缺（尤其医疗/教育），减轻退休系统压力',eg:'例子：日本人口老龄化 → 鼓励老年人延长工作年限'},
+      {n:2,text:'经验优势：多年积累 → 传授给年轻人，避免错误',eg:'教育/医疗领域尤其宝贵'},
+      {n:3,text:'个人层面：保持被需要感，维持积极生活节奏，经济稳定',eg:'se sentir utile / garder un rythme de vie actif'}
+    ],
+    fr:`Du côté de la société, la présence des personnes âgées dans le monde du travail peut aider à compenser le manque de travailleurs. C'est un problème sérieux, surtout dans des secteurs comme la santé, l'éducation ou l'aide aux personnes. Par exemple, au Japon, où la population est très vieillissante, le manque de travailleurs devient de plus en plus grave. Le pays encourage donc les personnes âgées à rester actives plus longtemps.
+
+De plus, leur expérience est un vrai avantage. Ces personnes ont souvent des années de pratique dans leur domaine. Elles peuvent partager leurs connaissances avec les jeunes, former les nouveaux employés et éviter certaines erreurs. Dans des secteurs comme l'éducation ou la médecine, c'est vraiment très utile.
+
+Sur le plan personnel, continuer à travailler permet de se sentir utile, de garder un rythme de vie actif et de rester stable financièrement.`,
+    zh:`从社会层面来看，老年人在职场中的存在有助于缓解劳动力短缺的问题。这一问题在医疗、教育或护理等关键领域尤为严重。例如，在人口高度老龄化的日本，劳动力短缺正变得愈发严峻，日本开始鼓励老年人延长工作年限。
+
+此外，老年人的经验本身就是一个加分项。他们通常在各自领域拥有多年专业积累，能够将知识传授给年轻一代，并凭借经验避免一些不必要的错误。在教育或医疗等行业，这种经验传承尤为宝贵。
+
+从个人角度来看，继续工作能让老年人保持被需要的感觉，维持积极的生活节奏，同时保持经济上的稳定。`,
+    topics:['P7-2','P6-4']
+  },
+  {
+    id:12,cat:'work',name:'远程工作·好坏',
+    hook1:'💻 疫情证明可行',hook2:'🏠 因人而异',
+    points:[
+      {n:1,text:'好处：疫情后证明效率不低，降低成本，全球招人才',eg:'ont compris que pouvait être aussi efficace（时态呼应）'},
+      {n:2,text:'坏处：有人孤独/易分心；某些职业必须现场（医疗/教育）',eg:'se laisser facilement distraire / avoir du mal à rester motivé'},
+      {n:3,text:'结论：混合模式是未来',eg:'quelques jours à la maison, quelques jours au bureau'}
+    ],
+    fr:`Du côté des entreprises, après la crise sanitaire, beaucoup d'entreprises ont compris que travailler à distance pouvait être aussi efficace que travailler au bureau. De plus, le télétravail permet de dépenser moins d'argent et de trouver des talents partout dans le monde.
+
+Cependant, le télétravail a aussi des inconvénients. Certaines personnes se sentent seules, se laissent facilement distraire ou ont du mal à rester motivées. De plus, certains métiers ont encore besoin d'être faits en personne, surtout quand il faut travailler ensemble ou avoir un vrai contact humain, comme dans la santé ou l'éducation.
+
+C'est pourquoi, à mon avis, le modèle hybride est l'avenir du monde professionnel : quelques jours à la maison, quelques jours au bureau.`,
+    zh:`从企业角度来看，疫情之后，很多企业意识到远程工作的效率并不一定比线下差。此外，远程办公还能帮助企业降低运营成本，并在全球范围内招聘人才。
+
+然而，远程工作也有缺点。有些人容易感到孤独，容易分心，或者很难保持动力。此外，有些工作仍然需要到现场完成，尤其是那些依赖面对面合作或人际接触的职业，比如医疗和教育。
+
+因此，在我看来，混合办公模式很可能是未来的发展方向：一部分时间在家办公，一部分时间在公司上班。`,
+    topics:['P3-2']
+  },
+  {
+    id:13,cat:'health',name:'保护环境·从我做起',
+    hook1:'🚶 无车一周多伦多',hook2:'🌿 小事积累大改变',
+    points:[
+      {n:1,text:'简单行动有真实效果：步行/公交/拼车 → 减少污染',eg:'ce sont ces petits gestes qui, mis ensemble, transforment une ville'},
+      {n:2,text:'亲身体验：多伦多无车一周 → 安静、空气清新、更有人情味',eg:'Cette expérience m\'a montré que vivre sans voiture n\'est pas une contrainte'},
+      {n:3,text:'结论：需要时间和投入，但完全可行，城市更宜居',eg:'améliore non seulement la qualité de l\'air, mais aussi notre qualité de vie'}
+    ],
+    fr:`Tout d'abord, je suis convaincu que les actions simples ont un effet réel, surtout quand elles sont répétées par des milliers de personnes. Par exemple, choisir de marcher pour de courts trajets, prendre le bus plutôt que la voiture permet de beaucoup réduire la pollution. Ce sont ces petits gestes qui, mis ensemble, peuvent transformer une ville.
+
+Ensuite, j'ai participé à Toronto à un événement appelé « Une semaine sans voiture ». Plusieurs rues étaient fermées aux voitures et réservées aux piétons et aux cyclistes. L'ambiance était calme, plus humaine, et on pouvait vraiment respirer un air plus pur. Cette expérience m'a montré que vivre sans voiture n'est pas quelque chose de difficile, mais parfois un plaisir.
+
+Enfin, vivre avec moins de voitures rend les villes plus calmes, plus vertes et plus agréables. Cela améliore non seulement la qualité de l'air, mais aussi notre qualité de vie en général. Bien sûr, cela demande du temps et un changement lent des habitudes, mais je pense sincèrement que c'est possible.`,
+    zh:`首先，我坚信一些看似简单的小行动，其实真的能产生影响，尤其是当成千上万的人一起去做的时候。比如说，短距离时选择步行、坐公交车代替开车，都能明显减少污染。正是这些"小事"积累起来，才能真正改变一座城市。
+
+其次，我在多伦多参加过一个叫"无车一周"的活动，当时很多街道都禁止机动车通行，只留给行人和骑行者。那种氛围非常安静、更有人情味，而且空气真的更清新。这次经历让我意识到，没有车并不一定是一种限制，反而有时候是一种享受。
+
+最后，汽车数量减少，会让城市变得更安静、更绿色、更宜居。这不仅改善了空气质量，也提升了整体生活质量。`,
+    topics:['P3-1','P6-2','P4-3','P2-5']
+  },
+  {
+    id:14,cat:'health',name:'社会福利·好坏',
+    hook1:'🏥 加拿大免费医疗',hook2:'💸 财政压力大',
+    points:[
+      {n:1,text:'好处：补贴/住房援助帮助弱势群体有尊严生活',eg:'les allocations / l\'aide au logement / 移民选加拿大原因之一'},
+      {n:2,text:'坏处：政府支出高，可能降低工作积极性',eg:'peut freiner l\'économie / réduire la motivation à travailler'},
+      {n:3,text:'结论：找到平衡 = 真正需要的人才能得到帮助',eg:'La protection sociale n\'est pas une dépense, mais un investissement'}
+    ],
+    fr:`D'abord, les aides sociales permettent aux personnes les plus fragiles de vivre normalement. Par exemple, les allocations, l'aide au logement évitent que certaines personnes se retrouvent dans une situation très difficile. Dans des pays comme le Canada, on peut accéder aux soins de base gratuitement. C'est aussi une des raisons pour lesquelles beaucoup de gens choisissent d'immigrer au Canada.
+
+Cependant, ce système peut aussi coûter très cher à l'État. Les dépenses sont très élevées, et cela peut freiner l'économie et réduire la motivation à travailler.
+
+C'est pourquoi il est important de trouver un bon équilibre. Les aides doivent soutenir ceux qui en ont vraiment besoin, sans nuire à l'économie du pays. La protection sociale n'est pas une dépense, mais un investissement.`,
+    zh:`首先，社会福利可以帮助弱势群体有尊严地生活。比如，各种补贴、住房援助可以避免一些家庭陷入极端困境。在像加拿大这样的国家，通过公共医疗系统，人们可以免费获得基本医疗服务。这也是很多人选择移民加拿大的原因之一。
+
+然而，这种制度也会给国家经济带来很大的压力。政府支出很高，可能会影响经济增长，也会在一定程度上降低工作的积极性。
+
+因此，关键是要找到一个平衡点：福利应该真正帮助到有需要的人，而不能损害国家的经济活力。社会保障不是一种支出，而是一种投资。`,
+    topics:['P9-4','P8-2','P4-3','P4-4']
+  },
+  {
+    id:15,cat:'culture',name:'书籍·好处',
+    hook1:'📖 沉浸进小说里',hook2:'🎁 珍藏的那本书',
+    points:[
+      {n:1,text:'专注和深度：纸质书不被通知打断，真正沉浸进故事',eg:'例子：最近读了一本小说，真正感受人物情绪（手机/平板做不到）'},
+      {n:2,text:'文化和个人载体：留下笔记、记忆，可珍藏、可传递',eg:'别人送的礼物/学生时代的书/改变看法的书 → 有温度的实体'}
+    ],
+    fr:`D'abord, le livre offre une concentration et une profondeur que les écrans ne permettent pas toujours. Quand on lit un livre papier, on est moins distrait par les notifications ou la publicité. Par exemple, quand j'ai lu un roman récemment, j'ai pu vraiment entrer dans l'histoire, réfléchir aux personnages et ressentir leurs émotions. Cette immersion est beaucoup plus difficile sur un téléphone ou une tablette.
+
+Ensuite, le livre est un outil culturel et personnel. Il garde des souvenirs, des annotations et des traces de notre pensée. Par exemple, beaucoup de gens conservent les livres qui ont marqué leur vie : un cadeau, un livre lu pendant les études, ou un ouvrage qui a changé leur vision du monde. C'est un objet physique, chargé d'émotions, qu'on peut transmettre à d'autres.`,
+    zh:`首先，书籍能带来一种专注和深度，这是电子屏幕很难做到的。读纸质书时，不会被通知、广告不断打断。比如我最近读了一本小说，能够真正走进故事里，去思考人物，感受他们的情绪。而在手机或平板上，很难有这种沉浸感。
+
+其次，书籍也是一种文化和个人的载体。书上会留下我们的笔记、标注，承载着我们的回忆。很多人都会珍藏那些对自己有特殊意义的书，比如别人送的礼物、学生时代读过的书，或是改变了自己看法的一本书。它是一个有温度、有情感的实体，还可以被传递给他人。`,
+    topics:['P2-3','P7-4']
+  },
+  {
+    id:16,cat:'culture',name:'书信·好处',
+    hook1:'✍️ 手写字迹温度',hook2:'⏰ 给时间意义',
+    points:[
+      {n:1,text:'现代通讯更方便：几秒收到回复，发照片/语音/生日消息',eg:'对比：以前寄用心写的贺卡 vs 现在发WhatsApp消息'},
+      {n:2,text:'书信有情感价值：看到对方字迹，感受用心，可留存作纪念',eg:'数字信息很快淹没在通知里'},
+      {n:3,text:'写信让时间有意义：逼你认真思考要传达什么，是私密的表达',eg:'la lettre donne du sens au temps / une connexion plus profonde'}
+    ],
+    fr:`D'abord, les moyens de communication modernes sont plus pratiques. Avec un téléphone, on peut envoyer une photo, laisser un message vocal et recevoir une réponse en quelques secondes. Par exemple, même pour souhaiter un anniversaire, beaucoup de personnes écrivent juste un message sur WhatsApp, alors qu'avant, on envoyait une carte personnalisée.
+
+Ensuite, une lettre crée une relation émotionnelle différente. Quand on reçoit une lettre écrite à la main, avec une écriture unique, on sent l'effort, les émotions, et on peut la garder comme un souvenir. Un message numérique, lui, disparaît très vite parmi les autres notifications.
+
+Pour moi, écrire ne devrait pas être remplacé, car la lettre donne du sens au temps. C'est un geste intime qui nous oblige à choisir nos mots et à réfléchir à ce qu'on veut transmettre.`,
+    zh:`首先，现代的通讯方式更加方便。用手机不仅可以发文字，还能发照片、语音，而且几秒钟就能收到回复。比如现在给别人过生日，很多人只是发一条WhatsApp消息，而不像以前那样寄一张用心写的贺卡。
+
+其次，收到一封手写的信，看到独特的字迹，能感受到对方的用心和情绪，而且还能把信留下来当作纪念；相比之下，电子信息很快就会被新的通知淹没。
+
+对我来说，写信不应该被完全取代，因为它让时间变得有意义。这是一种很私密的表达方式，会让我们认真思考自己想传达的内容。`,
+    topics:['P6-1']
+  },
+  {
+    id:17,cat:'health',name:'饮食习惯·健康',
+    hook1:'🥗 知道吃了什么',hook2:'💰 在家做更省钱',
+    points:[
+      {n:1,text:'健康意识提升：人们更关注添加剂/糖/盐，自己做才放心',eg:'la cuisine maison permet de contrôler la qualité / 肥胖和饮食疾病增加'},
+      {n:2,text:'节省成本：多伦多点外卖贵（加配送费+小费），在家更划算',eg:'un simple repas peut coûter presque aussi cher qu\'au restaurant'},
+      {n:3,text:'厨房是分享的地方：一起做饭创造温馨时刻，拉近感情',eg:'un moment qu\'on partage / rapproche les gens'}
+    ],
+    fr:`D'une part, de plus en plus de personnes reviennent à la cuisine maison. La raison principale, c'est qu'on fait de plus en plus attention à ce qu'on mange. Les gens s'informent sur les ingrédients, le sucre et le sel présents dans les plats industriels. La cuisine maison permet de contrôler la qualité des produits et de manger de façon plus équilibrée. C'est un bon moyen de prendre soin de sa santé, surtout maintenant que l'obésité et les maladies liées à la nourriture sont de plus en plus courantes.
+
+En plus, cuisiner est aussi un bon moyen de faire des économies. À Toronto, commander à manger coûte souvent cher, surtout si on ajoute les frais de livraison et le pourboire. Finalement, un simple repas peut coûter presque aussi cher qu'au restaurant.
+
+Enfin, la cuisine, c'est aussi un moment qu'on partage avec les autres. Préparer un repas avec des amis ou de la famille crée une belle ambiance et rapproche les gens.`,
+    zh:`一方面，越来越多的人开始重新回归家庭厨房。最主要的原因是大家对健康饮食的重视程度在提高。现在，人们更关注食材、添加剂、糖和盐的含量，很多人宁愿自己做饭，也想清楚地知道自己吃进了什么。这对身体健康非常重要，尤其是在肥胖和饮食相关疾病不断增加的背景下。
+
+另外，自己做饭也是一个很好的省钱方式。在多伦多，点外卖其实并不便宜，尤其是加上配送费和小费之后，一个简单的餐可能就要花不少钱，价格甚至接近在餐厅吃一顿。
+
+最后，厨房还是一个充满分享和温度的地方。一起做饭、尝试新菜谱，会创造出温馨的时刻，拉近人与人之间的距离。`,
+    topics:['P2-5','P4-4']
+  }
+];
+
+let currentCat = null;
+let currentIdx = 0;
+let stage = 0;
+let knew = {};
+
+const cats = [
+  {label:'全部',val:null},
+  {label:'🌍 移民旅游',val:'travel'},
+  {label:'📱 电子科技',val:'tech'},
+  {label:'💼 职业工作',val:'work'},
+  {label:'🏥 健康环境',val:'health'},
+  {label:'📖 文化兴趣',val:'culture'}
+];
+
+function getFiltered() {
+  if (!currentCat) return modules;
+  return modules.filter(m => m.cat === currentCat);
+}
+
+function updateStats() {
+  const all = modules.length;
+  const k = Object.values(knew).filter(Boolean).length;
+  document.getElementById('statTotal').textContent = all;
+  document.getElementById('statKnew').textContent = k;
+  document.getElementById('statLeft').textContent = all - k;
+  document.getElementById('progressFill').style.width = Math.round(k/all*100)+'%';
+}
+
+function buildCatTabs() {
+  const el = document.getElementById('catTabs');
+  el.innerHTML = '';
+  cats.forEach(c => {
+    const t = document.createElement('div');
+    t.className = 'cat-tab' + (currentCat===c.val?' active':'');
+    t.textContent = c.label;
+    t.onclick = () => { currentCat=c.val; currentIdx=0; stage=0; buildCatTabs(); renderCard(); };
+    el.appendChild(t);
+  });
+}
+
+function updateDots() {
+  for(let i=0;i<3;i++){
+    const d = document.getElementById('dot'+i);
+    d.className = 'dot' + (i===stage?' active':(i<stage?' done':''));
+  }
+  const labels = ['第1层：模块名称','第2层：钩子 + 论点提示','第3层：完整原文'];
+  document.getElementById('stageLabel').textContent = labels[stage];
+}
+
+function renderCard() {
+  const filtered = getFiltered();
+  const m = filtered[currentIdx];
+  const col = catColors[m.cat];
+  document.getElementById('cardCounter').textContent = (currentIdx+1)+' / '+filtered.length;
+
+  updateDots();
+
+  const navBtn = document.querySelector('.nav-btn.primary');
+
+  if(stage === 0) {
+    navBtn.textContent = '展开提示 ▼';
+    document.getElementById('knewRow').style.display = 'none';
+    document.getElementById('cardArea').innerHTML = `
+      <div class="card">
+        <span class="card-tag" style="background:${col.bg};color:${col.color}">${col.name}</span>
+        <div class="card-title">${m.name}</div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center">
+          <div style="text-align:center;color:#ccc;font-size:15px">点击查看提示 →</div>
+        </div>
+        <div class="card-footer">试着在脑子里还原这个模块的论点</div>
+      </div>`;
+  } else if(stage === 1) {
+    navBtn.textContent = '查看原文 ▼';
+    document.getElementById('knewRow').style.display = 'none';
+    const ph = m.points.map(p=>`
+      <div class="point-row">
+        <div class="point-num">${p.n}</div>
+        <div class="point-body">
+          <div class="point-text">${p.text}</div>
+          <div class="point-eg">${p.eg}</div>
+        </div>
+      </div>`).join('');
+    const pills = m.topics.map(t=>`<span class="topic-pill">${t}</span>`).join('');
+    document.getElementById('cardArea').innerHTML = `
+      <div class="card">
+        <span class="card-tag" style="background:${col.bg};color:${col.color}">${m.name}</span>
+        <div style="display:flex;gap:8px;margin-bottom:14px">
+          <div style="flex:1;background:${col.bg};border-radius:10px;padding:10px 12px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;color:${col.color};margin-bottom:4px">钩子 1</div>
+            <div style="font-size:15px;font-weight:700;color:#1a1a1a">${m.hook1}</div>
+          </div>
+          <div style="flex:1;background:${col.bg};border-radius:10px;padding:10px 12px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;color:${col.color};margin-bottom:4px">钩子 2</div>
+            <div style="font-size:15px;font-weight:700;color:#1a1a1a">${m.hook2}</div>
+          </div>
+        </div>
+        ${ph}
+        <div class="topics-section">
+          <div class="topics-label">覆盖题目</div>
+          <div class="topic-pills">${pills}</div>
+        </div>
+      </div>`;
+  } else {
+    navBtn.textContent = '下一张 →';
+    document.getElementById('knewRow').style.display = 'flex';
+    document.getElementById('cardArea').innerHTML = `
+      <div class="card">
+        <span class="card-tag" style="background:${col.bg};color:${col.color}">${m.name}</span>
+        <div class="fulltext-section">
+          <div class="fulltext-block">
+            <span class="ft-lang ft-fr">🇫🇷 法文原文</span>
+            <div class="ft-text">${m.fr.replace(/\n\n/g,'<br><br>')}</div>
+          </div>
+          <div class="fulltext-block">
+            <span class="ft-lang ft-zh">🇨🇳 中文对照</span>
+            <div class="ft-text">${m.zh.replace(/\n\n/g,'<br><br>')}</div>
+          </div>
+        </div>
+      </div>`;
+  }
+}
+
+function nextStage() {
+  if(stage < 2) { stage++; renderCard(); }
+  else { nextCard(); }
+}
+
+function prevCard() {
+  const filtered = getFiltered();
+  currentIdx = (currentIdx - 1 + filtered.length) % filtered.length;
+  stage = 0;
+  renderCard();
+}
+
+function nextCard() {
+  const filtered = getFiltered();
+  currentIdx = (currentIdx + 1) % filtered.length;
+  stage = 0;
+  renderCard();
+}
+
+function markKnew(val) {
+  const filtered = getFiltered();
+  knew[filtered[currentIdx].id] = val;
+  updateStats();
+  nextCard();
+}
+
+buildCatTabs();
+renderCard();
+updateStats();
+</script>
+</body>
+</html>
