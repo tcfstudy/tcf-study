@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vancouver 8-Day Trip · May 30 – Jun 6, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1a3c2e;
+    --ocean: #2a5f7a;
+    --sand: #f5f0e8;
+    --cream: #faf8f4;
+    --gold: #c9a84c;
+    --mist: #e8ede9;
+    --text: #1c2022;
+    --sub: #5a6a60;
+    --border: #dde3d8;
+    --tag-nature-bg: #e3f0e5; --tag-nature: #1a5c2a;
+    --tag-food-bg: #fef3e2; --tag-food: #8a5a00;
+    --tag-city-bg: #e3eef8; --tag-city: #1a4a7a;
+    --tag-water-bg: #e0f2f4; --tag-water: #0a5c60;
+    --tag-free-bg: #f0e8f8; --tag-free: #5a2a80;
+    --tag-car-bg: #fde8e8; --tag-car: #8a1a1a;
+    --tag-paid-bg: #fff3e0; --tag-paid: #7a4800;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--forest);
+    color: #fff;
+    padding: 60px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-inner { max-width: 860px; margin: 0 auto; position: relative; }
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.72);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 36px;
+  }
+  .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 99px;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+  }
+
+  /* ─── LAYOUT ─── */
+  .page { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ─── QUICK INFO ─── */
+  .quick-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 36px 0 28px;
+  }
+  .qi-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .qi-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--sub); font-weight: 500; margin-bottom: 4px; }
+  .qi-value { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.4; }
+
+  /* ─── SECTION TITLE ─── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--forest);
+    margin: 40px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--border);
+  }
+
+  /* ─── TRANSIT TIPS ─── */
+  .transit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  @media (max-width: 580px) { .transit-grid { grid-template-columns: 1fr; } }
+  .transit-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .transit-card h4 { font-size: 13px; font-weight: 500; color: var(--forest); margin-bottom: 6px; }
+  .transit-card p { font-size: 12.5px; color: var(--sub); line-height: 1.6; }
+
+  /* ─── DAY CARDS ─── */
+  .day-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: box-shadow .2s;
+  }
+  .day-card:hover { box-shadow: 0 4px 20px rgba(26,60,46,0.08); }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .day-num {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .day-num .d { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; opacity: .8; }
+  .day-num .n { font-size: 20px; }
+
+  .day-meta { flex: 1; min-width: 0; }
+  .day-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .day-sub { font-size: 12px; color: var(--sub); margin-top: 3px; }
+  .day-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+
+  .tag {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 500;
+    padding: 2px 9px;
+    border-radius: 99px;
+  }
+  .tag-nature { background: var(--tag-nature-bg); color: var(--tag-nature); }
+  .tag-food { background: var(--tag-food-bg); color: var(--tag-food); }
+  .tag-city { background: var(--tag-city-bg); color: var(--tag-city); }
+  .tag-water { background: var(--tag-water-bg); color: var(--tag-water); }
+  .tag-free { background: var(--tag-free-bg); color: var(--tag-free); }
+  .tag-car { background: var(--tag-car-bg); color: var(--tag-car); }
+  .tag-paid { background: var(--tag-paid-bg); color: var(--tag-paid); }
+
+  .day-toggle {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--mist);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform .25s, background .2s;
+    font-size: 11px;
+    color: var(--sub);
+  }
+  .day-card.open .day-toggle { transform: rotate(180deg); background: var(--forest); color: #fff; }
+
+  .day-body { display: none; border-top: 1px solid var(--border); }
+  .day-body.open { display: block; }
+
+  /* map embed */
+  .map-wrap {
+    position: relative;
+    height: 220px;
+    background: var(--mist);
+    overflow: hidden;
+  }
+  .map-wrap iframe { width: 100%; height: 220px; border: none; display:block; }
+  .map-label {
+    position: absolute;
+    top: 10px; left: 10px;
+    background: var(--forest);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 99px;
+  }
+
+  /* timeline */
+  .timeline { padding: 20px 20px 4px; }
+  .tl-item {
+    display: flex;
+    gap: 14px;
+    padding-bottom: 20px;
+    position: relative;
+  }
+  .tl-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 34px;
+    top: 28px;
+    bottom: 0;
+    width: 1.5px;
+    background: var(--border);
+  }
+  .tl-left { flex-shrink: 0; width: 56px; }
+  .tl-time {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--sub);
+    line-height: 1.3;
+    text-align: right;
+    padding-top: 3px;
+  }
+  .tl-dot-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 6px;
+  }
+  .tl-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--forest);
+    background: #fff;
+    flex-shrink: 0;
+  }
+  .tl-content { flex: 1; padding-top: 1px; }
+  .tl-name { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.4; }
+  .tl-desc { font-size: 12.5px; color: var(--sub); margin-top: 3px; line-height: 1.6; }
+  .tl-cost {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 5px;
+    padding: 1px 8px;
+    border-radius: 99px;
+    background: var(--mist);
+    color: var(--sub);
+  }
+
+  /* tip box */
+  .tip-box {
+    margin: 0 20px 20px;
+    background: linear-gradient(135deg, #f0f7f2 0%, #e8f4f0 100%);
+    border-left: 3px solid var(--forest);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: #2a4a35;
+    line-height: 1.7;
+  }
+  .tip-box strong { font-weight: 600; }
+
+  /* route pills */
+  .route-bar {
+    margin: 0 20px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+  }
+  .route-stop {
+    background: var(--forest);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .route-arrow { color: var(--gold); font-weight: 700; font-size: 14px; }
+  .route-time {
+    background: var(--mist);
+    color: var(--sub);
+    padding: 3px 9px;
+    border-radius: 99px;
+    font-size: 11px;
+  }
+
+  /* places grid */
+  .places-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 10px;
+    padding: 0 20px 20px;
+  }
+  .place-card {
+    background: var(--mist);
+    border-radius: 10px;
+    padding: 12px 13px;
+  }
+  .place-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .place-desc { font-size: 11.5px; color: var(--sub); margin-top: 3px; line-height: 1.5; }
+  .place-cost { font-size: 11px; color: var(--gold); font-weight: 500; margin-top: 5px; }
+
+  /* divider */
+  .divider { height: 1px; background: var(--border); margin: 0 20px 20px; }
+
+  /* footer */
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    color: var(--sub);
+    font-size: 12.5px;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+  .footer strong { color: var(--forest); }
+
+  /* budget table */
+  .budget-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+  .budget-table th {
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--sub); font-weight: 500;
+    padding: 8px 12px; text-align: left;
+    border-bottom: 1.5px solid var(--border);
+  }
+  .budget-table td {
+    padding: 10px 12px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  .budget-table tr:last-child td { border-bottom: none; font-weight: 600; color: var(--forest); }
+  .budget-wrap {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ──────────── HERO ──────────── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Complete Trip Guide · With Maps & Routes · 2 Travellers</div>
+    <h1>Vancouver<br><span>8 Days</span></h1>
+    <p class="hero-sub">May 30 – Jun 6, 2026 · Nights 1-2: HI Vancouver Downtown · Nights 3-7: Richmond Airbnb<br>Nature · Food · City Sights · Water Activities · Budget-Conscious · Only 1 Car Rental Day</p>
+    <div class="hero-pills">
+      <span class="pill">🌿 Granville Island Market</span>
+      <span class="pill">🚲 Stanley Park Seawall</span>
+      <span class="pill">🏝 Bowen Island Ferry</span>
+      <span class="pill">🎢 FlyOver Canada</span>
+      <span class="pill">🌲 Lynn Canyon Free Bridge</span>
+      <span class="pill">🚣 Deep Cove Kayaking</span>
+      <span class="pill">⛰ Sea to Sky Gondola</span>
+      <span class="pill">🦐 Steveston Spot Prawns</span>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ── QUICK INFO ── -->
+  <div class="quick-info">
+    <div class="qi-card">
+      <div class="qi-label">Downtown Stay (Nights 1-2)</div>
+      <div class="qi-value">HI Vancouver Downtown<br><span style="font-size:11.5px;color:var(--sub)">1114 Burnaby St · Women's Dorm · $79.59/person/night</span></div>
+    </div>
+    <div class="qi-card">
+      <div class="qi-label">Richmond Stay (Nights 3-7)</div>
+      <div class="qi-value">10060 Albion Rd, Richmond<br><span style="font-size:11.5px;color:var(--sub)">Private bath, parking · $66.47/person/night</span></div>
+    </div>
+    <div class="qi-card">
+      <div class="qi-label">Flights</div>
+      <div class="qi-value">YOW→YVR: May 30 07:15 AM<br><span style="font-size:11.5px;color:var(--sub)">YVR→YOW: Jun 6 17:10</span></div>
+    </div>
+    <div class="qi-card">
+      <div class="qi-label">Transit Card</div>
+      <div class="qi-value">Buy Compass Card at YVR<br><span style="font-size:11.5px;color:var(--sub)">Single fare ~$3.25 · 90-min transfers</span></div>
+    </div>
+  </div>
+
+  <!-- ── TRANSIT OVERVIEW ── -->
+  <div class="section-title">🚌 Transit Tips at a Glance</div>
+  <div class="transit-grid">
+    <div class="transit-card">
+      <h4>Airport → Downtown (Day 1)</h4>
+      <p>Canada Line from YVR → City Centre station, ~25 min. <strong>$3.25 + $5 airport surcharge = $8.25/person.</strong> The YVR station is inside the terminal — no shuttle needed.</p>
+    </div>
+    <div class="transit-card">
+      <h4>Downtown → Richmond (Day 3 evening)</h4>
+      <p>Canada Line Waterfront → Brighouse ~25 min ($3.25). Then <strong>Bus 401</strong> south to No.1 Rd, ~20 min. Airbnb is a 2–5 min walk.</p>
+    </div>
+    <div class="transit-card">
+      <h4>Richmond → Downtown Day Trips</h4>
+      <p>Walk to No.1 Rd stop → <strong>Bus 401</strong> north → Brighouse → Canada Line. Full journey ~45 min, $3.25/person. Very straightforward.</p>
+    </div>
+    <div class="transit-card">
+      <h4>North Shore (No Car Needed)</h4>
+      <p>Waterfront → <strong>SeaBus</strong> → Lonsdale Quay (12 min), then Bus 228/236 to Lynn Canyon or Bus 212 for Deep Cove. Included in regular fare.</p>
+    </div>
+    <div class="transit-card">
+      <h4>Car Rental (Day 6 Only)</h4>
+      <p><strong>Only 1 car day needed!</strong> Day 6: Sea to Sky Highway (Squamish). Pick up near Brighouse station at Enterprise / Budget. ~$60–80/day incl. tax. Book online in advance.</p>
+    </div>
+    <div class="transit-card">
+      <h4>Airport → YVR (Day 8)</h4>
+      <p>Bus 401 → Brighouse → Canada Line → YVR, ~35–40 min total. No car needed. Remember the $5 airport surcharge. Canada Line runs until midnight.</p>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────── -->
+  <!-- DAILY ITINERARY -->
+  <!-- ─────────────────────────────────────────────────── -->
+  <div class="section-title">📅 Day-by-Day Itinerary</div>
+
+  <!-- DAY 1 -->
+  <div class="day-card" id="card1">
+    <div class="day-header" onclick="toggleDay(1)">
+      <div class="day-num" style="background:#e3f0ff;color:#1a4a8a">
+        <span class="d">Day</span><span class="n">1</span>
+      </div>
+      <div class="day-meta">
+        <div class="day-title">Arrive · Granville Island · Stanley Park · Gastown</div>
+        <div class="day-sub">May 30 · Land 07:15 AM · Stay: HI Vancouver Downtown Hostel</div>
+        <div class="day-tags">
+          <span class="tag tag-city">City Sights</span>
+          <span class="tag tag-food">Market Food</span>
+          <span class="tag tag-nature">Seawall</span>
+          <span class="tag tag-free">Mostly Free</span>
+        </div>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="map-wrap">
+        <div class="map-label">📍 Day 1 · YVR → Granville Island → Stanley Park → Gastown</div>
+        <iframe
+          src="https://www.google.com/maps/dir/Vancouver%20International%20Airport%20YVR%2C%20BC/HI%20Vancouver%20Downtown%20Hostel%2C%201114%20Burnaby%20St%2C%20Vancouver/Granville%20Island%20Public%20Market%2C%20Vancouver/Stanley%20Park%20Seawall%2C%20Vancouver/Gastown%20Steam%20Clock%2C%20305%20Water%20St%2C%20Vancouver/?output=embed"
+          width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <div class="route-bar">
+        <span class="route-stop">✈ YVR Arrive</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Canada Line 25 min</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🏠 HI Hostel</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Bus + Walk</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🌿 Granville Island</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Walk/Bus</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🚲 Stanley Park</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Walk</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">⚙ Gastown</span>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">07:15</div><div class="tl-dot-wrap"><div class="tl-dot" style="border-color:#1a4a8a"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🛬 Land at YVR</div>
+            <div class="tl-desc">Clear customs, collect luggage. Buy your <strong>Compass Card</strong> at the YVR station (load ~$30). Canada Line departs from inside the terminal — no shuttle needed. Arrive at City Centre in ~25 min.</div>
+            <span class="tl-cost">$3.25 + $5 airport surcharge = $8.25/person</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">08:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🏠 Drop Bags at HI Hostel</div>
+            <div class="tl-desc">Check-in isn't until 2 PM, but 24-hr front desk allows free luggage storage. 1114 Burnaby St — walk ~10 min from Yaletown-Roundhouse or City Centre station. Freshen up and head out!</div>
+            <span class="tl-cost">Free luggage storage</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">09:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🌿 Granville Island Public Market</div>
+            <div class="tl-desc">Take bus 50 from Davie St or walk down to the waterfront ferry dock. The market bursts with fresh seafood, artisan bread, local produce, and world-class doughnuts (Lee's Donuts — get there early!). Browse the galleries and craft studios in the surrounding arts district. This is Vancouver's creative soul.</div>
+            <span class="tl-cost">Free entry · Budget $15–25 for food</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">11:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🍞 Lunch at the Market</div>
+            <div class="tl-desc">Grab lunch from the market stalls — Oyama Sausage Co., Siegel's Bagels, or the fresh oyster bar. Eat outside by the waterfront with views of False Creek and the Burrard Bridge.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">13:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🚲 Stanley Park Seawall Bike Ride</div>
+            <div class="tl-desc">Ride the Aquabus from Granville Island to the Hornby St dock (~$4, 5 min) then walk up to Denman St to rent bikes. The 9 km seawall loop takes ~1.5–2 hours — ocean views, totem poles at Brockton Point, Siwash Rock, and the gorgeous Lions Gate Bridge backdrop. Stop at Prospect Point for the best panorama.</div>
+            <span class="tl-cost">Aquabus ~$4/person · Bike rental ~$10–15/hr</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">14:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🛏 Official Check-in + Rest</div>
+            <div class="tl-desc">Return bikes and head back to the hostel — check-in opens at 2 PM. Settle in, shower, and take a short rest. You've already covered a lot for an arrival day!</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">17:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">⚙ Gastown — Steam Clock & Old-Town Charm</div>
+            <div class="tl-desc">Stroll from the hostel (~15 min walk or short bus) to Gastown. The famous Steam Clock at Cambie & Water St whistles every 15 minutes. Explore the cobblestone streets, independent boutiques, and the Victorian brick architecture. Great spot for dinner — try The Flying Pig for West Coast comfort food or Nuba for Lebanese.</div>
+            <span class="tl-cost">Free to explore · Dinner ~$20–30/person</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="places-grid">
+        <div class="place-card"><div class="place-name">Granville Island Market</div><div class="place-desc">1689 Johnston St — Local market, galleries & studios</div><div class="place-cost">Free entry</div></div>
+        <div class="place-card"><div class="place-name">Stanley Park Seawall</div><div class="place-desc">9 km loop · Totem poles · Ocean views</div><div class="place-cost">Free (bike rental extra)</div></div>
+        <div class="place-card"><div class="place-name">Gastown Steam Clock</div><div class="place-desc">305 Water St · Sounds every 15 min</div><div class="place-cost">Free</div></div>
+        <div class="place-card"><div class="place-name">Lee's Donuts</div><div class="place-desc">Inside Granville Market · Legendary since 1979</div><div class="place-cost">~$3–4 each</div></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>📌 Day 1 Tips:</strong> You land at 7:15 AM local time, which is ~10 AM Ottawa time — you won't be too jet-lagged going east→west. Pace yourself though and build in that afternoon nap. Granville Island is best on <strong>weekday mornings before 11 AM</strong> (less crowded). The hostel on Burnaby St is perfectly located — Granville, Stanley Park, and Gastown are all within a 15-min walk or short bus ride.
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day-card" id="card2">
+    <div class="day-header" onclick="toggleDay(2)">
+      <div class="day-num" style="background:#e3f5e8;color:#1a5c2a">
+        <span class="d">Day</span><span class="n">2</span>
+      </div>
+      <div class="day-meta">
+        <div class="day-title">FlyOver Canada · Queen Elizabeth Park · Sunset Beach</div>
+        <div class="day-sub">May 31 · All transit · Stay: HI Vancouver Downtown Hostel</div>
+        <div class="day-tags">
+          <span class="tag tag-city">City Icons</span>
+          <span class="tag tag-nature">Park & Views</span>
+          <span class="tag tag-paid">FlyOver ~$40+</span>
+          <span class="tag tag-free">Sunset Free</span>
+        </div>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="map-wrap">
+        <div class="map-label">📍 Day 2 · FlyOver Canada → Queen Elizabeth Park → Sunset Beach</div>
+        <iframe
+          src="https://www.google.com/maps/dir/FlyOver%20Canada%2C%20999%20Canada%20Place%2C%20Vancouver/Queen%20Elizabeth%20Park%2C%20Vancouver/Sunset%20Beach%20Park%2C%20Vancouver/?output=embed"
+          width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <div class="route-bar">
+        <span class="route-stop">🏠 HI Hostel</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Walk / Bus 15 min</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🎢 Canada Place</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Canada Line → King Edward</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🌸 Queen Elizabeth Park</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Bus → Walk</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🌅 Sunset Beach</span>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">08:30</div><div class="tl-dot-wrap"><div class="tl-dot" style="border-color:#1a5c2a"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🥐 Hostel Breakfast</div>
+            <div class="tl-desc">The hostel includes breakfast — make the most of it before heading out. A proper meal will power you through the morning.</div>
+            <span class="tl-cost">Included in stay</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">09:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🎢 FlyOver Canada — 4D Flight Experience</div>
+            <div class="tl-desc">Located at 999 Canada Place, this is one of Vancouver's most unique attractions. You'll be suspended in a motion seat and "flown" across Canada's landscapes — Rockies, PEI coastline, Northern Lights — with wind, mist, and scent effects. The full experience takes ~45 min including pre-shows. <strong>Book online in advance — cheaper and skip the queue!</strong></div>
+            <span class="tl-cost">~$35–45/person (cheaper online)</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">11:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🌊 Canada Place Waterfront Stroll</div>
+            <div class="tl-desc">Walk the outer promenade of Canada Place — stunning views of the North Shore mountains, Burrard Inlet, and float planes landing on the water. Completely free. Great for photos.</div>
+            <span class="tl-cost">Free</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">12:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🍜 Lunch in Chinatown / Gastown Area</div>
+            <div class="tl-desc">Walk 10 min east to Chinatown on Pender St — vibrant, affordable, and delicious. Try New Town Bakery for BBQ pork buns, or Phnom Penh for legendary crispy garlic chicken wings and butter beef. Budget-friendly and delicious.</div>
+            <span class="tl-cost">~$12–18/person</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">14:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🌸 Queen Elizabeth Park — City's Highest Point</div>
+            <div class="tl-desc">Take Canada Line south to King Edward station, then Bus 15 up Cambie St (~5 min walk from bus stop). At 167 m, this park offers the best 360° panorama of Vancouver with the mountains as a backdrop. The Bloedel Conservatory is a tropical dome full of free-flying parrots and exotic birds — worth the $7 entry. The sunken gardens are spectacular in late May/June.</div>
+            <span class="tl-cost">Park free · Conservatory ~$7/person</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">17:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🌅 Sunset Beach — Golden Hour</div>
+            <div class="tl-desc">Take Canada Line back north, walk from Yaletown-Roundhouse to Sunset Beach (10 min). In late May, sunset is around 9 PM — so enjoy the beach in the long golden afternoon light. Watch the English Bay scene come alive with kayakers, cyclists, and sunset chasers. Grab ice cream from English Bay Café and sit on the sand.</div>
+            <span class="tl-cost">Free</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">Evening</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🍷 Dinner on Davie St or Denman St</div>
+            <div class="tl-desc">Both streets are steps from the hostel and packed with great options — from sushi and Thai to wood-fired pizza and Mexican. Great neighbourhood energy on a Saturday night.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>📌 Day 2 Tips:</strong> FlyOver Canada is <strong>best booked online</strong> (save ~$10 and choose your slot). Queen Elizabeth Park is reachable in 20 min from downtown — don't skip it, the view is genuinely stunning. Since sunset in Vancouver on May 31 is around <strong>9:05 PM</strong>, you have a very long, beautiful evening to enjoy.
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-card" id="card3">
+    <div class="day-header" onclick="toggleDay(3)">
+      <div class="day-num" style="background:#e0f4f5;color:#0a5c60">
+        <span class="d">Day</span><span class="n">3</span>
+      </div>
+      <div class="day-meta">
+        <div class="day-title">Bowen Island All Day · Check Out + Move to Richmond</div>
+        <div class="day-sub">Jun 1 · Ferry day trip · No car needed · Check in to Airbnb evening</div>
+        <div class="day-tags">
+          <span class="tag tag-water">Ferry & Beach</span>
+          <span class="tag tag-nature">Island Hike</span>
+          <span class="tag tag-food">Island Café</span>
+        </div>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="map-wrap">
+        <div class="map-label">📍 Day 3 · Horseshoe Bay Ferry Terminal → Bowen Island</div>
+        <iframe
+          src="https://www.google.com/maps/dir/Horseshoe%20Bay%20Ferry%20Terminal%2C%20West%20Vancouver%2C%20BC/Snug%20Cove%2C%20Bowen%20Island%2C%20BC/?output=embed"
+          width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <div class="route-bar">
+        <span class="route-stop">🏠 HI Hostel</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Canada Line → Bus 257 ~70 min</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">⛴ Horseshoe Bay</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">BC Ferries ~20 min</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🏝 Bowen Island Snug Cove</span>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">07:30</div><div class="tl-dot-wrap"><div class="tl-dot" style="border-color:#0a5c60"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🧳 Hostel Breakfast + Check Out</div>
+            <div class="tl-desc">Enjoy hostel breakfast, then check out and store your bigger bags at left luggage (or take everything — the Airbnb check-in is flexible). Grab your day bag and head out early to catch a morning ferry.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">08:15</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🚌 Transit to Horseshoe Bay</div>
+            <div class="tl-desc">From City Centre Canada Line station, take Canada Line south one stop to Waterfront, then walk up to Bus 257 (Horseshoe Bay Express — direct, no transfers). About 70 min total. Scenic ride through West Vancouver. Arrive early at the terminal — BC Ferries to Bowen Island stops selling tickets 10 min before sailing.</div>
+            <span class="tl-cost">~$3.25/person (Compass Card)</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">09:45</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">⛴ BC Ferries: Horseshoe Bay → Snug Cove</div>
+            <div class="tl-desc"><strong>Tickets are walk-up only — no reservations.</strong> A 20-minute crossing across glassy Howe Sound, framed by snowcapped Coast Mountains. Return journey is included in your ticket. Go up top for the best views and the sea air.</div>
+            <span class="tl-cost">~$11–13/person (return included)</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">10:15</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">☕ Snug Cove Village — Morning Wander</div>
+            <div class="tl-desc">Step off the ferry into Snug Cove — a little village of galleries, boutiques, and cafes. Try The Snug Café for Eggs Benedict or Artisan Eats for fresh pastries. Browse the artisan shops and soak in the slow island pace.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">11:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🥾 Crippen Regional Park Hike</div>
+            <div class="tl-desc">Start from Snug Cove and enter the free Crippen Park trail network. The <strong>Killarney Creek Loop</strong> (~3.5 km, 1.5 hrs) winds through old-growth forest past a small lake and a salmon-bearing creek. Or take the shorter Pebbly Beach trail (30 min) for ocean views without the elevation.</div>
+            <span class="tl-cost">Free</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">13:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🏖 Deep Bay / Sandy Beach Relaxation</div>
+            <div class="tl-desc">10 min walk from Snug Cove, a quiet pebble-and-sand beach looks out over Howe Sound. Perfect for sitting, paddling, and mountain-gazing. Total serenity.</div>
+            <span class="tl-cost">Free</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">Afternoon</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🚣 Sea Kayaking (Optional)</div>
+            <div class="tl-desc">Kayak rentals are right near the ferry dock. Paddling the calm waters of Howe Sound with mountain walls rising on all sides is genuinely magical. Self-guided 2-hr rental or guided 3-hr tour available. Beginner-friendly.</div>
+            <span class="tl-cost">Self-rental ~$40/2 hrs · Guided tour ~$85/person</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">17:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🍦 Branch on Bowen Ice Cream + Return Ferry</div>
+            <div class="tl-desc">Get a scoop from Branch on Bowen (home of Earnest Ice Cream) while waiting for the 5–6 PM ferry back to Horseshoe Bay. Check the BC Ferries schedule before heading in. The return crossing is included in your ticket.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">19:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🏠 Check In to Richmond Airbnb</div>
+            <div class="tl-desc">Take Bus 257 back to downtown, Canada Line to Brighouse, then Bus 401 south to No.1 Rd. Coordinate check-in time with your host. Pick up luggage from storage if you left it downtown. Settle in — this is your home base for the next 5 nights!</div>
+            <span class="tl-cost">~$3.25/person transit</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>📌 Day 3 Tips:</strong> Bowen Island ferries <strong>cannot be reserved</strong> — arrive at Horseshoe Bay ~30 min early on busy weekends. You <strong>do not need to bring your car</strong> (saves ~$45 in vehicle fare!) — Snug Cove and Crippen Park are completely walkable from the dock. The return ferry is <strong>free</strong> (included in the outbound ticket). If you want to carry less on this day, coordinate a mid-afternoon Airbnb check-in with your host.
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="day-card" id="card4">
+    <div class="day-header" onclick="toggleDay(4)">
+      <div class="day-num" style="background:#fef3e2;color:#8a5a00">
+        <span class="d">Day</span><span class="n">4</span>
+      </div>
+      <div class="day-meta">
+        <div class="day-title">Richmond Food Day · Dim Sum + Steveston Wharf</div>
+        <div class="day-sub">Jun 2 · No car needed · Bus + Canada Line · Stay: Richmond Airbnb</div>
+        <div class="day-tags">
+          <span class="tag tag-food">Food Heaven</span>
+          <span class="tag tag-water">Fisherman's Wharf</span>
+          <span class="tag tag-city">Shopping</span>
+          <span class="tag tag-free">No Car</span>
+        </div>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="map-wrap">
+        <div class="map-label">📍 Day 4 · 10060 Albion Rd → Aberdeen Centre → Steveston</div>
+        <iframe
+          src="https://www.google.com/maps/dir/10060%20Albion%20Road%2C%20Richmond%2C%20BC/Aberdeen%20Centre%2C%204151%20Hazelbridge%20Way%2C%20Richmond/Steveston%20Fisherman%27s%20Wharf%2C%20Richmond%2C%20BC/Richmond%20Night%20Market%2C%20Richmond%2C%20BC/?output=embed"
+          width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <div class="route-bar">
+        <span class="route-stop">🏠 Albion Rd</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Bus 401 → Brighouse → Canada Line</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🏬 Aberdeen Centre</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Bus to Steveston</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🦐 Steveston Wharf</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Walk 10 min</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🌅 Garry Point Park</span>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">Morning</div><div class="tl-dot-wrap"><div class="tl-dot" style="border-color:#8a5a00"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🍱 Alexandra Road — Richmond's Golden Mile</div>
+            <div class="tl-desc">Known as the "Golden Mile," Alexandra Rd (between No.1 Rd and No.5 Rd) is one of the best Asian restaurant strips in North America. From HK-style BBQ and Shanghainese xiaolongbao to Vietnamese pho and Taiwanese scallion pancakes — breakfast and early lunch options are everywhere. Get there before noon for the best dim sum selection.</div>
+            <span class="tl-cost">Breakfast/Lunch ~$10–18/person</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">10:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🏬 Aberdeen Centre + Lansdowne Centre</div>
+            <div class="tl-desc">Canada Line to Aberdeen station — the mall is directly connected to the platform. Browse the 3rd-floor food court (Taiwanese milk tea, Japanese curry, HK egg waffles), Japanese variety shops, and bubble tea brands. Then walk to adjacent Lansdowne Centre for mainstream shopping. CF Richmond Centre (largest mainstream mall in Richmond) is one stop north at Brighouse.</div>
+            <span class="tl-cost">Free to browse</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">12:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🍤 Dim Sum at a Top Cantonese Restaurant</div>
+            <div class="tl-desc">Richmond has arguably the best Cantonese dim sum outside Hong Kong. Top picks near Aberdeen: <strong>Chef Tony Seafood Restaurant</strong> (creative dim sum, book ahead), <strong>Sea Harbour Seafood</strong>, or <strong>Fisherman's Terrace</strong>. Lunch service is much more affordable than dinner.</div>
+            <span class="tl-cost">~$25–40/person (book in advance!)</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">14:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🦐 Steveston Fisherman's Wharf — Live Spot Prawns</div>
+            <div class="tl-desc">Take Bus 401 south from No.1 Rd toward No.5 Rd, then Bus 401 south direction or a short taxi to Steveston (~25–30 min total). Historic Steveston Village is a beautifully preserved cannery town. At the wharf, fishing boats sell live spot prawns, Dungeness crab, and sea urchin directly to the public. <strong>June is peak spot prawn season</strong> — get them steamed right on the dock. Stroll the wooden boardwalk and explore the Gulf of Georgia Cannery museum.</div>
+            <span class="tl-cost">Spot prawns ~$25–30/lb · Free to explore village</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">16:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🌅 Garry Point Park — Steveston Sunset Stroll</div>
+            <div class="tl-desc">A 10-min walk from the Wharf, Garry Point Park sits at the tip of the Steveston Peninsula with 180° views over the Strait of Georgia. Japanese gardens, open grass, and stunning evening light — perfect for a slow end to a full day. In June sunset is after 9 PM, so there's no rush heading home.</div>
+            <span class="tl-cost">Free</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">Evening</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🧋 Richmond Bubble Tea Night</div>
+            <div class="tl-desc">Head back to central Richmond via bus. No.3 Rd after dark is lined with neon bubble tea and dessert shops — Coco, Gong Cha, Tiger Sugar, Meet Fresh. A relaxed low-key wind-down before the big Sea to Sky day tomorrow.</div>
+            <span class="tl-cost">~$6–8/drink</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>📌 Day 4 Tips:</strong> Steveston is reachable without a car — take a cab from Aberdeen (~$15) or Bus 407/401 toward No.5 Rd. <strong>Spot prawn timing matters:</strong> boats usually start selling around noon, but if you arrive at 2–3 PM, selection may be limited — aim to get there by 2:30 PM at the latest. The Richmond Night Market (Fri/Sat/Sun only) is saved for Day 7, which lands on a Friday — perfect timing!
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 5 -->
+  <div class="day-card" id="card5">
+    <div class="day-header" onclick="toggleDay(5)">
+      <div class="day-num" style="background:#e3f0e5;color:#1a5c2a">
+        <span class="d">Day</span><span class="n">5</span>
+      </div>
+      <div class="day-meta">
+        <div class="day-title">North Shore by Transit · Lynn Canyon + Deep Cove Kayaking</div>
+        <div class="day-sub">Jun 3 · No car needed! · SeaBus + Bus · Stay: Richmond Airbnb</div>
+        <div class="day-tags">
+          <span class="tag tag-nature">Forest & Falls</span>
+          <span class="tag tag-water">Kayaking</span>
+          <span class="tag tag-free">Free Bridge!</span>
+          <span class="tag tag-city">North Van</span>
+        </div>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="map-wrap">
+        <div class="map-label">📍 Day 5 · Waterfront → Lynn Canyon → Deep Cove</div>
+        <iframe
+          src="https://www.google.com/maps/dir/Waterfront%20Station%2C%20Vancouver%2C%20BC/Lynn%20Canyon%20Suspension%20Bridge%2C%20North%20Vancouver%2C%20BC/Deep%20Cove%20Kayak%20Centre%2C%20North%20Vancouver%2C%20BC/?output=embed"
+          width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <div class="route-bar">
+        <span class="route-stop">🏠 Richmond</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">401 → Canada Line → Waterfront</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">⛴ SeaBus</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">Lonsdale Quay</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Bus 228 ~20 min</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🌲 Lynn Canyon</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Bus 212</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🚣 Deep Cove</span>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">08:00</div><div class="tl-dot-wrap"><div class="tl-dot" style="border-color:#1a5c2a"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🚌 Head to Waterfront via Canada Line</div>
+            <div class="tl-desc">Bus 401 → Brighouse → Canada Line to Waterfront (~40 min from Richmond). Walk to the SeaBus terminal (connected to Waterfront station). Grab a coffee at one of the Waterfront shops before boarding.</div>
+            <span class="tl-cost">$3.25/person (Compass Card)</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">09:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">⛴ SeaBus to Lonsdale Quay</div>
+            <div class="tl-desc">12-minute ferry crossing of Burrard Inlet with outstanding views of Vancouver's downtown skyline and the mountains behind. Included in your regular Compass Card fare — no extra charge. Browse Lonsdale Quay market briefly (it opens at 9 AM) before catching Bus 228.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">09:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🌲 Lynn Canyon Suspension Bridge — FREE!</div>
+            <div class="tl-desc">Bus 228 (Lynn Valley direction) from Lonsdale Quay to Peters Rd (~20 min), then a 5-min walk into Lynn Canyon Park. The free suspension bridge hangs 50 m above the canyon gorge — just as dramatic as Capilano, without the $60 admission fee. After crossing, take the <strong>Twin Falls Loop</strong> trail (1.5 km, 25 min) to see the twin waterfalls and the stunning 30 Foot Pool (an emerald natural swimming hole — safe in summer).</div>
+            <span class="tl-cost">Completely FREE</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">11:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🌊 Cleveland Dam (Optional Extension)</div>
+            <div class="tl-desc">If energy allows, take a short taxi or Uber to Cleveland Dam (~10 min from Lynn Canyon, no easy bus connection). The dam retains Capilano Lake — the short walk along the top offers gorgeous views of the Capilano Canyon below and Grouse Mountain above. The <strong>Dam to Bridge Trail</strong> (~1.5 hr hike) winds through old-growth forest. Parking: 5077 Dam Rd.</div>
+            <span class="tl-cost">Free · Taxi ~$12 one-way</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">12:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🍩 Lunch + Honey's Donuts at Deep Cove</div>
+            <div class="tl-desc">Bus 212 from Phibbs Exchange to Deep Cove (check TransLink for transfer from Lynn Canyon). Deep Cove is a charming waterfront village at the head of Indian Arm fjord. <strong>Honey's Donuts</strong> is legendary — the lineup is long but moves fast. Get a maple-glazed and eat it by the dock with a view of the still water and forested mountains.</div>
+            <span class="tl-cost">Donuts ~$2–3 each · Lunch ~$15</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">14:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🚣 Deep Cove Kayaking</div>
+            <div class="tl-desc">Deep Cove Canoe & Kayak rents double kayaks right at the waterfront. Paddle out into Indian Arm — a 70 km fjord flanked by mountains. The water is calm and sheltered, perfect for beginners. A 2-hour paddle takes you past rocky shores and forested slopes. Absolutely unforgettable.</div>
+            <span class="tl-cost">Double kayak ~$30–40/2 hrs per boat</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">Evening</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🍜 Return to Richmond for Dinner</div>
+            <div class="tl-desc">Bus 212 → Phibbs Exchange → Bus 210 to downtown → Canada Line back to Richmond. Grab a bowl of hot noodles from the Alexandra Rd strip — you've earned it after all that paddling.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="places-grid">
+        <div class="place-card"><div class="place-name">Lynn Canyon Bridge</div><div class="place-desc">50 m suspension bridge over canyon gorge</div><div class="place-cost">FREE (no ticket needed)</div></div>
+        <div class="place-card"><div class="place-name">30 Foot Pool</div><div class="place-desc">Emerald swimming hole below falls</div><div class="place-cost">Free · swim in summer</div></div>
+        <div class="place-card"><div class="place-name">Honey's Donuts</div><div class="place-desc">Deep Cove institution since 1976</div><div class="place-cost">~$2–3 each · Worth the queue</div></div>
+        <div class="place-card"><div class="place-name">Deep Cove Kayaking</div><div class="place-desc">Indian Arm fjord paddling</div><div class="place-cost">~$30–40/boat/2 hrs</div></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>📌 Day 5 Tips — Car or No Car?</strong> If you want to do the full combo (Lynn Canyon + <strong>Cleveland Dam 1.5-hr hike</strong> + Deep Cove kayaking), <strong>renting a car for Day 5 is worth it</strong>. There's no direct bus between Lynn Canyon and Cleveland Dam — you'd need a taxi (~$12–15 one way), then another taxi back to main transit for Deep Cove, which adds ~45 min of friction and ~$30 in taxi fares. With a car, the three spots form a clean 30-min loop on the North Shore. If you drop Cleveland Dam and just do <strong>Lynn Canyon + Deep Cove</strong>, transit by SeaBus + Bus 228 + Bus 212 works perfectly and costs ~$6.50 total. Your call — the car saves time; transit saves money. <strong>Lynn Canyon bridge remains 100% free either way.</strong> Deep Cove kayak rentals: arrive between 1–3 PM on weekdays for shortest wait. Bring water shoes.
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 6 -->
+  <div class="day-card" id="card6">
+    <div class="day-header" onclick="toggleDay(6)">
+      <div class="day-num" style="background:#fde8e8;color:#8a1a1a">
+        <span class="d">Day</span><span class="n">6</span>
+      </div>
+      <div class="day-meta">
+        <div class="day-title">Sea to Sky Highway · Cypress + Gondola + Shannon Falls</div>
+        <div class="day-sub">Jun 4 · 🚗 Rent a car (1 day only!) · Stay: Richmond Airbnb</div>
+        <div class="day-tags">
+          <span class="tag tag-nature">Scenic Drive</span>
+          <span class="tag tag-car">🚗 Car Day</span>
+          <span class="tag tag-food">Spot Prawns!</span>
+          <span class="tag tag-paid">Gondola $74</span>
+        </div>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="map-wrap">
+        <div class="map-label">📍 Day 6 · Richmond → Cypress → Shannon Falls → Sea to Sky Gondola</div>
+        <iframe
+          src="https://www.google.com/maps/dir/Richmond%2C%20BC/Cypress%20Mountain%20Lookout%2C%20West%20Vancouver%2C%20BC/Shannon%20Falls%20Provincial%20Park%2C%20Squamish%2C%20BC/Sea%20to%20Sky%20Gondola%2C%20Squamish%2C%20BC/?output=embed"
+          width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <div class="route-bar">
+        <span class="route-stop">🚗 Richmond</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Drive ~30 min</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🔭 Cypress Lookout</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Drive ~50 min on Hwy 99</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">💦 Shannon Falls</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Drive 5 min</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">⛰ Sea to Sky Gondola</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Drive back ~1 hr</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🏠 Richmond</span>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">07:30</div><div class="tl-dot-wrap"><div class="tl-dot" style="border-color:#8a1a1a"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🚗 Pick Up Rental Car at Brighouse</div>
+            <div class="tl-desc">Enterprise or Budget near Brighouse Canada Line station — book in advance online to get the best rate and guarantee availability. Check out early for the best driving conditions on the Sea to Sky. This is your <strong>only car rental day</strong> of the whole trip.</div>
+            <span class="tl-cost">~$60–80/day incl. tax (book online)</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">08:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🔭 Cypress Mountain Lookout — Panoramic Vancouver View</div>
+            <div class="tl-desc">Drive north over the Lions Gate Bridge and up Cypress Bowl Rd to the Cypress Mountain Lookout. On a clear day, the view sweeps over Vancouver's entire cityscape, the Fraser Delta, and Mount Baker in Washington State. The 2010 Olympic venue is up here too. Free to visit, just park in the lot. Great morning light for photos.</div>
+            <span class="tl-cost">Free · Parking free</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">09:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🌊 Whytecliff Park — Hidden Ocean Gem</div>
+            <div class="tl-desc">A short detour from Cypress on Marine Dr brings you to Whytecliff Park — a rocky marine park with stunning ocean-carved bluffs and tide pools. On a clear day you can see Bowen Island just across the water (you were there two days ago!). Perfect photo spot. Free, limited parking.</div>
+            <span class="tl-cost">Free</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">10:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">💦 Shannon Falls Provincial Park</div>
+            <div class="tl-desc">Continue north on the Sea to Sky Highway (Hwy 99) to Squamish. Shannon Falls is BC's third-highest waterfall at 335 m — and it's just a 5-minute walk from the free parking lot. The roar is audible from the car park. Bring a light jacket as it creates its own microclimate.</div>
+            <span class="tl-cost">Free (parking ~$5)</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">11:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">⛰ Sea to Sky Gondola — Summit Views</div>
+            <div class="tl-desc">Just 2 min drive from Shannon Falls. The gondola lifts you 885 m up to the Summit Lodge in under 10 minutes — views of Howe Sound, glaciers, and Squamish Chief granite monolith. At the top: a sky pilot trail, suspension bridge walk, and the Summit Lodge café with huge windows. Allow 2–3 hours up top.</div>
+            <span class="tl-cost">$73.95/person · Parking ~$10/day</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">15:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🚗 Drive Back to Richmond</div>
+            <div class="tl-desc">Head back south along the Sea to Sky Highway — the return drive is just as beautiful. Stop at a Squamish roadside diner for a late lunch if you haven't eaten. Back in Richmond by mid-afternoon.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">17:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🚗 Return Car + Relax</div>
+            <div class="tl-desc">Return the rental car to Brighouse. Head back to the Airbnb and unwind — it's been a big day. Grab a simple dinner from a nearby noodle shop on Alexandra Rd or order delivery. Rest up for tomorrow's UBC and Night Market day!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>📌 Day 6 Tips:</strong> This is your <strong>only driving day</strong> — make it count! Check that the Gondola is operating before leaving (weather closures occasionally happen) and book tickets online in advance. The Sea to Sky Highway is stunning in both directions, so enjoy the drive. Return the car by early evening to keep costs down — and save your appetite, because tomorrow is the <strong>Richmond Night Market</strong>!
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 7 -->
+  <div class="day-card" id="card7">
+    <div class="day-header" onclick="toggleDay(7)">
+      <div class="day-num" style="background:#e3eef8;color:#1a4a7a">
+        <span class="d">Day</span><span class="n">7</span>
+      </div>
+      <div class="day-meta">
+        <div class="day-title">UBC Peninsula · MOA + Spanish Banks + Richmond Night Market</div>
+        <div class="day-sub">Jun 5 (Friday) · No car needed · Canada Line + Bus · Stay: Richmond Airbnb</div>
+        <div class="day-tags">
+          <span class="tag tag-city">Culture & Art</span>
+          <span class="tag tag-nature">Forest & Beach</span>
+          <span class="tag tag-food">🎪 Night Market!</span>
+          <span class="tag tag-free">Mostly Free</span>
+        </div>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="map-wrap">
+        <div class="map-label">📍 Day 7 · UBC Museum of Anthropology → Spanish Banks → Kitsilano</div>
+        <iframe
+          src="https://www.google.com/maps/dir/Museum%20of%20Anthropology%20at%20UBC%2C%20Vancouver%2C%20BC/Spanish%20Banks%20Beach%2C%20Vancouver%2C%20BC/Kitsilano%20Beach%2C%20Vancouver%2C%20BC/?output=embed"
+          width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <div class="route-bar">
+        <span class="route-stop">🏠 Richmond</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Canada Line → Broadway-City Hall</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Bus 9 west ~35 min</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🏛 UBC / MOA</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Walk 20 min</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🏖 Spanish Banks</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Bus 4/9 east</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🍽 Kitsilano</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Canada Line south</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">🎪 Night Market</span>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">09:00</div><div class="tl-dot-wrap"><div class="tl-dot" style="border-color:#1a4a7a"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🚌 Head to UBC via Canada Line + Bus 9</div>
+            <div class="tl-desc">Bus 401 → Brighouse → Canada Line to Broadway-City Hall station, then Bus 9 (UBC direction) all the way to the university loop (~35 min). The bus runs along W 10th Ave through the leafy Point Grey neighbourhood. Get off at UBC Bus Exchange.</div>
+            <span class="tl-cost">$3.25/person (Compass Card)</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">10:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🏛 Museum of Anthropology (MOA)</div>
+            <div class="tl-desc">One of Canada's finest museums — and one of Vancouver's most underrated attractions. The iconic Arthur Erickson building houses an extraordinary collection of First Nations art: towering totem poles inside a glass Great Hall, Haida longhouses in the outdoor garden, and the world-renowned <strong>Raven and the First Men</strong> sculpture by Bill Reid. Allow 1.5–2 hrs. The museum sits on a bluff with ocean views towards the North Shore mountains.</div>
+            <span class="tl-cost">~$18/person (Tuesdays free after 5 PM)</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">12:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🌲 Pacific Spirit Regional Park Trail</div>
+            <div class="tl-desc">Right behind UBC, Pacific Spirit Park has 73 km of free hiking trails through old-growth forest — Douglas fir, western red cedar, and towering hemlock. Pick up the <strong>Sword Fern Trail</strong> or <strong>Salal Trail</strong> (both easy, ~45 min loops). The forest here is genuinely lush, mossy, and serene. A beautiful contrast to the museum.</div>
+            <span class="tl-cost">Free</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">13:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🏖 Spanish Banks Beach</div>
+            <div class="tl-desc">Walk 20 min north from the park to Spanish Banks — one of Vancouver's best and most expansive beaches. At low tide the sand flats stretch endlessly, and the views across English Bay to the North Shore mountains are spectacular. In June the water is cold but the beach is fantastic for a picnic, a paddle, or just lying in the sun. <strong>Bring food from MOA café</strong> or pick up a sandwich at the UBC bus loop before heading down.</div>
+            <span class="tl-cost">Free</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">15:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🌊 Walk the Foreshore to Locarno Beach (Optional)</div>
+            <div class="tl-desc">The shoreline from Spanish Banks connects to Locarno Beach and then Jericho Beach — you can walk the entire foreshore for about 3 km with uninterrupted water views. The afternoon light on the mountains is exceptional. A perfect wind-down after the museum.</div>
+            <span class="tl-cost">Free</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">17:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🍕 Dinner in Kitsilano — W 4th Ave</div>
+            <div class="tl-desc">Bus 4 east from Jericho Beach (or Bus 9 from UBC) drops you on W 4th Ave — Kitsilano's vibrant restaurant strip. Options range from casual to upscale: <strong>Nook</strong> for wood-fired pizza, <strong>Fable</strong> for farm-to-table, or grab fish tacos from the many takeout spots along the strip. Afterwards, walk down to Kitsilano Beach for the last golden hour of the day.</div>
+            <span class="tl-cost">Dinner ~$18–30/person</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">17:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🍕 Early Dinner in Kitsilano — W 4th Ave</div>
+            <div class="tl-desc">Bus 4 east from Jericho Beach (or Bus 9 from UBC) drops you on W 4th Ave — Kitsilano's vibrant restaurant strip. Eat early so you have energy for the night market. Try <strong>Nook</strong> for wood-fired pizza, <strong>Fable</strong> for farm-to-table, or grab fish tacos from a takeout spot along the strip.</div>
+            <span class="tl-cost">Dinner ~$18–28/person</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">19:00</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🎪 Richmond Night Market (7 PM – 11 PM) — Friday!</div>
+            <div class="tl-desc">Canada Line from Broadway-City Hall back to Brighouse (~25 min), then walk ~15 min to the Night Market. <strong>Friday is the perfect night</strong> — lively but not as packed as Saturday. 100+ Asian street food stalls and live entertainment: takoyaki, Taiwanese stinky tofu, mango sticky rice, dragon's beard candy, fried squid, and more. This is a proper Richmond bucket-list experience.</div>
+            <span class="tl-cost">Entry ~$2/person · Food ~$20–30</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="places-grid">
+        <div class="place-card"><div class="place-name">Museum of Anthropology</div><div class="place-desc">6393 NW Marine Dr, UBC · First Nations masterworks</div><div class="place-cost">~$18/person</div></div>
+        <div class="place-card"><div class="place-name">Pacific Spirit Park</div><div class="place-desc">73 km of old-growth forest trails</div><div class="place-cost">Free</div></div>
+        <div class="place-card"><div class="place-name">Spanish Banks Beach</div><div class="place-desc">NW Marine Dr · Best low-tide beach in Vancouver</div><div class="place-cost">Free</div></div>
+        <div class="place-card"><div class="place-name">Richmond Night Market</div><div class="place-desc">Fri–Sun 7–11 PM · Near Brighouse station</div><div class="place-cost">~$2 entry · Food ~$20–30</div></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>📌 Day 7 Tips:</strong> MOA is closed Mondays — June 5 (Friday) is perfect. The Night Market runs <strong>Friday–Sunday only</strong>, so tonight is the ideal night to go: lively but not as crowded as Saturday. Walk from Brighouse station (~15 min) or take a short cab. MOA tip: the <strong>outdoor Haida houses</strong> in the sculpture garden are free to view from the fence even without entering the museum. Eat dinner in Kitsilano before heading back so you arrive at the Night Market with room for snacks!
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 8 -->
+  <div class="day-card" id="card8">
+    <div class="day-header" onclick="toggleDay(8)">
+      <div class="day-num" style="background:#f1efe8;color:#5f5e5a">
+        <span class="d">Day</span><span class="n">8</span>
+      </div>
+      <div class="day-meta">
+        <div class="day-title">Last Morning · Dim Sum · YVR 5:10 PM Flight</div>
+        <div class="day-sub">Jun 6 · Flight departs 5:10 PM · Canada Line direct to airport · No car needed</div>
+        <div class="day-tags">
+          <span class="tag tag-food">Final Dim Sum</span>
+          <span class="tag tag-city">Light Farewell</span>
+        </div>
+      </div>
+      <div class="day-toggle">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="map-wrap">
+        <div class="map-label">📍 Day 8 · 10060 Albion Rd → Brighouse Station → YVR Airport</div>
+        <iframe
+          src="https://www.google.com/maps/dir/10060%20Albion%20Road%2C%20Richmond%2C%20BC/Brighouse%20Station%2C%20Richmond%2C%20BC/Vancouver%20International%20Airport%20YVR%2C%20BC/?output=embed"
+          width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <div class="route-bar">
+        <span class="route-stop">🏠 Albion Rd</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Bus 401 ~15 min</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">Brighouse</span>
+        <span class="route-arrow">→</span>
+        <span class="route-time">Canada Line 3 stops ~10 min</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">✈ YVR Airport</span>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">Morning</div><div class="tl-dot-wrap"><div class="tl-dot" style="border-color:#5f5e5a"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🍵 Final Dim Sum in Richmond</div>
+            <div class="tl-desc">The perfect goodbye meal. Head to No.3 Rd near Aberdeen for a Hong Kong-style tea house — BBQ pork buns, rice noodle rolls, egg tarts, and milk tea. Pure Richmond. Recommended: <strong>Kirin Restaurant</strong>, <strong>Grand Dynasty</strong>, or simply find the place with the longest queue of locals.</div>
+            <span class="tl-cost">~$15–20/person</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">10:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🛍 Last-Minute Shopping (Optional)</div>
+            <div class="tl-desc">Canada Line to Aberdeen — grab any last souvenirs at Aberdeen Centre or the nearby shops. The Japanese variety store Daiso is a great place to pick up cheap practical gifts. Pack before heading to the airport.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">13:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">🧳 Head to YVR Airport</div>
+            <div class="tl-desc">For a <strong>5:10 PM domestic flight</strong>, aim to be at YVR by <strong>2:30–3:00 PM</strong>. From Airbnb: walk to No.1 Rd bus stop → Bus 401 north → Brighouse Canada Line → YVR (3 stops, ~10 min). Total ~35 minutes. Don't forget the $5 airport surcharge on your Compass Card!</div>
+            <span class="tl-cost">$3.25 + $5 airport surcharge = $8.25/person</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-time">14:30</div><div class="tl-dot-wrap"><div class="tl-dot"></div></div></div>
+          <div class="tl-content">
+            <div class="tl-name">✈ Check In for Return Flight to Ottawa</div>
+            <div class="tl-desc">YVR is a large international airport — allow 1.5–2 hrs before departure for domestic flights. Check in, clear security, and relax at the gate. When you get your Compass Card refund at the Skytrain booth, you'll get back the $6 deposit plus remaining balance. <strong>Vancouver, until next time!</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>📌 Day 8 Tips:</strong> The biggest advantage of staying in Richmond is this last day — Brighouse to YVR is just <strong>3 stops on the Canada Line, ~10 minutes, no transfers</strong>. Don't forget to <strong>return your Compass Card</strong> at a Canada Line station for your $6 deposit + remaining balance refund. Your flight departs at 17:10 and arrives in Ottawa at 00:55 AM (+1 day).
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BUDGET OVERVIEW ── -->
+  <div class="section-title">💰 Estimated Budget Overview (2 People)</div>
+  <div class="budget-wrap">
+    <table class="budget-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Estimated Cost (2 people)</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>✈ Flights — Ottawa ↔ Vancouver (per person × 2)</td><td>$945.02</td><td>$472.51/person</td></tr>
+        <tr><td>🧳 Checked Baggage × 1</td><td>$39.55</td><td>$20/person</td></tr>
+        <tr><td>Accommodation — HI Hostel × 2 nights</td><td>$318.36</td><td>$79.59/person/night</td></tr>
+        <tr><td>Accommodation — Richmond Airbnb × 5 nights</td><td>$664.70</td><td>$66.47/person/night</td></tr>
+        <tr><td>Transit — Compass Card × 2 (8 days)</td><td>~$90–120</td><td>Canada Line, SeaBus, buses</td></tr>
+        <tr><td>Airport surcharge × 4 (in + out × 2 people)</td><td>$20</td><td>$5/person each way</td></tr>
+        <tr><td>Car Rental — Day 6 (Sea to Sky) × 1 day</td><td>~$60–80</td><td>Enterprise/Budget near Brighouse</td></tr>
+        <tr><td>BC Ferries — Bowen Island (Day 3) × 2</td><td>~$24–26</td><td>Return included in outbound ticket</td></tr>
+        <tr><td>FlyOver Canada × 2 (Day 2)</td><td>~$70–90</td><td>Cheaper with online booking</td></tr>
+        <tr><td>Sea to Sky Gondola × 2 (Day 6)</td><td>$147.90</td><td>$73.95/person, parking ~$10</td></tr>
+        <tr><td>Museum of Anthropology × 2 (Day 7)</td><td>~$36</td><td>~$18/person</td></tr>
+        <tr><td>Deep Cove Kayak rental (Day 5)</td><td>~$60–80</td><td>Double kayak ~$30–40/2 hrs</td></tr>
+        <tr><td>Meals — 8 days × 2 people × 3 meals</td><td>~$600–900</td><td>Mix of markets, dim sum, Steveston seafood, street food</td></tr>
+        <tr><td><strong>Total Estimated (all-in)</strong></td><td><strong>~$3,100–3,500 CAD total</strong></td><td><strong>~$1,550–1,750 per person</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /page -->
+
+<div class="footer">
+  <strong>Vancouver 8-Day Trip Guide</strong> · May 30 – Jun 6, 2026 · 2 Travellers<br>
+  Transit schedules subject to change — check TransLink & BC Ferries official sites · Download the <strong>Transit App</strong> for real-time schedules
+</div>
+
+<script>
+function toggleDay(n) {
+  const card = document.getElementById('card' + n);
+  const body = card.querySelector('.day-body');
+  const isOpen = card.classList.contains('open');
+  card.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+// default open day 1
+document.addEventListener('DOMContentLoaded', () => toggleDay(1));
+</script>
+</body>
+</html>
