@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>法语口语训练器</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F5F0;
+  --surface: #FFFFFF;
+  --surface2: #F0EDE6;
+  --border: #E2DDD4;
+  --text: #1A1814;
+  --text2: #6B6760;
+  --text3: #9E9B96;
+  --blue-bg: #EBF2FF; --blue-txt: #1A3A7A; --blue-acc: #3366CC;
+  --teal-bg: #E4F5EE; --teal-txt: #0D4F38; --teal-acc: #1A8C5F;
+  --amber-bg: #FEF3E2; --amber-txt: #6B3D00; --amber-acc: #D4820A;
+  --purple-bg: #F0EEFF; --purple-txt: #3B2080; --purple-acc: #6B48E8;
+  --coral-bg: #FFF0EC; --coral-txt: #7A2B18; --coral-acc: #D95030;
+  --green-bg: #ECFAE5; --green-txt: #1E4D0A; --green-acc: #3D9420;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
+.app{max-width:680px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+/* Header */
+.header{text-align:center;margin-bottom:2rem;padding-top:1rem}
+.header-title{font-family:'DM Serif Display',serif;font-size:28px;color:var(--text);margin-bottom:4px}
+.header-sub{font-size:13px;color:var(--text3);letter-spacing:.04em}
+
+/* Nav */
+.nav{display:flex;gap:6px;margin-bottom:1.5rem;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nb{padding:8px 16px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all .2s}
+.nb.on{background:var(--text);color:white;border-color:var(--text)}
+.nb:hover:not(.on){background:var(--surface2)}
+
+/* Screens */
+.screen{display:none}.screen.on{display:block}
+
+/* Section titles */
+.sec-title{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin:1.5rem 0 .75rem;padding-left:2px}
+
+/* ========= FLIP CARDS ========= */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:.5rem}
+@media(max-width:420px){.cards-grid{grid-template-columns:repeat(2,1fr)}}
+.flip-wrap{height:100px;perspective:600px;cursor:pointer}
+.flip-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.4,0,.2,1)}
+.flip-wrap.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;inset:0;border-radius:var(--radius);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;padding:12px 14px;border:1.5px solid var(--border)}
+.flip-front{background:var(--surface)}
+.flip-back{transform:rotateY(180deg);font-size:12px;line-height:1.55}
+.flip-word{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.3}
+.flip-zh{font-size:12px;color:var(--text3)}
+.flip-num{position:absolute;top:8px;right:10px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px}
+.flip-ex{font-style:italic;color:inherit}
+.flip-hint{font-size:10px;opacity:.7;margin-top:6px}
+
+/* Color variants for flip cards */
+.fc-blue .flip-front{background:var(--blue-bg);border-color:#B8CEEE}
+.fc-blue .flip-back{background:var(--blue-bg);border-color:#B8CEEE;color:var(--blue-txt)}
+.fc-blue .flip-word{color:var(--blue-txt)}.fc-blue .flip-zh{color:var(--blue-acc)}.fc-blue .flip-num{background:#D0E4FF;color:var(--blue-txt)}
+.fc-teal .flip-front{background:var(--teal-bg);border-color:#A8D9C2}
+.fc-teal .flip-back{background:var(--teal-bg);border-color:#A8D9C2;color:var(--teal-txt)}
+.fc-teal .flip-word{color:var(--teal-txt)}.fc-teal .flip-zh{color:var(--teal-acc)}.fc-teal .flip-num{background:#C0EDD8;color:var(--teal-txt)}
+.fc-amber .flip-front{background:var(--amber-bg);border-color:#F0C97A}
+.fc-amber .flip-back{background:var(--amber-bg);border-color:#F0C97A;color:var(--amber-txt)}
+.fc-amber .flip-word{color:var(--amber-txt)}.fc-amber .flip-zh{color:var(--amber-acc)}.fc-amber .flip-num{background:#FFE5AB;color:var(--amber-txt)}
+.fc-purple .flip-front{background:var(--purple-bg);border-color:#C8B8F8}
+.fc-purple .flip-back{background:var(--purple-bg);border-color:#C8B8F8;color:var(--purple-txt)}
+.fc-purple .flip-word{color:var(--purple-txt)}.fc-purple .flip-zh{color:var(--purple-acc)}.fc-purple .flip-num{background:#DDD4FF;color:var(--purple-txt)}
+.fc-coral .flip-front{background:var(--coral-bg);border-color:#F2B8A8}
+.fc-coral .flip-back{background:var(--coral-bg);border-color:#F2B8A8;color:var(--coral-txt)}
+.fc-coral .flip-word{color:var(--coral-txt)}.fc-coral .flip-zh{color:var(--coral-acc)}.fc-coral .flip-num{background:#FFD8CE;color:var(--coral-txt)}
+.fc-green .flip-front{background:var(--green-bg);border-color:#A8D890}
+.fc-green .flip-back{background:var(--green-bg);border-color:#A8D890;color:var(--green-txt)}
+.fc-green .flip-word{color:var(--green-txt)}.fc-green .flip-zh{color:var(--green-acc)}.fc-green .flip-num{background:#C8EDB8;color:var(--green-txt)}
+.fc-gray .flip-front{background:var(--surface2);border-color:var(--border)}
+.fc-gray .flip-back{background:var(--surface2);border-color:var(--border);color:var(--text2)}
+.fc-gray .flip-word{color:var(--text)}.fc-gray .flip-zh{color:var(--text3)}.fc-gray .flip-num{background:var(--border);color:var(--text2)}
+
+/* ========= SKELETON ========= */
+.skel-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:.75rem;overflow:hidden}
+.skel-head{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.1rem;cursor:pointer}
+.skel-head-left{display:flex;align-items:center;gap:10px}
+.skel-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.skel-label{font-size:14px;font-weight:600;color:var(--text)}
+.skel-sub{font-size:12px;color:var(--text3);margin-top:1px}
+.skel-chev{font-size:18px;color:var(--text3);transition:transform .25s}
+.skel-card.open .skel-chev{transform:rotate(180deg)}
+.skel-body{display:none;padding:0 1.1rem 1rem}
+.skel-card.open .skel-body{display:block}
+.skel-frame{font-size:14px;line-height:1.8;padding:10px 14px;border-radius:var(--radius-sm);margin-bottom:8px;font-style:italic}
+.skel-divider{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin:1rem 0 .5rem;opacity:.6}
+.skel-ex{font-size:13px;line-height:1.7;padding:9px 12px;border-radius:var(--radius-sm);background:var(--surface2);color:var(--text2);margin-bottom:6px;border-left:3px solid var(--border)}
+
+/* ========= PRACTICE (fill/recall) ========= */
+.prog-bar{height:3px;background:var(--surface2);border-radius:2px;margin-bottom:1.25rem}
+.prog-fill{height:100%;background:var(--text);border-radius:2px;transition:width .3s}
+.pcard{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.25rem;box-shadow:var(--shadow)}
+.topic-tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px;margin-bottom:1rem;letter-spacing:.03em}
+.question{font-size:16px;font-weight:500;line-height:1.55;margin-bottom:1rem;color:var(--text)}
+.hint-txt{font-size:13px;color:var(--text3);margin-bottom:.875rem}
+textarea{width:100%;min-height:90px;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--surface2);resize:vertical;outline:none;transition:border .2s}
+textarea:focus{border-color:#888}
+.fill-sent{font-size:16px;line-height:2.2;color:var(--text);margin-bottom:.75rem}
+input.blank-in{font-size:15px;border:none;border-bottom:2px solid var(--text);background:transparent;color:var(--blue-acc);width:110px;outline:none;font-family:'DM Sans',sans-serif;padding:0 4px}
+input.blank-in:focus{border-bottom-color:var(--blue-acc)}
+.btn-row{display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap}
+button.btn{padding:9px 18px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--surface);cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);font-weight:500;transition:all .15s}
+button.btn:hover{background:var(--surface2)}
+button.btn:active{transform:scale(.97)}
+button.btn.pri{background:var(--text);color:white;border-color:var(--text)}
+button.btn.pri:hover{opacity:.88}
+.fb-box{font-size:13px;margin-top:.75rem;padding:8px 14px;border-radius:var(--radius-sm);display:none}
+.fb-box.on{display:block}
+.fb-box.ok{background:var(--green-bg);color:var(--green-txt)}
+.fb-box.no{background:var(--amber-bg);color:var(--amber-txt)}
+.rev-box{display:none;margin-top:1rem;padding:.875rem 1.1rem;background:var(--surface2);border-radius:var(--radius-sm);border-left:3px solid var(--teal-acc)}
+.rev-box.on{display:block}
+.rev-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem}
+.rev-text{font-size:15px;line-height:1.75;color:var(--text)}
+.nav-row{display:flex;align-items:center;justify-content:space-between;margin-top:1.25rem}
+.counter{font-size:13px;color:var(--text3)}
+
+/* ========= EXAM ========= */
+.exam-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.exam-num{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:.5rem}
+.exam-topic{font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);margin-bottom:1rem;line-height:1.3}
+.points-list{margin:0 0 1rem;padding:0}
+.point-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:.6rem}
+.point-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);margin-top:.45em;flex-shrink:0}
+.point-text{font-size:14px;color:var(--text2);line-height:1.6}
+.point-text strong{color:var(--text);font-weight:600}
+.exam-rev{display:none;margin-top:1rem;padding:.875rem 1.1rem;border-radius:var(--radius-sm)}
+.exam-rev.on{display:block}
+
+/* Color accent bars for exam cards */
+.exam-card.ec-blue{border-left:4px solid var(--blue-acc)}
+.exam-card.ec-teal{border-left:4px solid var(--teal-acc)}
+.exam-card.ec-purple{border-left:4px solid var(--purple-acc)}
+.exam-card.ec-coral{border-left:4px solid var(--coral-acc)}
+.exam-card.ec-amber{border-left:4px solid var(--amber-acc)}
+.exam-card.ec-green{border-left:4px solid var(--green-acc)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="header-title">Mon entraîneur oral</div>
+    <div class="header-sub">法语口语表达系统训练</div>
+  </div>
+
+  <div class="nav">
+    <button class="nb on" onclick="go('pieces',this)">零件库</button>
+    <button class="nb" onclick="go('skeleton',this)">大骨架</button>
+    <button class="nb" onclick="go('fill',this)">填空</button>
+    <button class="nb" onclick="go('recall',this)">回忆</button>
+    <button class="nb" onclick="go('exam',this)">考试</button>
+  </div>
+
+  <!-- PIECES -->
+  <div id="s-pieces" class="screen on">
+    <div class="sec-title">情感 &amp; 状态词组</div>
+    <div class="cards-grid" id="cg-emotion"></div>
+    <div class="sec-title">时间 &amp; 变化词组</div>
+    <div class="cards-grid" id="cg-time"></div>
+    <div class="sec-title">举例 &amp; 个人引入</div>
+    <div class="cards-grid" id="cg-example"></div>
+    <div class="sec-title">程度 &amp; 修饰副词</div>
+    <div class="cards-grid" id="cg-degree"></div>
+    <div class="sec-title">连接 &amp; 转折词组</div>
+    <div class="cards-grid" id="cg-link"></div>
+    <div class="sec-title">高频名词词组</div>
+    <div class="cards-grid" id="cg-nouns"></div>
+    <div class="sec-title">核心单词（按频率）</div>
+    <div class="cards-grid" id="cg-words"></div>
+  </div>
+
+  <!-- SKELETON -->
+  <div id="s-skeleton" class="screen">
+    <div id="skel-list"></div>
+  </div>
+
+  <!-- FILL -->
+  <div id="s-fill" class="screen">
+    <div class="prog-bar"><div class="prog-fill" id="fill-prog" style="width:0%"></div></div>
+    <div id="fill-content"></div>
+  </div>
+
+  <!-- RECALL -->
+  <div id="s-recall" class="screen">
+    <div class="prog-bar"><div class="prog-fill" id="recall-prog" style="width:0%"></div></div>
+    <div id="recall-content"></div>
+  </div>
+
+  <!-- EXAM -->
+  <div id="s-exam" class="screen">
+    <div id="exam-content"></div>
+  </div>
+</div>
+
+<script>
+const pieces = {
+  emotion:[
+    {w:"se sentir seul(e)",c:"blue",zh:"感到孤独",freq:8,ex:"Au début, on peut se sentir seul dans un nouvel environnement."},
+    {w:"se sentir rassuré(e)",c:"teal",zh:"感到安心",freq:7,ex:"Quand la famille est là, on se sent souvent rassuré."},
+    {w:"se sentir à l'aise",c:"teal",zh:"感到自在",freq:6,ex:"Parler la langue aide à se sentir plus à l'aise."},
+    {w:"le mal du pays",c:"coral",zh:"思乡",freq:5,ex:"Surtout le soir, on peut avoir le mal du pays."},
+    {w:"être stressé(e)",c:"coral",zh:"感到压力/紧张",freq:7,ex:"Commencer une nouvelle vie peut être très stressant."},
+    {w:"être motivé(e)",c:"green",zh:"有动力",freq:6,ex:"Quand on aime son travail, on est souvent plus motivé."},
+    {w:"être irritable",c:"amber",zh:"变得烦躁",freq:4,ex:"Ils deviennent parfois irritables quand on leur demande d'arrêter."},
+    {w:"se débrouiller",c:"purple",zh:"自己搞定/应对",freq:5,ex:"Quand on est seul, on doit apprendre à se débrouiller tout seul."},
+    {w:"se sentir isolé(e)",c:"coral",zh:"感到孤立",freq:4,ex:"Certaines personnes peuvent se sentir isolées à la campagne."},
+    {w:"être rassurant(e)",c:"teal",zh:"令人安心的",freq:4,ex:"Voyager avec quelqu'un est beaucoup plus rassurant."},
+  ],
+  time:[
+    {w:"petit à petit",c:"green",zh:"慢慢地",freq:9,ex:"Petit à petit, on apprend à être plus indépendant."},
+    {w:"au début",c:"blue",zh:"一开始",freq:9,ex:"Au début, ce n'est pas toujours facile."},
+    {w:"de plus en plus",c:"amber",zh:"越来越……",freq:8,ex:"On voit de plus en plus de personnes qui réussissent sans diplôme."},
+    {w:"sur le long terme",c:"purple",zh:"从长远来看",freq:6,ex:"Il est difficile de progresser sur le long terme sans motivation."},
+    {w:"progressivement",c:"teal",zh:"逐渐地",freq:5,ex:"Les habitudes changent progressivement dans la société."},
+    {w:"pendant des années",c:"gray",zh:"多年来",freq:5,ex:"Certaines personnes pratiquent pendant des années."},
+    {w:"à la dernière minute",c:"amber",zh:"在最后一刻",freq:3,ex:"On peut changer de plan à la dernière minute."},
+    {w:"depuis la crise sanitaire",c:"gray",zh:"自疫情以来",freq:3,ex:"Depuis la crise sanitaire, beaucoup d'entreprises ont découvert le télétravail."},
+  ],
+  example:[
+    {w:"personnellement",c:"teal",zh:"就我个人而言",freq:15,ex:"Personnellement, je pense que la technologie peut vraiment aider."},
+    {w:"par exemple",c:"blue",zh:"比如",freq:14,ex:"Par exemple, certains apprennent l'anglais grâce à des séries."},
+    {w:"honnêtement",c:"coral",zh:"说实话",freq:7,ex:"Honnêtement, je trouve que c'est assez vrai."},
+    {w:"franchement",c:"coral",zh:"坦率地说",freq:5,ex:"Franchement, je ne suis pas très favorable aux écrans pour les enfants."},
+    {w:"j'ai déjà vu",c:"purple",zh:"我曾经见过",freq:4,ex:"J'ai déjà vu une jeune femme qui avait créé son entreprise."},
+    {w:"certains de mes amis",c:"purple",zh:"我有些朋友",freq:4,ex:"Certains de mes amis vivent dans une maison achetée par leurs parents."},
+    {w:"dans certains cas",c:"gray",zh:"在某些情况下",freq:4,ex:"Dans certains cas, cela peut même améliorer la qualité de vie."},
+    {w:"comme … (ville/pays)",c:"blue",zh:"像……这样的城市/国家",freq:8,ex:"Dans une ville multiculturelle comme Toronto, on voit des festivals."},
+  ],
+  degree:[
+    {w:"vraiment",c:"blue",zh:"真的/确实",freq:10,ex:"La technologie peut vraiment aider les gens à apprendre."},
+    {w:"surtout",c:"purple",zh:"尤其是",freq:10,ex:"Surtout le soir, on peut avoir le mal du pays."},
+    {w:"souvent",c:"gray",zh:"经常",freq:12,ex:"Les personnes âgées ont souvent travaillé pendant de nombreuses années."},
+    {w:"parfois",c:"gray",zh:"有时候",freq:10,ex:"Cela peut parfois créer des petits conflits ou du stress."},
+    {w:"beaucoup plus + adj",c:"teal",zh:"……得多",freq:8,ex:"On est beaucoup plus libre quand on est seul."},
+    {w:"encore plus",c:"amber",zh:"更加……",freq:6,ex:"Les problèmes financiers rendent la situation encore plus difficile."},
+    {w:"assez + adj",c:"green",zh:"相当……",freq:5,ex:"La solitude peut être assez difficile à gérer."},
+    {w:"constamment",c:"amber",zh:"不断地/持续地",freq:4,ex:"Les jeunes sont constamment en contact avec des langues étrangères."},
+  ],
+  link:[
+    {w:"en plus",c:"blue",zh:"另外/而且",freq:11,ex:"En plus, les appareils rendent l'apprentissage plus interactif."},
+    {w:"ensuite",c:"blue",zh:"其次/接着",freq:9,ex:"Ensuite, je pense qu'il est aussi plus compliqué d'organiser la vie."},
+    {w:"cependant",c:"amber",zh:"然而",freq:5,ex:"Cependant, il est important de respecter les habitudes locales."},
+    {w:"contrairement à",c:"coral",zh:"与……相反",freq:4,ex:"Contrairement à la famille, les amis sont des personnes qu'on choisit."},
+    {w:"alors que",c:"coral",zh:"而……却/尽管",freq:5,ex:"En Chine on partage les plats, alors qu'au Canada on préfère son assiette."},
+    {w:"donc",c:"green",zh:"因此",freq:10,ex:"Donc, certaines familles doivent travailler beaucoup."},
+    {w:"c'est pourquoi",c:"green",zh:"这就是为什么",freq:5,ex:"C'est pourquoi je pense que le modèle hybride est l'avenir."},
+    {w:"même si",c:"purple",zh:"即使",freq:5,ex:"Même si ces amis vivent loin, ils peuvent très bien se comprendre."},
+    {w:"pourtant",c:"amber",zh:"然而/可是",freq:4,ex:"Pourtant, la nature peut avoir un effet très positif sur la santé."},
+    {w:"d'un autre côté",c:"gray",zh:"另一方面",freq:5,ex:"D'un autre côté, vivre à la campagne peut offrir un environnement calme."},
+    {w:"d'abord … ensuite … enfin",c:"blue",zh:"首先…其次…最后",freq:9,ex:"D'abord, [point1]. Ensuite, [point2]. Enfin, [conclusion]."},
+  ],
+  nouns:[
+    {w:"la vie quotidienne",c:"teal",zh:"日常生活",freq:11,ex:"Cela peut aider dans la vie quotidienne à se sentir plus intégré."},
+    {w:"le bien-être",c:"green",zh:"幸福感/身心健康",freq:5,ex:"Le bien-être mental est très important pour les personnes âgées."},
+    {w:"l'identité",c:"purple",zh:"身份认同",freq:5,ex:"Les traditions font partie de notre identité."},
+    {w:"l'équilibre",c:"teal",zh:"平衡",freq:7,ex:"Le plus important est de trouver un équilibre entre les deux cultures."},
+    {w:"la qualité de vie",c:"green",zh:"生活质量",freq:6,ex:"Le télétravail peut améliorer la qualité de vie."},
+    {w:"le soutien émotionnel",c:"blue",zh:"情感支持",freq:4,ex:"La famille peut apporter du soutien émotionnel pendant l'adaptation."},
+    {w:"l'environnement",c:"green",zh:"环境",freq:8,ex:"Il est difficile de s'adapter à un nouvel environnement."},
+    {w:"les habitudes",c:"amber",zh:"习惯",freq:8,ex:"Il faut faire des efforts pour s'adapter aux habitudes locales."},
+    {w:"la société",c:"gray",zh:"社会",freq:7,ex:"Le sentiment d'être utile dans la société est très important."},
+    {w:"l'expérience",c:"purple",zh:"经历/经验",freq:7,ex:"Cette expérience peut beaucoup faire grandir une personne."},
+    {w:"les compétences",c:"blue",zh:"技能/能力",freq:4,ex:"Ils développent leurs compétences pendant des années."},
+    {w:"la transmission",c:"amber",zh:"传承",freq:4,ex:"Cette transmission d'expérience est très importante."},
+    {w:"le rythme de vie",c:"coral",zh:"生活节奏",freq:4,ex:"Le rythme de vie dans les grandes villes peut être difficile à supporter."},
+    {w:"les origines",c:"coral",zh:"起源/根",freq:4,ex:"On ne doit pas complètement oublier ses origines."},
+    {w:"l'intégration",c:"teal",zh:"融入/融合",freq:5,ex:"La famille rend l'intégration dans un nouveau pays beaucoup plus facile."},
+  ],
+  words:[
+    {w:"permettre de",c:"blue",zh:"允许/使得……",freq:12,ex:"Le travail permet de garder une routine et de rencontrer des gens."},
+    {w:"aider à",c:"teal",zh:"帮助……",freq:12,ex:"Les amis peuvent aider à surmonter les difficultés."},
+    {w:"rendre + adj",c:"purple",zh:"使……变得……",freq:11,ex:"Cela rend l'apprentissage beaucoup plus vivant et motivant."},
+    {w:"avoir du mal à",c:"coral",zh:"难以……",freq:6,ex:"Beaucoup de personnes ont du mal à vraiment se reposer."},
+    {w:"manquer de",c:"amber",zh:"缺乏……",freq:5,ex:"Les habitants des grandes villes manquent souvent de contact avec la nature."},
+    {w:"s'adapter à",c:"teal",zh:"适应……",freq:7,ex:"Il faut faire des efforts pour s'adapter à la vie locale."},
+    {w:"compter sur",c:"blue",zh:"依靠……",freq:4,ex:"Quand on n'a personne sur qui compter, on doit se débrouiller seul."},
+    {w:"partager",c:"green",zh:"分享/共享",freq:6,ex:"Partager sa culture peut enrichir la société."},
+    {w:"transmettre",c:"amber",zh:"传递/传承",freq:4,ex:"Cela permet de transmettre la culture aux enfants."},
+    {w:"encourager",c:"green",zh:"鼓励",freq:4,ex:"Le gouvernement encourage les personnes âgées à continuer de travailler."},
+    {w:"réduire",c:"coral",zh:"减少/降低",freq:6,ex:"Réduire l'utilisation de la voiture améliore la qualité de l'air."},
+    {w:"développer",c:"blue",zh:"发展/培养",freq:5,ex:"Certaines villes développent davantage les transports publics."},
+    {w:"favoriser",c:"teal",zh:"促进/有利于",freq:4,ex:"Ce type d'environnement favorise la concentration."},
+    {w:"surmonter",c:"purple",zh:"克服",freq:4,ex:"La famille peut aider à surmonter les difficultés de la vie quotidienne."},
+    {w:"s'habituer à",c:"amber",zh:"习惯……",freq:5,ex:"Petit à petit, on s'habitue aux différences culturelles."},
+  ]
+};
+
+const skeletons = [
+  {label:"开场表态",sub:"任何话题",color:"blue",acc:"var(--blue-acc)",bg:"var(--blue-bg)",txt:"var(--blue-txt)",
+   frames:["À mon avis, [sujet] a beaucoup d'avantages, surtout pour [raison].","Personnellement, je pense que [sujet] est très important(e) dans la vie quotidienne.","Pour moi, [sujet] dépend beaucoup de [facteur].","Franchement, je ne suis pas très favorable à [sujet]."],
+   examples:["À mon avis, les appareils électroniques ont beaucoup d'avantages, surtout pour apprendre plus rapidement.","Franchement, je ne suis pas très favorable aux écrans pour les enfants. Je pense que le principal problème, c'est l'excès."]},
+  {label:"举个人例子",sub:"J'ai déjà vu / certains amis…",color:"purple",acc:"var(--purple-acc)",bg:"var(--purple-bg)",txt:"var(--purple-txt)",
+   frames:["Personnellement, j'ai déjà vu [personne] qui [action].","Certains de mes amis [situation], donc ils peuvent [résultat].","Personnellement, chaque fois que je [action], j'aime bien [détail]."],
+   examples:["J'ai déjà vu une jeune femme qui n'avait pas de diplôme universitaire, mais qui avait réussi à créer son entreprise grâce à Internet.","Certains de mes amis vivent dans une maison achetée par leurs parents. Ils n'ont pas besoin de payer un loyer très élevé."]},
+  {label:"转折成长弧",sub:"Au début… mais petit à petit…",color:"teal",acc:"var(--teal-acc)",bg:"var(--teal-bg)",txt:"var(--teal-txt)",
+   frames:["Au début, ce n'est pas toujours facile. Mais petit à petit, on apprend à [résultat].","Surtout [moment difficile], on peut [sentiment]. Mais quand [condition], on se sent [mieux].","Au début, [difficulté]. Mais avec le temps, [amélioration]."],
+   examples:["Au début, ce n'est pas toujours facile. Il faut parfois parler une langue qu'on ne maîtrise pas parfaitement. Mais petit à petit, on apprend à être plus indépendant.","Surtout le soir ou pendant les moments difficiles, on peut avoir le mal du pays. Mais quand la famille est là, on se sent souvent plus rassuré."]},
+  {label:"举城市/国家",sub:"Dans une ville / un pays comme…",color:"coral",acc:"var(--coral-acc)",bg:"var(--coral-bg)",txt:"var(--coral-txt)",
+   frames:["Dans une ville multiculturelle comme [ville], on peut souvent voir [phénomène].","Dans des pays comme [pays], [situation] est déjà très [adj].","Au [pays], [différence culturelle], alors qu'en [autre pays], [contraste]."],
+   examples:["Dans une ville multiculturelle comme Toronto, on peut souvent voir des festivals avec de la cuisine, de la musique ou des danses traditionnelles.","En Chine, on partage souvent tous les plats au milieu de la table, alors qu'au Canada, beaucoup de personnes préfèrent avoir leur propre assiette."]},
+  {label:"让步 + 坚持",sub:"Certes… mais je pense que…",color:"amber",acc:"var(--amber-acc)",bg:"var(--amber-bg)",txt:"var(--amber-txt)",
+   frames:["Certes, [concession]. Mais je pense que [position principale].","Bien sûr, [limitation]. Mais personnellement, je pense que [nuance].","Il faut reconnaître que [fait]. Mais cela ne veut pas dire que [conclusion]."],
+   examples:["Il faut reconnaître que les diplômes jouent encore un rôle important. Mais aujourd'hui, on voit aussi de plus en plus de personnes qui réussissent sans avoir fait de grandes études.","Bien sûr, changer les habitudes prend du temps. Mais personnellement, je pense que ce changement est possible si les citoyens et les gouvernements travaillent ensemble."]},
+  {label:"总结收尾",sub:"Finalement / Pour moi…",color:"green",acc:"var(--green-acc)",bg:"var(--green-bg)",txt:"var(--green-txt)",
+   frames:["Finalement, je pense que [bilan]. Tout dépend de [facteur].","Pour moi, le plus important est de trouver un équilibre entre [A] et [B].","Je dirais que [conclusion]. Mais il faut aussi [nuance].","En résumé, [sujet] peut être [positif] mais aussi [négatif], selon [situation]."],
+   examples:["Finalement, je pense que le succès professionnel ne dépend pas seulement des diplômes, mais aussi de la motivation et du développement personnel.","Pour moi, le plus important est de trouver un équilibre entre sa culture d'origine et la culture locale. Ce n'est pas un choix entre deux cultures, mais plutôt un échange entre les deux."]},
+];
+
+const fillItems = [
+  {sent:"Surtout le soir, on peut avoir le mal du ___.",blank:"pays",topic:"思乡",tc:"coral"},
+  {sent:"Les traditions font partie de notre ___.",blank:"identité",topic:"传统",tc:"purple"},
+  {sent:"Petit à ___, on apprend à être plus indépendant.",blank:"petit",topic:"成长",tc:"green"},
+  {sent:"Contrairement à la famille, les amis sont des personnes qu'on choisit ___.",blank:"librement",topic:"朋友",tc:"teal"},
+  {sent:"Pour moi, la langue est la ___ de la communication.",blank:"clé",topic:"语言",tc:"blue"},
+  {sent:"Au début, ce n'est pas toujours ___.",blank:"facile",topic:"万能句",tc:"gray"},
+  {sent:"Finalement, le plus important est de trouver un ___.",blank:"équilibre",topic:"总结",tc:"teal"},
+  {sent:"Franchement, je ne suis pas très ___ aux écrans pour les enfants.",blank:"favorable",topic:"电子设备",tc:"coral"},
+  {sent:"En Chine on partage les plats, ___ qu'au Canada on préfère son assiette.",blank:"alors",topic:"文化差异",tc:"amber"},
+  {sent:"Les personnes âgées peuvent aider à ___ le manque de travailleurs.",blank:"compenser",topic:"老年人工作",tc:"green"},
+  {sent:"Grâce aux outils numériques, il est devenu plus facile d'organiser des ___ en ligne.",blank:"réunions",topic:"远程工作",tc:"blue"},
+  {sent:"Dans une ville ___ comme Toronto, on voit des festivals de toutes cultures.",blank:"multiculturelle",topic:"多元文化",tc:"purple"},
+  {sent:"Quand on n'a personne sur qui ___, on doit se débrouiller tout seul.",blank:"compter",topic:"独立",tc:"amber"},
+  {sent:"Le travail permet de garder une routine et de ___ des gens.",blank:"rencontrer",topic:"老年人工作",tc:"green"},
+];
+
+const recallItems = [
+  {topic:"电子设备",tc:"blue",zh:"「坦率说，我对孩子用屏幕不太赞成，主要问题是过度……」",fr:"Franchement, je ne suis pas très favorable aux écrans pour les enfants. Je pense que le principal problème, c'est l'excès."},
+  {topic:"移民",tc:"teal",zh:"「尤其是晚上或困难时刻，会想家……但家人在，就会感到安心……」",fr:"Surtout le soir ou pendant les moments difficiles, on peut avoir le mal du pays. Mais quand la famille est là, on se sent souvent plus rassuré et moins seul."},
+  {topic:"传统文化",tc:"purple",zh:"「传统是我们身份的一部分，让我们想起国家、家人和童年……」",fr:"Les traditions restent très importantes, parce qu'elles font partie de notre identité. Elles nous rappellent notre pays, notre famille et aussi notre enfance."},
+  {topic:"文化差异",tc:"coral",zh:"「在中国大家共享桌上菜，而在加拿大很多人喜欢自己的盘子……」",fr:"En Chine, on partage souvent tous les plats au milieu de la table, alors qu'au Canada, beaucoup de personnes préfèrent avoir leur propre assiette."},
+  {topic:"独自旅行",tc:"amber",zh:"「每次坐出租车，我都喜欢和司机聊几句，他们对城市了解很多……」",fr:"Personnellement, chaque fois que je prends un taxi, j'aime bien discuter un peu avec le chauffeur. Honnêtement, les chauffeurs de taxi connaissent souvent très bien la ville."},
+  {topic:"朋友",tc:"blue",zh:"「和家人不同，朋友是我们自由选择的人，更容易找到共同点……」",fr:"Contrairement à la famille, les amis sont des personnes qu'on choisit librement. Donc, il est parfois plus facile de trouver des points communs avec eux."},
+  {topic:"职业成功",tc:"green",zh:"「我见过一个没有大学文凭的年轻女性，靠互联网创办了自己的公司……」",fr:"J'ai déjà vu une jeune femme qui n'avait pas de diplôme universitaire, mais qui avait réussi à créer son entreprise grâce à Internet et aux réseaux sociaux."},
+  {topic:"环保",tc:"teal",zh:"「我参加过多伦多的无车周，街道留给行人和骑行者，气氛更平静……」",fr:"Personnellement, j'ai participé à Toronto à un événement appelé 'Une semaine sans voiture'. Certaines rues étaient réservées aux piétons et aux cyclistes. L'ambiance était beaucoup plus calme."},
+  {topic:"城市vs乡村",tc:"coral",zh:"「我在乡下长大，和表兄弟玩耍、钓鱼……那些时刻很简单，但印象深刻……」",fr:"Comme j'ai grandi à la campagne, je garde de très bons souvenirs. Je jouais dehors avec mes cousins, je pêchais dans la rivière. Ces moments étaient très simples, mais ils m'ont beaucoup marqué."},
+  {topic:"远程工作",tc:"blue",zh:"「远程工作对所有人效果不同——有人更专注，有人容易分心，一切取决于个性……」",fr:"Certaines personnes se sentent plus concentrées à la maison. Mais d'autres peuvent avoir des difficultés à rester motivées ou se sentir seules. Tout dépend de la personnalité."},
+];
+
+const examItems = [
+  {topic:"电子设备好坏",color:"ec-blue",acc:"var(--blue-acc)",
+   points:[
+     {strong:"论点1 优点：学习更高效",detail:"手机/平板随时随地学习；举学法语的例子（早上和巴黎人练口音，晚上和摩纳哥女性练对话）"},
+     {strong:"论点2 优点：互动性强",detail:"孩子用iPad学教育应用，可以自主学习，父母不用一直陪"},
+     {strong:"论点3 缺点：过度使用",detail:"孩子打游戏几小时，叫停就变烦躁 → 说明使用不均衡"},
+     {strong:"论点4 缺点：脱离现实",detail:"小时候在农村和表兄弟玩；现在孩子都对着屏幕 → 减少好奇心和社交经历"},
+     {strong:"结论",detail:"技术有用，但要找到平衡；互联网上也有暴力/假信息，家长监督重要"},
+   ]},
+  {topic:"和家人移民好坏",color:"ec-teal",acc:"var(--teal-acc)",
+   points:[
+     {strong:"论点1 好处：情感支持",detail:"新环境孤独/压力大，尤其晚上会想家；家人在就更安心，帮助度过困难时期"},
+     {strong:"论点2 好处：经济支持",detail:"新生活费用高（租房/交通/教育）；举朋友住父母买的房子，省下高额租金"},
+     {strong:"论点3 坏处：费用更高",detail:"在加拿大等高消费国家，多人移民要付大房子/多张机票/子女教育费用"},
+     {strong:"论点4 坏处：决策复杂",detail:"一人可随时改计划；家庭需要照顾所有人需求 → 旅行时讨论活动比旅行本身花更多时间"},
+     {strong:"结论",detail:"家庭移民积极但需要耐心和组织能力"},
+   ]},
+  {topic:"国外生活会忘记传统吗",color:"ec-purple",acc:"var(--purple-acc)",
+   points:[
+     {strong:"论点1 保留传统很重要",detail:"传统是身份认同的一部分；让我们想起家乡/家人/童年；举在多伦多还庆祝春节的例子"},
+     {strong:"论点2 多元文化的价值",detail:"多伦多有各种文化节日 → 分享文化丰富社会，让人更开放"},
+     {strong:"论点3 也要适应当地文化",detail:"中加餐桌文化差异（共享vs个人盘子）；语言是沟通的钥匙；小对话就能帮助日常生活"},
+     {strong:"论点4 找到平衡",detail:"保留母国某些习惯（烹饪/节日）同时采纳加拿大习惯（thank you/sorry）"},
+     {strong:"结论",detail:"不是在两种文化间做选择，而是两者之间的交流"},
+   ]},
+  {topic:"一个人旅游/移民好坏",color:"ec-coral",acc:"var(--coral-acc)",
+   points:[
+     {strong:"论点1 好处：完全自由",detail:"随心组织行程，随时改变计划，不需要考虑别人意见"},
+     {strong:"论点2 好处：变得独立",detail:"一个人必须学会应对一切；一开始不容易，但慢慢更独立更包容文化差异；举坐出租车和司机聊天的例子"},
+     {strong:"论点3 坏处：心理孤独",detail:"没有朋友家人陪伴，尤其晚上或重要时刻会感到孤独"},
+     {strong:"论点4 坏处：出问题没人帮",detail:"举朋友在意大利手机被盗的例子：没有Google Maps，不认识城市，非常焦虑"},
+     {strong:"结论",detail:"一人旅行给自由，但也带来压力；一切取决于个人管理孤独的能力"},
+   ]},
+  {topic:"朋友的好处",color:"ec-amber",acc:"var(--amber-acc)",
+   points:[
+     {strong:"论点1 共同兴趣",detail:"和家人不同，朋友是自由选择的人；更容易找到共同点；举通过游戏/音乐/摄影在网上认识的朋友"},
+     {strong:"论点2 沟通更自在",detail:"对话更放松自然；可以聊感情/八卦/疯狂经历；朋友不那么评判人"},
+     {strong:"论点3 情感支持",detail:"朋友可以倾听和支持；这种情感支持在日常生活中非常重要"},
+     {strong:"结论",detail:"家人和朋友都重要；但朋友有特殊之处在于我们自己选择了他们"},
+   ]},
+  {topic:"城市vs乡村生活",color:"ec-green",acc:"var(--green-acc)",
+   points:[
+     {strong:"论点1 城市压力大",detail:"拥挤交通/持续噪音/工作压力/高消费；人们总是匆忙；屏幕和工作让真正休息很难"},
+     {strong:"论点2 城市缺乏自然",detail:"大自然对心理健康有积极作用；很多人周末出城去乡村找平静"},
+     {strong:"论点3 乡村的好处",detail:"空气清新/森林/湖泊/安静；举童年在农村的美好回忆（和表兄弟玩、钓鱼、看日落）"},
+     {strong:"论点4 乡村的局限",detail:"职业机会少/文化活动少；年轻人可能感到孤立"},
+     {strong:"结论",detail:"选择城市还是乡村取决于个性和生活方式"},
+   ]},
+  {topic:"远程工作利弊",color:"ec-blue",acc:"var(--blue-acc)",
+   points:[
+     {strong:"论点1 对企业的好处",detail:"自疫情以来证明远程工作可以同样高效；减少办公室/电费/餐饮支出；可以在全球招人才"},
+     {strong:"论点2 对员工的好处",detail:"省去通勤时间；更灵活地组织一天；更好地平衡工作和私人生活"},
+     {strong:"论点3 缺点",detail:"有些人在家难以保持动力或感到孤独；容易分心；取决于个性和家庭环境"},
+     {strong:"论点4 有些工作仍需人际接触",detail:"医疗/教育/商业需要直接接触他人；团队合作有利于创造力"},
+     {strong:"结论",detail:"混合模式（部分在家/部分在办公室）可能是未来工作方式"},
+   ]},
+  {topic:"年轻人学语言的优势",color:"ec-teal",acc:"var(--teal-acc)",
+   points:[
+     {strong:"论点1 记忆更灵活",detail:"年轻人记忆更灵活；不怕犯错；敢于说话即使语言不完美 → 这种态度帮助进步"},
+     {strong:"论点2 好奇心/开放性",detail:"年轻人通常更好奇更开放；更容易走出舒适区"},
+     {strong:"论点3 互联网的自然接触",detail:"通过Netflix/TikTok/音乐/游戏接触外语；举通过Friends学英语表达的例子"},
+     {strong:"论点4 沉浸式学习",detail:"把语言和乐趣/文化/娱乐联系起来 → 更有动力学习；这种自然沉浸使学习更容易有趣"},
+     {strong:"结论",detail:"动力和环境也很重要；但年轻人确实有记忆和接触方面的优势"},
+   ]},
+];
+
+const tagColors = {blue:"background:var(--blue-bg);color:var(--blue-txt)",teal:"background:var(--teal-bg);color:var(--teal-txt)",amber:"background:var(--amber-bg);color:var(--amber-txt)",purple:"background:var(--purple-bg);color:var(--purple-txt)",coral:"background:var(--coral-bg);color:var(--coral-txt)",green:"background:var(--green-bg);color:var(--green-txt)",gray:"background:var(--surface2);color:var(--text2)"};
+
+let fillIdx=0, recallIdx=0;
+
+function go(s, btn){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(x=>x.classList.remove('on'));
+  document.getElementById('s-'+s).classList.add('on');
+  btn.classList.add('on');
+  if(s==='fill') renderFill();
+  else if(s==='recall') renderRecall();
+  else if(s==='exam') renderExam();
+  else if(s==='skeleton') renderSkel();
+  else if(s==='pieces') renderPieces();
+}
+
+function renderPieces(){
+  Object.keys(pieces).forEach(cat=>{
+    const el=document.getElementById('cg-'+cat);
+    if(!el)return;
+    const sorted=[...pieces[cat]].sort((a,b)=>b.freq-a.freq);
+    el.innerHTML=sorted.map((p,i)=>`
+      <div class="flip-wrap fc-${p.c}" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="flip-num">${p.freq}×</span>
+            <div class="flip-word">${p.w}</div>
+            <div class="flip-zh">${p.zh}</div>
+          </div>
+          <div class="flip-back">
+            <div class="flip-ex">${p.ex}</div>
+            <div class="flip-hint">← 点击翻回</div>
+          </div>
+        </div>
+      </div>`).join('');
+  });
+}
+
+function renderSkel(){
+  document.getElementById('skel-list').innerHTML=skeletons.map((sk,i)=>`
+    <div class="skel-card" id="sc-${i}">
+      <div class="skel-head" onclick="toggleSkel(${i})">
+        <div class="skel-head-left">
+          <div class="skel-dot" style="background:${sk.acc}"></div>
+          <div><div class="skel-label">${sk.label}</div><div class="skel-sub">${sk.sub}</div></div>
+        </div>
+        <div class="skel-chev">▾</div>
+      </div>
+      <div class="skel-body">
+        <div class="skel-divider">骨架模板</div>
+        ${sk.frames.map(f=>`<div class="skel-frame" style="background:${sk.bg};color:${sk.txt}">${f}</div>`).join('')}
+        <div class="skel-divider">原库例句</div>
+        ${sk.examples.map(e=>`<div class="skel-ex">${e}</div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function toggleSkel(i){
+  document.getElementById('sc-'+i).classList.toggle('open');
+}
+
+function renderFill(){
+  const item=fillItems[fillIdx];
+  document.getElementById('fill-prog').style.width=Math.round(fillIdx/fillItems.length*100)+'%';
+  const parts=item.sent.split('___');
+  document.getElementById('fill-content').innerHTML=`
+    <div class="pcard">
+      <span class="topic-tag" style="${tagColors[item.tc]||tagColors.gray}">${item.topic}</span>
+      <div class="fill-sent">${parts[0]}<input class="blank-in" id="bi" placeholder="___" autocomplete="off">${parts[1]||''}</div>
+      <div class="btn-row">
+        <button class="btn pri" onclick="checkFill()">检查答案</button>
+        <button class="btn" onclick="fillNav(1)">跳过 →</button>
+      </div>
+      <div class="fb-box" id="fbi"></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn" onclick="fillNav(-1)">← 上一条</button>
+      <span class="counter">${fillIdx+1} / ${fillItems.length}</span>
+      <button class="btn" onclick="fillNav(1)">下一条 →</button>
+    </div>`;
+  document.getElementById('bi').addEventListener('keydown',e=>{if(e.key==='Enter')checkFill();});
+  document.getElementById('bi').focus();
+}
+
+function checkFill(){
+  const item=fillItems[fillIdx];
+  const val=(document.getElementById('bi').value||'').trim().toLowerCase();
+  const fb=document.getElementById('fbi');
+  fb.classList.add('on');
+  if(val===item.blank.toLowerCase()){
+    fb.className='fb-box on ok'; fb.innerHTML='✓ 正确！<strong>'+item.blank+'</strong>';
+  } else {
+    fb.className='fb-box on no'; fb.innerHTML='正确答案：<strong>'+item.blank+'</strong>';
+    document.getElementById('bi').value=item.blank;
+  }
+}
+
+function fillNav(d){fillIdx=(fillIdx+d+fillItems.length)%fillItems.length;renderFill();}
+
+function renderRecall(){
+  const item=recallItems[recallIdx];
+  document.getElementById('recall-prog').style.width=Math.round(recallIdx/recallItems.length*100)+'%';
+  document.getElementById('recall-content').innerHTML=`
+    <div class="pcard">
+      <span class="topic-tag" style="${tagColors[item.tc]||tagColors.gray}">${item.topic}</span>
+      <div class="question">${item.zh}</div>
+      <div class="hint-txt">用法语说出来，再点「显示答案」对照</div>
+      <textarea placeholder="在这里写出你的法语表达…"></textarea>
+      <div class="btn-row">
+        <button class="btn pri" onclick="document.getElementById('rev-r').classList.add('on')">显示答案</button>
+      </div>
+      <div class="rev-box" id="rev-r">
+        <div class="rev-label">参考表达</div>
+        <div class="rev-text">${item.fr}</div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn" onclick="recallNav(-1)">← 上一条</button>
+      <span class="counter">${recallIdx+1} / ${recallItems.length}</span>
+      <button class="btn" onclick="recallNav(1)">下一条 →</button>
+    </div>`;
+}
+
+function recallNav(d){recallIdx=(recallIdx+d+recallItems.length)%recallItems.length;renderRecall();}
+
+function renderExam(){
+  document.getElementById('exam-content').innerHTML=examItems.map((ex,i)=>`
+    <div class="exam-card ${ex.color}">
+      <div class="exam-num">话题 ${i+1}</div>
+      <div class="exam-topic">「${ex.topic}」</div>
+      <ul class="points-list">
+        ${ex.points.map(p=>`<li class="point-item"><div class="point-dot"></div><div class="point-text"><strong>${p.strong}</strong> — ${p.detail}</div></li>`).join('')}
+      </ul>
+      <textarea placeholder="假装你在考场，连续说1-2分钟……在这里写下或大声说出来"></textarea>
+      <div class="btn-row">
+        <button class="btn pri" onclick="this.nextElementSibling.classList.add('on')">显示关键零件提示</button>
+        <div class="exam-rev" style="background:${ex.color.includes('blue')?'var(--blue-bg)':ex.color.includes('teal')?'var(--teal-bg)':ex.color.includes('purple')?'var(--purple-bg)':ex.color.includes('coral')?'var(--coral-bg)':ex.color.includes('amber')?'var(--amber-bg)':'var(--green-bg)'}">
+          <div class="rev-label">练完后对照零件库</div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.6">检查自己用了哪些零件：情感词、连接词、个人例子、结尾句。重点不是全对，是发现哪个零件还没内化。</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+renderPieces();
+</script>
+</body>
+</html>
