@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCF Canada 口语2 速查手册</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f5f5f3;
+  color: #1a1a1a;
+  min-height: 100vh;
+  padding: 1.5rem 1rem;
+}
+.wrap { max-width: 720px; margin: 0 auto; }
+h1 { font-size: 18px; font-weight: 600; text-align: center; margin-bottom: 0.3rem; }
+.subtitle { text-align: center; font-size: 12px; color: #888; margin-bottom: 1.5rem; }
+
+/* Tab nav */
+.tabs { display: flex; gap: 6px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.tab {
+  padding: 6px 14px; border-radius: 20px;
+  border: 1px solid #ddd; background: #fff;
+  font-size: 13px; cursor: pointer; color: #555;
+  transition: all 0.15s;
+}
+.tab:hover { border-color: #aaa; color: #1a1a1a; }
+.tab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+/* Panels */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Type cards */
+.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+@media (max-width: 480px) { .type-grid { grid-template-columns: 1fr; } }
+.type-card {
+  background: #fff; border: 1px solid #e8e8e6;
+  border-radius: 12px; padding: 1rem;
+  cursor: pointer; transition: all 0.15s;
+}
+.type-card:hover { border-color: #bbb; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.type-card.selected { border-color: #1a1a1a; background: #fafaf8; }
+.type-emoji { font-size: 22px; margin-bottom: 0.4rem; }
+.type-name { font-size: 14px; font-weight: 600; margin-bottom: 0.3rem; }
+.type-keywords { font-size: 11px; color: #888; line-height: 1.5; }
+
+/* Questions panel */
+.questions-wrap {
+  background: #fff; border: 1px solid #e8e8e6;
+  border-radius: 12px; padding: 1.25rem;
+  margin-top: 1rem;
+}
+.q-title { font-size: 15px; font-weight: 600; margin-bottom: 1rem; }
+.q-item {
+  border-bottom: 1px solid #f0f0ee;
+  padding: 0.75rem 0;
+}
+.q-item:last-child { border-bottom: none; padding-bottom: 0; }
+.q-num { font-size: 11px; color: #aaa; margin-bottom: 0.3rem; }
+.q-zh { font-size: 14px; font-weight: 500; color: #1a1a1a; margin-bottom: 0.4rem; }
+.q-fr {
+  font-size: 13px; color: #555; font-style: italic;
+  line-height: 1.5; cursor: pointer;
+  transition: opacity 0.15s;
+}
+.q-fr.hidden { opacity: 0; }
+.q-fr-wrap { position: relative; }
+.q-show-btn {
+  font-size: 11px; color: #aaa; cursor: pointer;
+  margin-top: 0.2rem; display: inline-block;
+}
+.q-show-btn:hover { color: #555; }
+
+/* Flow panel */
+.flow-steps { display: flex; flex-direction: column; gap: 10px; }
+.flow-step {
+  background: #fff; border: 1px solid #e8e8e6;
+  border-radius: 10px; padding: 1rem 1.25rem;
+  display: flex; gap: 1rem; align-items: flex-start;
+}
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #1a1a1a; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; flex-shrink: 0;
+}
+.step-content { flex: 1; }
+.step-title { font-size: 14px; font-weight: 600; margin-bottom: 0.3rem; }
+.step-desc { font-size: 13px; color: #555; line-height: 1.5; }
+
+/* Templates panel */
+.tmpl-section { margin-bottom: 1.25rem; }
+.tmpl-label {
+  font-size: 11px; color: #aaa; text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 0.5rem;
+}
+.tmpl-card {
+  background: #fff; border: 1px solid #e8e8e6;
+  border-radius: 10px; padding: 1rem 1.25rem;
+  margin-bottom: 8px;
+}
+.tmpl-scene { font-size: 12px; color: #888; margin-bottom: 0.4rem; }
+.tmpl-fr { font-size: 13px; color: #1a1a1a; line-height: 1.6; font-style: italic; }
+.tmpl-var { color: #888; }
+
+/* Trigger panel */
+.trigger-section { margin-bottom: 1rem; }
+.trigger-cat {
+  font-size: 12px; font-weight: 600; color: #555;
+  margin-bottom: 0.5rem; margin-top: 1rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.trigger-item {
+  background: #fff; border: 1px solid #e8e8e6;
+  border-radius: 8px; padding: 0.75rem 1rem;
+  margin-bottom: 6px;
+}
+.trigger-cue { font-size: 11px; color: #aaa; margin-bottom: 0.3rem; }
+.trigger-fr { font-size: 13px; color: #1a1a1a; line-height: 1.5; }
+
+/* Back btn */
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; color: #555; cursor: pointer;
+  margin-bottom: 1rem; padding: 4px 0;
+}
+.back-btn:hover { color: #1a1a1a; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>TCF Canada 口语2 速查手册</h1>
+  <p class="subtitle">看到题目 → 识别类型 → 找问题 → 开口说</p>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showPanel('types')">🔍 识别题型</div>
+    <div class="tab" onclick="showPanel('flow')">📋 答题流程</div>
+    <div class="tab" onclick="showPanel('templates')">💬 开头结尾</div>
+    <div class="tab" onclick="showPanel('triggers')">⚡ 触发回应</div>
+  </div>
+
+  <!-- Panel 1: 识别题型 -->
+  <div class="panel active" id="panel-types">
+    <div id="type-grid-view">
+      <p style="font-size:13px;color:#888;margin-bottom:1rem;">点击题型查看必问问题</p>
+      <div class="type-grid" id="typeGrid"></div>
+    </div>
+    <div id="questions-view" style="display:none;">
+      <div class="back-btn" onclick="showTypeGrid()">← 返回题型列表</div>
+      <div class="questions-wrap" id="questionsContent"></div>
+    </div>
+  </div>
+
+  <!-- Panel 2: 答题流程 -->
+  <div class="panel" id="panel-flow">
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">读题找关键词（3秒）</div>
+          <div class="step-desc">找：工作人员？朋友？邻居？旅游？住房？→ 确定类型</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">选开头模板</div>
+          <div class="step-desc">去「开头结尾」页面找对应模板，记住结尾永远一样</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">问5个必问问题</div>
+          <div class="step-desc">去「识别题型」找你的类型，按顺序问5个问题就够了</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">加1-2个触发回应</div>
+          <div class="step-desc">考官回答后，自然地说一句个人反应，让对话不像背书</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">结尾模板收尾</div>
+          <div class="step-desc">Merci beaucoup + 下一步行动。完成！</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #e8e8e6;border-radius:10px;padding:1rem 1.25rem;margin-top:1rem;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:0.5rem;">⏱️ 时间分配</div>
+      <div style="font-size:13px;color:#555;line-height:1.8;">
+        开头：约30秒<br>
+        5个问题+回应：约3-4分钟<br>
+        结尾：约20秒<br>
+        <span style="color:#aaa;font-size:12px;">考试总时长约4-5分钟，问6-8个问题就够了</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 3: 开头结尾模板 -->
+  <div class="panel" id="panel-templates">
+    <div class="tmpl-section">
+      <div class="tmpl-label">开头模板（前面换，结尾永远一样）</div>
+
+      <div class="tmpl-card">
+        <div class="tmpl-scene">⭐⭐⭐⭐⭐ A. 主动咨询服务（vous）— 运动中心/酒店/旅行社/市政厅…</div>
+        <div class="tmpl-fr">Bonjour ! Je souhaite <span class="tmpl-var">[me renseigner sur / m'inscrire à / réserver]</span>... J'aurais quelques questions à vous poser si vous avez un moment.</div>
+      </div>
+
+      <div class="tmpl-card">
+        <div class="tmpl-scene">⭐⭐⭐⭐⭐ B. 听说某事想了解（tu）— 同事跑步/朋友上课/越野滑雪…</div>
+        <div class="tmpl-fr">Bonjour ! J'ai entendu dire que tu <span class="tmpl-var">[participais à / faisais / vendais]</span>... Ça m'intéresse vraiment. J'aurais quelques questions à te poser si tu as un moment.</div>
+      </div>
+
+      <div class="tmpl-card">
+        <div class="tmpl-scene">⭐⭐⭐⭐ C. 新移民/刚到新环境（vous）— 楼管员/市政厅/邻居…</div>
+        <div class="tmpl-fr">Bonjour ! Je viens juste d'arriver <span class="tmpl-var">[au Québec / dans le quartier / dans l'immeuble]</span> et je ne connais pas encore bien <span class="tmpl-var">[le système / les habitudes ici]</span>. J'aurais quelques questions à vous poser si vous avez un moment.</div>
+      </div>
+
+      <div class="tmpl-card">
+        <div class="tmpl-scene">⭐⭐⭐⭐ D. 朋友分享经历（tu）— 度假回来/爱加拿大/推荐…</div>
+        <div class="tmpl-fr">Tu m'en as souvent parlé et ça m'intéresse vraiment ! J'aurais quelques questions à te poser si tu as un moment.</div>
+      </div>
+
+      <div class="tmpl-card">
+        <div class="tmpl-scene">⭐⭐⭐ E. 对方主动提议/邀请（tu）— 演出票/合租/聚会…</div>
+        <div class="tmpl-fr">C'est vraiment sympa de ta part <span class="tmpl-var">[de me proposer ça / de m'inviter]</span> ! Avant de décider, j'aurais quelques questions à te poser si ça ne te dérange pas.</div>
+      </div>
+
+      <div class="tmpl-card">
+        <div class="tmpl-scene">⭐⭐⭐ F. 回应广告（vous）— 二手物品/招聘/租借…</div>
+        <div class="tmpl-fr">Bonjour ! J'ai vu votre annonce et ça m'intéresse vraiment. J'aurais quelques questions à vous poser si vous avez un moment.</div>
+      </div>
+
+      <div class="tmpl-card">
+        <div class="tmpl-scene">⭐⭐⭐ G. 刚入职/刚搬来（vous）— 楼管员/新入职…</div>
+        <div class="tmpl-fr">Bonjour ! Je viens de <span class="tmpl-var">[m'installer / intégrer l'entreprise]</span> et je voulais me présenter. J'aurais quelques questions à vous poser si vous avez un moment.</div>
+      </div>
+
+      <div class="tmpl-card">
+        <div class="tmpl-scene">⭐⭐ H. 帮朋友办事（tu）— 代寄包裹/照顾孩子…</div>
+        <div class="tmpl-fr">Bien sûr, je peux essayer de t'aider ! Mais avant de me lancer, j'aurais quelques questions à te poser si tu as un moment.</div>
+      </div>
+
+      <div class="tmpl-card">
+        <div class="tmpl-scene">⭐⭐ I. 重要机会需要决定（vous）— 海外工作…</div>
+        <div class="tmpl-fr">Bonjour ! Je suis vraiment touchée par cette opportunité et je l'envisage sérieusement. J'aurais quelques questions à vous poser si vous avez un moment.</div>
+      </div>
+    </div>
+
+    <div class="tmpl-section">
+      <div class="tmpl-label">结尾模板（只需记这3个）</div>
+
+      <div class="tmpl-card">
+        <div class="tmpl-scene">⭐⭐⭐⭐⭐ A. 需要考虑（万能）</div>
+        <div class="tmpl-fr">C'est très clair, merci beaucoup pour toutes ces informations. Je vais réfléchir et je <span class="tmpl-var">[vous / te]</span> contacte très prochainement.</div>
+      </div>
+
+      <div class="tmpl-card">
+        <div class="tmpl-scene">⭐⭐⭐⭐⭐ B. 当场决定（万能）</div>
+        <div class="tmpl-fr">Parfait, vous m'avez / tu m'as complètement convaincue ! On fait comme ça alors.</div>
+      </div>
+
+      <div class="tmpl-card">
+        <div class="tmpl-scene">⭐⭐⭐⭐ C. 通用感谢（万能）</div>
+        <div class="tmpl-fr">Merci infiniment, vous m'avez / tu m'as vraiment aidée. C'est exactement ce que je voulais savoir !</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 4: Trigger reactions -->
+  <div class="panel" id="panel-triggers">
+    <p style="font-size:12px;color:#888;margin-bottom:1rem;">考官回答后加一句个人反应，让对话自然不像背书。每次对话用2-3个就够。</p>
+
+    <div class="trigger-cat">🚌 交通相关</div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：公共交通方便/不需要开车</div>
+      <div class="trigger-fr">Ah tant mieux, je ne suis pas très à l'aise au volant !</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：可以步行到达</div>
+      <div class="trigger-fr">Super, j'adore marcher — ça me permet de découvrir le quartier !</div>
+    </div>
+
+    <div class="trigger-cat">💰 价格相关</div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：价格合理</div>
+      <div class="trigger-fr">C'est rassurant, j'ai un budget assez serré en ce moment.</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：有优惠/第一次免费</div>
+      <div class="trigger-fr">Super, j'aime bien essayer avant de m'engager — c'est parfait pour moi.</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：可以取消/退款</div>
+      <div class="trigger-fr">Ah, c'est rassurant — mon emploi du temps est parfois imprévisible !</div>
+    </div>
+
+    <div class="trigger-cat">🏃 运动/课程相关</div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：适合初学者</div>
+      <div class="trigger-fr">Ah parfait, parce que je n'ai vraiment aucune expérience dans ce domaine !</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：可以试听</div>
+      <div class="trigger-fr">Super, j'aime bien tester avant de décider — je suis du genre à hésiter !</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：器材可以租借</div>
+      <div class="trigger-fr">Super, je ne voulais pas investir avant de savoir si ça me plaît !</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：氛围友好</div>
+      <div class="trigger-fr">C'est exactement ce que je cherchais — j'avais peur d'être la seule débutante !</div>
+    </div>
+
+    <div class="trigger-cat">🏠 住房/街区相关</div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：街区安静</div>
+      <div class="trigger-fr">Ah, c'est exactement ce que je cherche — j'ai besoin de calme pour travailler.</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：附近有商店</div>
+      <div class="trigger-fr">Parfait, je n'ai pas de voiture donc pouvoir tout faire à pied c'est idéal.</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：采光好</div>
+      <div class="trigger-fr">Super, la lumière naturelle c'est vraiment important pour moi !</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：附近有公园</div>
+      <div class="trigger-fr">Ah j'adore ça, j'aime bien aller marcher le matin — c'est parfait !</div>
+    </div>
+
+    <div class="trigger-cat">🥗 饮食相关</div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：有素食选项</div>
+      <div class="trigger-fr">Ah parfait, je suis végétarienne — c'est toujours compliqué de trouver des options !</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：早餐包含在内</div>
+      <div class="trigger-fr">Super, le petit-déjeuner c'est important pour moi — je ne peux pas commencer sans bien manger !</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：可以在现场吃</div>
+      <div class="trigger-fr">Parfait, ça m'évite de tout prévoir à l'avance — je ne suis pas très organisée !</div>
+    </div>
+
+    <div class="trigger-cat">🌍 语言/文化相关</div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：有人说英语</div>
+      <div class="trigger-fr">C'est rassurant — mon français est encore en progrès, donc c'est utile.</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：课程en français</div>
+      <div class="trigger-fr">Parfait, j'ai justement besoin de pratiquer mon français au quotidien !</div>
+    </div>
+
+    <div class="trigger-cat">👥 社交/聚会相关</div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：可以带人来</div>
+      <div class="trigger-fr">Oh super, j'allais justement demander — j'ai une amie qui serait sûrement intéressée !</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：氛围festive</div>
+      <div class="trigger-fr">Super, j'adore ce genre d'ambiance — c'est tellement plus motivant !</div>
+    </div>
+
+    <div class="trigger-cat">❄️ 天气/季节相关</div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：冬天也有活动</div>
+      <div class="trigger-fr">C'est parfait — j'ai du mal avec les hivers longs, donc avoir une activité ça aide !</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：全年持续</div>
+      <div class="trigger-fr">Ah tant mieux, j'ai besoin d'une routine régulière — c'est motivant !</div>
+    </div>
+
+    <div class="trigger-cat">📋 实际安排相关</div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：可以在线预订</div>
+      <div class="trigger-fr">Ah pratique, j'aime bien pouvoir faire les choses depuis chez moi !</div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-cue">触发：可以改期</div>
+      <div class="trigger-fr">C'est rassurant, mon emploi du temps est parfois imprévisible !</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const TYPES = [
+  {
+    emoji: "🏢",
+    name: "服务类",
+    keywords: "工作人员 / agence / accueil / école / hôtel",
+    questions: [
+      { zh: "你们具体提供什么？", fr: "Quels types de [activités / services / cours] est-ce que vous proposez exactement ?" },
+      { zh: "时间怎么安排？", fr: "C'est disponible à quelle heure ? Et le week-end aussi ?" },
+      { zh: "价格是多少？包含什么？", fr: "C'est combien ? Est-ce que tout est inclus dans le prix ?" },
+      { zh: "怎么报名/预订？", fr: "Comment on fait pour s'inscrire — en ligne, par téléphone ou sur place ?" },
+      { zh: "有什么需要提前知道的？", fr: "Y a-t-il des choses importantes à savoir avant de commencer ?" },
+    ]
+  },
+  {
+    emoji: "👥",
+    name: "朋友分享类",
+    keywords: "ami(e) + 经历/活动/爱好",
+    questions: [
+      { zh: "你最喜欢哪一点？", fr: "Qu'est-ce que tu apprécies le plus dans tout ça ?" },
+      { zh: "具体是怎么样的？", fr: "Concrètement, ça se passe comment exactement ?" },
+      { zh: "什么让你最惊讶？", fr: "Qu'est-ce qui t'a le plus surpris(e) au début ?" },
+      { zh: "这适合没经验的人吗？", fr: "Tu penses que c'est adapté à quelqu'un qui n'a jamais essayé ?" },
+      { zh: "你给我一个建议？", fr: "Si tu devais me donner un seul conseil, ce serait lequel ?" },
+    ]
+  },
+  {
+    emoji: "🤝",
+    name: "朋友帮忙类",
+    keywords: "帮忙/照顾/代替/看管",
+    questions: [
+      { zh: "具体是什么情况？", fr: "C'est exactement quoi — tu peux m'expliquer ?" },
+      { zh: "什么时候/多久？", fr: "C'est pour quand ? Et ça dure combien de temps ?" },
+      { zh: "我需要做什么具体？", fr: "Qu'est-ce que je dois faire exactement ?" },
+      { zh: "有什么特别要注意的？", fr: "Il y a des choses importantes à savoir — des allergies, des règles particulières ?" },
+      { zh: "出问题怎么联系你？", fr: "En cas de problème, je te contacte comment — tu auras ton téléphone ?" },
+    ]
+  },
+  {
+    emoji: "🏘️",
+    name: "邻居类",
+    keywords: "voisin(e) / quartier / immeuble",
+    questions: [
+      { zh: "具体在哪里/是什么？", fr: "C'est où exactement ? / C'est quoi exactement ?" },
+      { zh: "状态/情况怎么样？", fr: "C'est en bon état ? Il y a des choses à signaler ?" },
+      { zh: "价格/费用是多少？", fr: "C'est combien ? C'est négociable ?" },
+      { zh: "交通方便吗？", fr: "C'est bien desservi par les transports en commun ?" },
+      { zh: "有什么需要知道的？", fr: "Y a-t-il des choses importantes à savoir ?" },
+    ]
+  },
+  {
+    emoji: "💼",
+    name: "职场类",
+    keywords: "collègue / entreprise / emploi / travail",
+    questions: [
+      { zh: "日常具体怎么运作？", fr: "Comment ça fonctionne exactement au quotidien ?" },
+      { zh: "和谁一起工作？", fr: "Tu travailles avec combien de personnes — c'est une petite équipe ?" },
+      { zh: "最喜欢/最难的是什么？", fr: "Qu'est-ce que tu apprécies le plus ? Et qu'est-ce qui est le plus difficile ?" },
+      { zh: "有没有不便之处？", fr: "Il y a des inconvénients que tu n'avais pas anticipés au début ?" },
+      { zh: "给我一个建议？", fr: "Si tu devais me donner un seul conseil, ce serait lequel ?" },
+    ]
+  },
+  {
+    emoji: "🌍",
+    name: "新移民类",
+    keywords: "新移民 / viens d'arriver / Canada / quartier",
+    questions: [
+      { zh: "最重要的手续是什么？", fr: "Quelles sont les démarches prioritaires à faire en premier ?" },
+      { zh: "在哪里办/怎么办？", fr: "Ça se fait ici ou dans un autre organisme ?" },
+      { zh: "需要什么文件？", fr: "Quels documents faut-il fournir ?" },
+      { zh: "有什么需要注意的？", fr: "Y a-t-il des choses importantes à savoir pour bien s'intégrer ?" },
+      { zh: "出问题联系谁？", fr: "En cas de problème, qui est-ce que je dois contacter ?" },
+    ]
+  },
+  {
+    emoji: "✈️",
+    name: "旅游类",
+    keywords: "voyage / vacances / tourisme / agence",
+    questions: [
+      { zh: "推荐什么目的地/活动？", fr: "Quelles destinations ou activités vous recommanderiez ?" },
+      { zh: "行程怎么安排？", fr: "Comment est organisé le séjour — c'est fixe ou libre ?" },
+      { zh: "住宿是什么情况？", fr: "Le logement est inclus dans le forfait ou c'est séparé ?" },
+      { zh: "价格大概是多少？", fr: "C'est combien en tout ? Est-ce que tout est inclus ?" },
+      { zh: "什么时候去最合适？", fr: "Quelle est la meilleure période pour y aller ?" },
+    ]
+  },
+  {
+    emoji: "🏠",
+    name: "住房类",
+    keywords: "logement / appartement / loyer / quartier",
+    questions: [
+      { zh: "有几个房间/设施怎么样？", fr: "Il y a combien de pièces ? C'est bien équipé ?" },
+      { zh: "在哪里/交通方便吗？", fr: "C'est situé où ? C'est bien desservi par les transports ?" },
+      { zh: "租金/价格是多少？", fr: "C'est combien par mois ? Les charges sont incluses ?" },
+      { zh: "合同/文件怎么处理？", fr: "Il faut fournir quels documents ? Le contrat dure combien de temps ?" },
+      { zh: "街区/邻居怎么样？", fr: "Le quartier est calme ? Les voisins sont sympas ?" },
+    ]
+  },
+  {
+    emoji: "🛒",
+    name: "购物交易类",
+    keywords: "vendre / louer / acheter / produit",
+    questions: [
+      { zh: "具体是什么/有什么可选？", fr: "C'est quoi exactement ? Quels modèles sont disponibles ?" },
+      { zh: "状态/情况怎么样？", fr: "C'est en bon état ? Il y a des défauts à signaler ?" },
+      { zh: "价格是多少？可以谈吗？", fr: "C'est combien ? C'est négociable ?" },
+      { zh: "怎么交付/取货？", fr: "Comment ça se passe pour récupérer — livraison ou sur place ?" },
+      { zh: "出问题怎么处理？", fr: "Si ça ne convient pas, on peut retourner / annuler ?" },
+    ]
+  },
+  {
+    emoji: "🎉",
+    name: "社交聚会类",
+    keywords: "fête / anniversaire / soirée / célébration",
+    questions: [
+      { zh: "是什么类型的活动？", fr: "C'est quel type d'événement exactement ?" },
+      { zh: "什么时候/在哪里？", fr: "C'est quand et où ? Ça commence à quelle heure ?" },
+      { zh: "有多少人/我可以带人吗？", fr: "Il y aura combien de personnes ? Je peux venir accompagnée ?" },
+      { zh: "需要带什么/怎么穿？", fr: "Il faut apporter quelque chose ? Il y a un dress code ?" },
+      { zh: "会有什么活动安排？", fr: "Il y aura des activités ou des jeux de prévus ?" },
+    ]
+  },
+];
+
+let selectedType = null;
+
+function renderTypeGrid() {
+  const grid = document.getElementById('typeGrid');
+  grid.innerHTML = '';
+  TYPES.forEach((t, i) => {
+    const card = document.createElement('div');
+    card.className = 'type-card';
+    card.innerHTML = `
+      <div class="type-emoji">${t.emoji}</div>
+      <div class="type-name">${t.name}</div>
+      <div class="type-keywords">${t.keywords}</div>
+    `;
+    card.onclick = () => showQuestions(i);
+    grid.appendChild(card);
+  });
+}
+
+function showQuestions(idx) {
+  selectedType = idx;
+  const t = TYPES[idx];
+  document.getElementById('type-grid-view').style.display = 'none';
+  document.getElementById('questions-view').style.display = 'block';
+
+  const content = document.getElementById('questionsContent');
+  let html = `<div class="q-title">${t.emoji} ${t.name} — 5个必问问题</div>`;
+  t.questions.forEach((q, i) => {
+    html += `
+      <div class="q-item">
+        <div class="q-num">问题 ${i+1}</div>
+        <div class="q-zh">${q.zh}</div>
+        <div class="q-fr-wrap">
+          <div class="q-fr hidden" id="qfr-${idx}-${i}">${q.fr}</div>
+          <div class="q-show-btn" onclick="toggleFr(${idx}, ${i})">点击显示法文 ▾</div>
+        </div>
+      </div>
+    `;
+  });
+
+  html += `
+    <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #eee;">
+      <div style="font-size:12px;color:#aaa;margin-bottom:0.5rem;">万能补充问题（问完5个还有时间用这些）</div>
+      <div style="font-size:13px;color:#555;line-height:2;">
+        有什么需要特别注意的吗？<br>
+        <span style="font-style:italic;color:#777">Y a-t-il des choses importantes à savoir ?</span><br><br>
+        你个人有什么建议？<br>
+        <span style="font-style:italic;color:#777">Si vous deviez me donner un conseil, ce serait lequel ?</span><br><br>
+        出问题怎么办？<br>
+        <span style="font-style:italic;color:#777">En cas de problème, qui est-ce que je contacte ?</span>
+      </div>
+    </div>
+  `;
+  content.innerHTML = html;
+}
+
+function toggleFr(idx, qIdx) {
+  const el = document.getElementById(`qfr-${idx}-${qIdx}`);
+  const btn = el.nextElementSibling;
+  if (el.classList.contains('hidden')) {
+    el.classList.remove('hidden');
+    btn.textContent = '隐藏法文 ▴';
+  } else {
+    el.classList.add('hidden');
+    btn.textContent = '点击显示法文 ▾';
+  }
+}
+
+function showTypeGrid() {
+  document.getElementById('type-grid-view').style.display = 'block';
+  document.getElementById('questions-view').style.display = 'none';
+}
+
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+renderTypeGrid();
+</script>
+</body>
+</html>
